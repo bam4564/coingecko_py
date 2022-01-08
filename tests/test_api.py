@@ -120,7 +120,9 @@ class TestWrapper(unittest.TestCase):
                           json = coins_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_supported_vs_currencies()
+        self.cg.get_supported_vs_currencies(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == coins_json_sample
@@ -130,13 +132,14 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/simple/supported_vs_currencies',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_supported_vs_currencies()
+            self.cg.get_supported_vs_currencies(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
-
+    """ KEEP GOING FROM THIS POINT """
     #---------- /simple/supported_vs_currencies ----------#
     @responses.activate
     def test_get_supported_vs_currencies(self):

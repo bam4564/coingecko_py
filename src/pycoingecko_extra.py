@@ -59,8 +59,6 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                     # this is a subclass of requests.exceptions.RequestException that is a failure condition 
                     raise e
                 except requests.exceptions.RequestException as e: 
-                    # print(type(e))
-                    # print(e)
                     if e.response.status_code == self._rate_limit_status_code: 
                         secs = 2**exp
                         logger.info(f"Rate limited: sleeping {secs} seconds")
@@ -75,7 +73,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
             if progress > (progress_updates + 1) * self._progress_interval:
                 logger.info(f'Progress: {math.floor(progress)}%')
                 progress_updates += 1
+        logger.info(f'Progress: 100%')
         # reset the call queue 
         self._queued_calls = dict()
-        logger.info(f'Progress: 100%')
         return results
