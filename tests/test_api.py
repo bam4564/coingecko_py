@@ -1,3 +1,4 @@
+from re import T
 import pytest
 import requests.exceptions
 import responses
@@ -139,7 +140,6 @@ class TestWrapper(unittest.TestCase):
             assert len(self.cg._queued_calls) == 1
             self.cg.execute_queued()[TEST_ID]
 
-    """ KEEP GOING FROM THIS POINT """
     #---------- /simple/supported_vs_currencies ----------#
     @responses.activate
     def test_get_supported_vs_currencies(self):
@@ -150,7 +150,9 @@ class TestWrapper(unittest.TestCase):
                           json = coins_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_supported_vs_currencies()
+        self.cg.get_supported_vs_currencies(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == coins_json_sample
@@ -160,11 +162,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/simple/supported_vs_currencies',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_supported_vs_currencies()
+            self.cg.get_supported_vs_currencies(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     #---------- COINS ----------#
@@ -175,11 +178,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coins()
+            self.cg.get_coins(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
     @responses.activate
     def test_get_coins(self):
@@ -190,7 +194,9 @@ class TestWrapper(unittest.TestCase):
                           json = coins_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coins()
+        self.cg.get_coins(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == coins_json_sample
@@ -202,11 +208,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/list',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coins_list()
+            self.cg.get_coins_list()
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
     @responses.activate
     def test_get_coins_list(self):
@@ -217,7 +224,9 @@ class TestWrapper(unittest.TestCase):
                           json = coins_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coins_list()
+        self.cg.get_coins_list(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == coins_json_sample
@@ -229,11 +238,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coins_markets('usd')
+            self.cg.get_coins_markets('usd', qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
     @responses.activate
     def test_get_coins_markets(self):
@@ -244,7 +254,9 @@ class TestWrapper(unittest.TestCase):
                           json = markets_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coins_markets('usd')
+        self.cg.get_coins_markets('usd', qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == markets_json_sample
@@ -256,11 +268,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coin_by_id('bitcoin')
+            self.cg.get_coin_by_id('bitcoin', qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -272,7 +285,9 @@ class TestWrapper(unittest.TestCase):
                           json = bitcoin_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coin_by_id('bitcoin')
+        self.cg.get_coin_by_id('bitcoin', qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == bitcoin_json_sample
@@ -284,11 +299,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/tickers',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coin_ticker_by_id('bitcoin')
+            self.cg.get_coin_ticker_by_id('bitcoin', qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -300,7 +316,9 @@ class TestWrapper(unittest.TestCase):
                           json = bitcoin_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coin_ticker_by_id('bitcoin')
+        self.cg.get_coin_ticker_by_id('bitcoin', qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == bitcoin_json_sample
@@ -312,11 +330,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/history?date=27-08-2018',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coin_history_by_id('bitcoin', '27-08-2018')
+            self.cg.get_coin_history_by_id('bitcoin', '27-08-2018', qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -328,7 +347,9 @@ class TestWrapper(unittest.TestCase):
                           json = history_json_sample, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coin_history_by_id('bitcoin', '27-08-2018')
+        self.cg.get_coin_history_by_id('bitcoin', '27-08-2018', qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == history_json_sample
@@ -340,11 +361,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coin_market_chart_by_id('bitcoin', 'usd', 1)
+            self.cg.get_coin_market_chart_by_id('bitcoin', 'usd', 1, qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -356,7 +378,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coin_market_chart_by_id('bitcoin', 'usd', 1)
+        self.cg.get_coin_market_chart_by_id('bitcoin', 'usd', 1, qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -368,11 +392,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/litecoin/status_updates',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coin_status_updates_by_id('litecoin')
+            self.cg.get_coin_status_updates_by_id('litecoin', qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -384,7 +409,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coin_status_updates_by_id('litecoin')
+        self.cg.get_coin_status_updates_by_id('litecoin', qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -396,11 +423,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/ethereum/contract/0x0D8775F648430679A709E98d2b0Cb6250d2887EF',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_coin_info_from_contract_address_by_id(id='ethereum',contract_address='0x0D8775F648430679A709E98d2b0Cb6250d2887EF')
+            self.cg.get_coin_info_from_contract_address_by_id(id='ethereum',contract_address='0x0D8775F648430679A709E98d2b0Cb6250d2887EF', qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -412,7 +440,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_coin_info_from_contract_address_by_id(id='ethereum',contract_address='0x0D8775F648430679A709E98d2b0Cb6250d2887EF')
+        self.cg.get_coin_info_from_contract_address_by_id(id='ethereum',contract_address='0x0D8775F648430679A709E98d2b0Cb6250d2887EF', qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -427,11 +457,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/exchanges',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_exchanges_list()
+            self.cg.get_exchanges_list(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -443,7 +474,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_exchanges_list()
+        self.cg.get_exchanges_list(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -455,11 +488,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/exchanges/list',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_exchanges_id_name_list()
+            self.cg.get_exchanges_id_name_list(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -471,7 +505,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_exchanges_id_name_list()
+        self.cg.get_exchanges_id_name_list(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -484,11 +520,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/exchanges/bitforex',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_exchanges_by_id('bitforex')
+            self.cg.get_exchanges_by_id('bitforex', qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            response = self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -500,7 +537,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_exchanges_by_id('bitforex')
+        self.cg.get_exchanges_by_id('bitforex', qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -514,11 +553,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/exchange_rates',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_exchange_rates()
+            self.cg.get_exchange_rates(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -530,7 +570,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_exchange_rates()
+        self.cg.get_exchange_rates(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -543,11 +585,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/search/trending',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_search_trending()
+            self.cg.get_search_trending(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -559,7 +602,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_search_trending()
+        self.cg.get_search_trending(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         assert response == json_response
@@ -572,11 +617,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/global',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_global()
+            self.cg.get_global(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
 
     @responses.activate
@@ -588,7 +634,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_global()
+        self.cg.get_global(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         expected_response = { "active_cryptocurrencies": 2517, "upcoming_icos": 360, "ongoing_icos": 423, "ended_icos": 2037, "markets": 197 }
@@ -605,11 +653,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/finance_platforms',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_finance_platforms()
+            self.cg.get_finance_platforms(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
     @responses.activate
     def test_get_finance_platforms(self):
@@ -620,7 +669,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_finance_platforms()
+        self.cg.get_finance_platforms(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         expected_response = [{"name": "Binance Lending", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Celsius Network", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Compound Finance", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "dYdX", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Nexo", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Staked US", "facts": "", "category": "", "centralized": False, "website_url": "https://staked.us/"}, {"name": "Cobo", "facts": "", "category": "", "centralized": False, "website_url": "https://cobo.com/"}, {"name": "Crypto.com", "facts": "", "category": "", "centralized": True, "website_url": "https://crypto.com/en/"}]
@@ -633,11 +684,12 @@ class TestWrapper(unittest.TestCase):
         # Arrange
         responses.add(responses.GET, 'https://api.coingecko.com/api/v3/finance_products',
                           status = 404)
-        exception = HTTPError("HTTP Error")
 
         # Act Assert
         with pytest.raises(HTTPError) as HE:
-            CoinGeckoAPIExtra().get_finance_products()
+            self.cg.get_finance_products(qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            self.cg.execute_queued()[TEST_ID]
 
     @responses.activate
     def test_get_finance_products(self):
@@ -648,7 +700,9 @@ class TestWrapper(unittest.TestCase):
                           json = json_response, status = 200)
 
         # Act
-        response = CoinGeckoAPIExtra().get_finance_platforms()
+        self.cg.get_finance_platforms(qid=TEST_ID)
+        assert len(self.cg._queued_calls) == 1
+        response = self.cg.execute_queued()[TEST_ID]
 
         ## Assert
         expected_response = [{"name": "Binance Lending", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Celsius Network", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Compound Finance", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "dYdX", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Nexo", "facts": "", "category": "", "centralized": False, "website_url": ""}, {"name": "Staked US", "facts": "", "category": "", "centralized": False, "website_url": "https://staked.us/"}, {"name": "Cobo", "facts": "", "category": "", "centralized": False, "website_url": "https://cobo.com/"}, {"name": "Crypto.com", "facts": "", "category": "", "centralized": True, "website_url": "https://crypto.com/en/"}]
