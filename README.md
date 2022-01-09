@@ -10,6 +10,13 @@ An extension of the [**pycoingecko**](https://github.com/man-c/pycoingecko) api 
   
 This module is intended to serve as a drop-in replacement for the pycoingecko api client and the additional functionality can be enabled as desired. 
 
+## Installation 
+
+PyPI
+```shell
+pip install pycoingecko_extra
+```
+
 ## Usage 
 To switch from the base api client to this augmented version, all you need to do is change
 ```python
@@ -21,7 +28,7 @@ to
 from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoinGeckoAPIExtra()
 ```
-If you make this change to an existing script, it will function exactly the same as before, as `CoinGeckoAPIExtra` is a subclass of `CoinGeckoAPI`. 
+If you make this change to an existing script, it will function exactly the same as before as `CoinGeckoAPIExtra` is a subclass of `CoinGeckoAPI`. 
 
 ## Examples - Rate Limiting  
 
@@ -90,3 +97,20 @@ prices = {
 ```
 
 This approach to API design was loosely inspired by [dask's][https://docs.dask.org/en/stable/] approach to lazy execution of a sequence of operations on dataframes.
+
+## Test 
+
+This package is packaged with [poetry](https://python-poetry.org/)
+
+If you have poetry installed, you can perform the following steps to test the package. 
+
+```shell 
+git clone https://github.com/brycemorrow4564/pycoingecko-extra.git
+cd pycoingecko-extra
+poetry shell 
+poetry install 
+poetry run python test_runner.py 
+```
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
