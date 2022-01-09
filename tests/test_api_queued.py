@@ -1,4 +1,4 @@
-from re import T
+import json 
 import pytest
 import requests 
 import requests.exceptions
@@ -6,6 +6,7 @@ import responses
 import unittest
 from requests.exceptions import HTTPError
 
+import src.pycoingecko_extra
 from src.pycoingecko_extra import CoinGeckoAPIExtra
 
 TEST_ID = 'TESTING_ID'
@@ -732,8 +733,17 @@ class TestWrapper(unittest.TestCase):
         assert response['one'] == bitcoin_json_sample
         assert response['two'] == history_json_sample
 
+    
     @responses.activate
-    def test_rate_limited_success(self):
+    @unittest.mock.patch('src.pycoingecko_extra.time.sleep')
+    def test_rate_limited_success(self, sleep_patch):
+        # patch time.sleep in the imported module so it doesn't block test 
+        sleep_patch.return_value = True 
+
+        # Total number of calls to make. num_calls - 1 fail due to rate limiting. Last one succeeds 
+        num_calls = 7
+
+        json_response = { "prices": [ [ 1535373899623, 6756.942910425894 ], [ 1535374183927, 6696.894541693875 ], [ 1535374496401, 6689.990513793263 ], [ 1535374779118, 6668.291007556478 ], [ 1535375102688, 6703.7499879964 ], [ 1535375384209, 6706.898948451269 ] ] }
 
         def callback_stateful(): 
             class MockResponse: 
@@ -745,23 +755,25 @@ class TestWrapper(unittest.TestCase):
                 def request_callback(self, request):
                     """ First two calls will fail with 429 response. Third call will succeed """
                     self.calls += 1
-                    if self.calls == 2: 
-                        return (200, {}, '{}')
+                    if self.calls == num_calls: 
+                        return (200, {}, json.dumps(json_response))
                     else: 
                         raise requests.exceptions.RequestException(response=MockResponse(status_code=429))
             return getattr(MockEndpoint(), 'request_callback')
 
         # Will simulate rate limiting on first call, then second call will succeed 
-        self.cg._exp_limit = 1 
+        self.cg._exp_limit = num_calls
         responses.add_callback(
             responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1',
             callback=callback_stateful(),
             content_type="application/json"
         )
         self.cg.get_coin_market_chart_by_id('bitcoin', 'usd', 1, qid='bitcoin')
-        self.cg.execute_queued()
-        assert len(responses.calls) == 2 
-        assert isinstance(responses.calls[0].response, requests.exceptions.RequestException)
-        assert responses.calls[0].response.response.status_code == 429 
-        assert isinstance(responses.calls[1].response, requests.models.Response)
-        assert responses.calls[1].response.status_code == 200 
+        result = self.cg.execute_queued()
+        assert len(responses.calls) == num_calls
+        for i in range(0, num_calls - 1): 
+            assert isinstance(responses.calls[i].response, requests.exceptions.RequestException)
+            assert responses.calls[i].response.response.status_code == 429 
+        assert isinstance(responses.calls[num_calls-1].response, requests.models.Response)
+        assert responses.calls[num_calls-1].response.status_code == 200 
+        assert result['bitcoin'] == json_response
