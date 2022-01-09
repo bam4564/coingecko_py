@@ -8,6 +8,8 @@ from pycoingecko import CoinGeckoAPI
 
 logger = logging.getLogger("CoinGeckoAPIExtra")
 
+logger.setLevel(50)
+
 def method_queueable(self, fn, *args, **kwargs):
     """ Runs method normally is 'qid' not in kwargs. Queues method call for later execution if 'qid' in kwargs 
     """
@@ -52,7 +54,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         progress_updates = 0
         for i, ((qid), (fn, args, kwargs)) in enumerate(self._queued_calls.items()): 
             exp = 0
-            while results.get(qid) is None and exp < self._exp_limit: 
+            while results.get(qid) is None and exp < self._exp_limit + 1: 
                 try: 
                     results[qid] = fn(*args, **kwargs)
                 except requests.exceptions.ConnectionError as e: 
@@ -67,7 +69,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                     else: 
                         # Any non 429 http respose error code is a failure condition 
                         raise e 
-            if exp == self._exp_limit: 
+            if exp == self._exp_limit + 1: 
                 raise Exception("Waited for maximum specified time but was still rate limited. Try increasing _exp_limit.")
             progress = i / len(self._queued_calls) * 100
             if progress > (progress_updates + 1) * self._progress_interval:

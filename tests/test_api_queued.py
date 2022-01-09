@@ -1,5 +1,6 @@
 from re import T
 import pytest
+import requests 
 import requests.exceptions
 import responses
 import unittest
@@ -710,3 +711,57 @@ class TestWrapper(unittest.TestCase):
 
 
     #---------- NEW FUNCTIONALITY ----------#
+
+    @responses.activate
+    def test_multiple_queued(self):
+        bitcoin_json_sample = {'name': 'Bitcoin', 'tickers': [{'base': 'BTC', 'target': 'USDT', 'market': {'name': 'BW.com', 'identifier': 'bw', 'has_trading_incentive': False}, 'last': 7963.0, '    volume': 93428.7568, 'converted_last': {'btc': 0.99993976, 'eth': 31.711347, 'usd': 7979.23}, 'converted_volume': {'btc': 93423, 'eth': 2962752, 'usd': 745489919}, '    bid_ask_spread_percentage': 0.111969, 'timestamp': '2019-05-24T11:20:14+00:00', 'is_anomaly': False, 'is_stale': False, 'trade_url': 'https://www.bw.com/trade/btc_us    dt', 'coin_id': 'bitcoin'}]}
+        history_json_sample = { "id": "bitcoin", "symbol": "btc", "name": "Bitcoin", "localization": { "en": "Bitcoin", "es": "Bitcoin", "de": "Bitcoin", "nl": "Bitcoin", "pt": "Bitcoin", "fr": "Bitcoin", "it": "Bitcoin", "hu": "Bitcoin", "ro": "Bitcoin", "sv": "Bitcoin", "pl": "Bitcoin", "id": "Bitcoin", "zh": "比特币", "zh-tw": "比特幣", "ja": "ビットコイン", "ko": "비트코인", "ru": "биткоина", "ar": "بيتكوين", "th": "บิตคอยน์", "vi": "Bitcoin", "tr": "Bitcoin" } }
+
+        responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/tickers',
+                          json = bitcoin_json_sample, status = 200)
+        responses.add(responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/history?date=27-08-2018',
+                    json = history_json_sample, status = 200)
+
+        self.cg.get_coin_ticker_by_id('bitcoin', qid="one")
+        assert len(self.cg._queued_calls) == 1
+        self.cg.get_coin_history_by_id('bitcoin', '27-08-2018', qid="two")
+        assert len(self.cg._queued_calls) == 2
+        response = self.cg.execute_queued()
+        assert len(self.cg._queued_calls) == 0
+
+        assert response['one'] == bitcoin_json_sample
+        assert response['two'] == history_json_sample
+
+    @responses.activate
+    def test_rate_limited_success(self):
+
+        def callback_stateful(): 
+            class MockResponse: 
+                def __init__(self, status_code): 
+                    self.status_code = status_code
+            class MockEndpoint: 
+                def __init__(self): 
+                    self.calls = 0 
+                def request_callback(self, request):
+                    """ First two calls will fail with 429 response. Third call will succeed """
+                    self.calls += 1
+                    if self.calls == 2: 
+                        return (200, {}, '{}')
+                    else: 
+                        raise requests.exceptions.RequestException(response=MockResponse(status_code=429))
+            return getattr(MockEndpoint(), 'request_callback')
+
+        # Will simulate rate limiting on first call, then second call will succeed 
+        self.cg._exp_limit = 1 
+        responses.add_callback(
+            responses.GET, 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1',
+            callback=callback_stateful(),
+            content_type="application/json"
+        )
+        self.cg.get_coin_market_chart_by_id('bitcoin', 'usd', 1, qid='bitcoin')
+        self.cg.execute_queued()
+        assert len(responses.calls) == 2 
+        assert isinstance(responses.calls[0].response, requests.exceptions.RequestException)
+        assert responses.calls[0].response.response.status_code == 429 
+        assert isinstance(responses.calls[1].response, requests.models.Response)
+        assert responses.calls[1].response.status_code == 200 
