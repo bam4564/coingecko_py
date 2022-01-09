@@ -1,4 +1,4 @@
-import os 
+import os
 import subprocess
 
 """
@@ -11,27 +11,32 @@ This allows us to
 2. Test the new functionality added to the api client 
 """
 
-USE_CACHED = False # For development purposes only 
-TEST_FILE_PATH = 'tests/test_api.py'
 
-if USE_CACHED: 
-    if not os.path.exists(TEST_FILE_PATH): 
-        raise Exception(f"USE_CACHED was True but there is no cached file. Re-run and set to False.")
-    print(f"Using previously downloaded version of file: ${TEST_FILE_PATH}")
-else:
-    subprocess.call(
-        f"curl https://raw.githubusercontent.com/man-c/pycoingecko/master/tests/test_api.py --output {TEST_FILE_PATH}".split(" ")
-    )
-    if not os.path.exists(TEST_FILE_PATH): 
-        raise Exception(f"curl failed to download test file.")
-    with open(TEST_FILE_PATH, 'r') as f: 
-        text = f.read()
-        assert "from pycoingecko" in text
-        assert "CoinGeckoAPI" in text 
-    with open(TEST_FILE_PATH, 'w') as f: 
-        f.write(
-            text.replace('from pycoingecko', 'from src.pycoingecko_extra')
-                .replace('CoinGeckoAPI', 'CoinGeckoAPIExtra')
+def run_tests():
+    USE_CACHED = False  # For development purposes only
+    TEST_FILE_PATH = "tests/test_api.py"
+    if USE_CACHED:
+        if not os.path.exists(TEST_FILE_PATH):
+            raise Exception(
+                f"USE_CACHED was True but there is no cached file. Re-run and set to False."
+            )
+        print(f"Using previously downloaded version of file: ${TEST_FILE_PATH}")
+    else:
+        subprocess.call(
+            f"curl https://raw.githubusercontent.com/man-c/pycoingecko/master/tests/test_api.py --output {TEST_FILE_PATH}".split(
+                " "
+            )
         )
-
-subprocess.call("poetry run pytest tests".split(" ")) 
+        if not os.path.exists(TEST_FILE_PATH):
+            raise Exception(f"curl failed to download test file.")
+        with open(TEST_FILE_PATH, "r") as f:
+            text = f.read()
+            assert "from pycoingecko" in text
+            assert "CoinGeckoAPI" in text
+        with open(TEST_FILE_PATH, "w") as f:
+            f.write(
+                text.replace("from pycoingecko", "from src.pycoingecko_extra").replace(
+                    "CoinGeckoAPI", "CoinGeckoAPIExtra"
+                )
+            )
+    subprocess.run("pytest --cov tests ".split(" "))

@@ -7,6 +7,9 @@ packages = [
     { include = "src" }
 ]
 
+[tool.poetry.scripts]                                                           
+test = "test_runner:run_tests"  
+
 [tool.poetry.dependencies]
 python = "^3.7"
 pycoingecko = "*"
@@ -15,6 +18,7 @@ requests = "^2.27.1"
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"
 pytest = "^6.2.5"
+pytest-cov = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

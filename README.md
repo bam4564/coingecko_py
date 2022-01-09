@@ -109,7 +109,7 @@ git clone https://github.com/brycemorrow4564/pycoingecko-extra.git
 cd pycoingecko-extra
 poetry shell 
 poetry install 
-poetry run python test_runner.py 
+poetry run test
 ```
 
 ## License
