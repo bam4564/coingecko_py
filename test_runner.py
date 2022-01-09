@@ -11,7 +11,7 @@ This allows us to
 2. Test the new functionality added to the api client 
 """
 
-USE_CACHED = True # For development purposes only 
+USE_CACHED = False # For development purposes only 
 TEST_FILE_PATH = 'tests/test_api.py'
 
 if USE_CACHED: 

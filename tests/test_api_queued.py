@@ -819,3 +819,5 @@ class TestWrapper(unittest.TestCase):
         assert str(e.value) == error_msgs['exp_limit_reached']
         # when we hit the exp_limit and are still rate limited, we retain all queued calls so user can tweak this param then continue 
         assert len(self.cg._queued_calls) == 1 
+
+    # TODO: Add tests to ensure that input kwargs that configure extension are found as instance properties 
