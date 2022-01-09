@@ -1,5 +1,7 @@
 # pycoingecko-extra 
 
+[![PyPi Version](https://img.shields.io/pypi/v/pycoingecko_extra.svg)](https://pypi.org/project/pycoingecko-extra/)
+
 An extension of the [**pycoingecko**](https://github.com/man-c/pycoingecko) api client that adds additional functionality like: 
 - Abstracting away complexities associated with rate limiting that occurs when sending many api requests. 
 - Enhanced pagination support (in-progress)
