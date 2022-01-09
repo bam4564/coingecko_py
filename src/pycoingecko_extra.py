@@ -10,6 +10,12 @@ logger = logging.getLogger("CoinGeckoAPIExtra")
 
 logger.setLevel(50)
 
+RATE_LIMIT_STATUS_CODE = 429
+
+error_msgs = dict(
+    exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing _exp_limit. Queued calls are retained."
+)
+
 def method_queueable(self, fn, *args, **kwargs):
     """ Runs method normally is 'qid' not in kwargs. Queues method call for later execution if 'qid' in kwargs 
     """
@@ -38,7 +44,6 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         self._queued_calls = dict()
         self._exp_limit = kwargs.get("_exp_limit", 8)
         self._progress_interval = kwargs.get("_progress_interval", 10)
-        self._rate_limit_status_code = 429
         logger.setLevel(kwargs.get("_log_level", 20))
         # decorate bound methods on base class that correspond to api calls to enable queueing 
         for attr in dir(self):
@@ -61,7 +66,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                     # this is a subclass of requests.exceptions.RequestException that is a failure condition 
                     raise e
                 except requests.exceptions.RequestException as e: 
-                    if e.response.status_code == self._rate_limit_status_code: 
+                    if e.response.status_code == RATE_LIMIT_STATUS_CODE:  
                         secs = 2**exp
                         logger.info(f"Rate limited: sleeping {secs} seconds")
                         time.sleep(secs)
@@ -70,7 +75,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                         # Any non 429 http respose error code is a failure condition 
                         raise e 
             if exp == self._exp_limit + 1: 
-                raise Exception("Waited for maximum specified time but was still rate limited. Try increasing _exp_limit.")
+                raise Exception(error_msgs['exp_limit_reached'])
             progress = i / len(self._queued_calls) * 100
             if progress > (progress_updates + 1) * self._progress_interval:
                 logger.info(f'Progress: {math.floor(progress)}%')
