@@ -39,4 +39,6 @@ def run_tests():
                     "CoinGeckoAPI", "CoinGeckoAPIExtra"
                 )
             )
-    subprocess.run("pytest --cov tests ".split(" "))
+    # TODO: Generate output coverage report and use this to create badge in readme
+    # subprocess.run("pytest --cov tests ".split(" "))
+    subprocess.run("pytest tests ".split(" "))
