@@ -37,9 +37,7 @@ def run_tests():
             f.write(
                 text.replace(
                     "from pycoingecko", "from pycoingecko_extra.pycoingecko_extra"
-                ).replace(
-                    "CoinGeckoAPI", "CoinGeckoAPIExtra"
-                )
+                ).replace("CoinGeckoAPI", "CoinGeckoAPIExtra")
             )
     # TODO: Generate output coverage report and use this to create badge in readme
     # subprocess.run("pytest --cov tests ".split(" "))

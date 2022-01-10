@@ -2,6 +2,11 @@
 
 This document outlines the process to follow when releasing new package versions. 
 
+First, ensure all local changes are committed. Also ensure that code quality is enforced: 
+```shell
+poetry run black 
+```
+
 ## Update Project Files 
 
 1. Update the version of the project in `pyproject.toml`.  

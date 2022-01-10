@@ -14,6 +14,7 @@ error_msgs = dict(
     exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing _exp_limit. Queued calls are retained."
 )
 
+
 def method_queueable(self, fn, *args, **kwargs):
     """Runs method normally is 'qid' not in kwargs. Queues method call for later execution if 'qid' in kwargs"""
     qid = kwargs.get("qid")
@@ -26,6 +27,7 @@ def method_queueable(self, fn, *args, **kwargs):
         self._queued_calls[qid] = (fn, args, kwargs)
     else:
         return fn(*args, **kwargs)
+
 
 class CoinGeckoAPIExtra(CoinGeckoAPI):
     def __init__(self, *args, **kwargs):

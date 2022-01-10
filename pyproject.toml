@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pycoingecko_extra"
-version = "0.3.0"
+version = "0.4.0"
 description = "An extension of the pycoingecko api client that introduces extra functionality like handling rate limiting and pagination."
 authors = ["Bryce Morrow <brycemorrow4564@gmail.com>"]
 license = "MIT"
