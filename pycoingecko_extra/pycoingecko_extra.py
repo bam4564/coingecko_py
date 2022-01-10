@@ -4,6 +4,7 @@ import logging
 import requests
 import inspect
 import itertools
+from typing import List, Set
 from collections import defaultdict
 from functools import partial
 
@@ -48,52 +49,75 @@ def flatten(data):
 
 
 class CoinGeckoAPIExtra(CoinGeckoAPI):
+
+    paginated_fns = [
+        # coins
+        "get_coins_markets",
+        "get_coin_ticker_by_id",
+        "get_coin_status_updates_by_id",
+        # exchanges
+        "get_exchanges_list",
+        "get_exchanges_tickers_by_id",
+        "get_exchanges_status_updates_by_id",
+        # finance
+        "get_finance_platforms",
+        "get_finance_products",
+        # indexes
+        "get_indexes",
+        # derivatives
+        "get_derivatives_exchanges",
+        # status
+        "get_status_updates",
+    ]
+
     def __init__(self, *args, **kwargs):
         # setup base class normally, removing kwargs specific to the wrapper
         filter_kwargs = ["_exp_limit", "_progress_interval", "_log_level"]
         super().__init__(
             *args, **{k: v for k, v in kwargs.items() if k not in filter_kwargs}
         )
-        # ensure we are not overridding any methods on the base class. if this occurs, the method names in the wrapper need to be changed
-        members = inspect.getmembers(CoinGeckoAPI, predicate=inspect.isfunction)
-        new_methods = set(["execute_queued"])
-        overriden_methods = new_methods.intersection(set([m[0] for m in members]))
-        if overriden_methods:
-            raise Exception(
-                f"Wrapper class overwrote existing methods on CoinGeckoAPI class: {overriden_methods}"
-            )
+        # perform instrospection to ensure no overrides of base class, and to get new methods of this subclass 
+        # we need the list of new methods so we ensure we only decorate methods of base class 
+        self._detect_overrides()
+        new_methods = self._get_new_method_names()
         # setup wrapper instance fields, for managing queued calls and rate limit behavior
         self._reset_queued_state()
         self._exp_limit = kwargs.get("_exp_limit", 8)
         self._progress_interval = kwargs.get("_progress_interval", 10)
-        logger.setLevel(kwargs.get("_log_level", 20))
-        # decorate bound methods on base class that correspond to api calls to enable queueing
-        # add page range query support to all functions that support pagination
-        # the base api client makes this impossible to dete
-        paginated_fns = [
-            # coins
-            "get_coins_markets",
-            "get_coin_ticker_by_id",
-            "get_coin_status_updates_by_id",
-            # exchanges
-            "get_exchanges_list",
-            "get_exchanges_tickers_by_id",
-            "get_exchanges_status_updates_by_id",
-            # finance
-            "get_finance_platforms",
-            "get_finance_products",
-            # indexes
-            "get_indexes",
-            # derivatives
-            "get_derivatives_exchanges",
-            # status
-            "get_status_updates",
-        ]
+        logger.setLevel(kwargs.get("_log_level", logging.INFO))
+        # decorate bound methods on base class that correspond to api calls to enable 
+        # queueing and page range query support for pagination enabled functions 
         for attr in dir(self):
             v = getattr(self, attr)
             if callable(v) and not attr.startswith("_") and attr not in new_methods:
-                pagination = attr in paginated_fns
+                pagination = attr in self.paginated_fns
+                logger.debug(f"Decorating: {attr:60} pagination: {pagination}")
                 setattr(self, attr, partial(self._method_queueable, v, pagination))
+
+    def _get_new_method_names(self) -> Set[str]: 
+        """ Returns names of all methods on self that don't exist in parent class """
+        inherited_class = self.__class__.__bases__
+        if len(inherited_class) != 1: 
+            raise ValueError("Parent class introspection broken")
+        c = inherited_class[0]
+        inherited_methods = set([attr for attr in dir(c) if callable(getattr(c, attr))])
+        my_methods = set([attr for attr in dir(self) if callable(getattr(self, attr))])
+        return my_methods - inherited_methods
+
+    def _detect_overrides(self): 
+        # ensure we are not overridding any methods on the base class. if this occurs, the method names in the wrapper need to be changed
+        inherited_class = self.__class__.__bases__
+        if len(inherited_class) != 1: 
+            raise ValueError("Parent class introspection broken")
+        cls = inherited_class[0]
+        common = cls.__dict__.keys() & self.__class__.__dict__.keys()
+        overrides = [
+            # filter out builtin methods as these exist on all classes 
+            m for m in common 
+            if cls.__dict__[m] != self.__class__.__dict__[m] and not m.startswith("__")
+        ]
+        if overrides: 
+            raise Exception(f"API Client extension overwrote methods in base class: {overrides}")
 
     def _reset_queued_state(self):
         self._queued_calls = defaultdict(list)
@@ -179,8 +203,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                 if not (page or page_start or page_end) or page:
                     # 1. paged endpoint but no paging arguments specified (api uses default of page 1)
                     # 2. paged endpoint and single page specified (supported by base api client)
-                    dup_check = True
-                    self._queue_single(qid, fn, dup_check, *args, **kwargs)
+                    self._queue_single(qid, fn, True, *args, **kwargs)
                 else:
                     # one or more of page_start and page_end is defined
                     validate_page_range(page_start, page_end)
@@ -198,9 +221,8 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                         # when only page_start is specified, we want to queue a request for all available pages
                         # this can only be determined at execution time so we queue a single request now and the
                         # rest will be queued as a part of execute_many
-                        dup_check = True
                         self._queue_single(
-                            qid, fn, dup_check, *args, page=page_start, **kwargs
+                            qid, fn, True, *args, page=page_start, **kwargs
                         )
                         self._infer_page_end_qids.append(qid)
                     # optionally mark these calls as flattenable
@@ -208,8 +230,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                         self._flatten_qids.append(qid)
             else:
                 # queueable and pagination disabled
-                dup_check = True
-                self._queue_single(qid, fn, dup_check, *args, **kwargs)
+                self._queue_single(qid, fn, True, *args, **kwargs)
         else:
             return fn(*args, **kwargs)
 
