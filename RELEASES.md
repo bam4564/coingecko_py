@@ -10,7 +10,7 @@ This document outlines the process to follow when releasing new package versions
 ## Publish (PyPI)
 
 ```shell 
-poetry publish --build` 
+poetry publish --build
 ```
 
 ## Release (Github)
