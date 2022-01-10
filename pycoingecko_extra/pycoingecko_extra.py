@@ -6,6 +6,8 @@ import inspect
 from functools import partial
 from pycoingecko import CoinGeckoAPI
 
+# This sets the root logger to write to stdout (your console).
+logging.basicConfig()
 logger = logging.getLogger("CoinGeckoAPIExtra")
 
 RATE_LIMIT_STATUS_CODE = 429
