@@ -1,4 +1,4 @@
-# pycoingecko-extra 
+# pycoingecko_extra 
 
 [![PyPi Version](https://img.shields.io/pypi/v/pycoingecko_extra.svg)](https://pypi.org/project/pycoingecko-extra/)
 ![GitHub](https://img.shields.io/github/license/brycemorrow4564/pycoingecko-extra)

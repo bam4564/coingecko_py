@@ -35,7 +35,9 @@ def run_tests():
             assert "CoinGeckoAPI" in text
         with open(TEST_FILE_PATH, "w") as f:
             f.write(
-                text.replace("from pycoingecko", "from src.pycoingecko_extra").replace(
+                text.replace(
+                    "from pycoingecko", "from pycoingecko_extra.pycoingecko_extra"
+                ).replace(
                     "CoinGeckoAPI", "CoinGeckoAPIExtra"
                 )
             )

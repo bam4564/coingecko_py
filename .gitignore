@@ -4,3 +4,4 @@ tests/test_api.py
 dist/
 __pycache__
 .coverage
+.DS_Store

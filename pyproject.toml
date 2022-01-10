@@ -1,17 +1,21 @@
 [tool.poetry]
 name = "pycoingecko_extra"
-version = "0.1.0"
+version = "0.0.2"
 description = "An extension of the pycoingecko api client that introduces extra functionality like handling rate limiting and pagination."
 authors = ["Bryce Morrow <brycemorrow4564@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/brycemorrow4564/pycoingecko-extra"
+repository = "https://github.com/brycemorrow4564/pycoingecko-extra"
 packages = [
-    { include = "src" }
+    { include = "pycoingecko_extra" }
 ]
 
 [tool.poetry.scripts]                                                           
 test = "test_runner:run_tests"  
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 pycoingecko = "*"
 requests = "^2.27.1"
 

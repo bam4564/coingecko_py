@@ -6,8 +6,7 @@ import responses
 import unittest
 from requests.exceptions import HTTPError
 
-import src.pycoingecko_extra
-from src.pycoingecko_extra import CoinGeckoAPIExtra, error_msgs
+from pycoingecko_extra.pycoingecko_extra import CoinGeckoAPIExtra, error_msgs
 
 TEST_ID = "TESTING_ID"
 
@@ -1649,7 +1648,7 @@ class TestWrapper(unittest.TestCase):
         assert response["two"] == history_json_sample
 
     @responses.activate
-    @unittest.mock.patch("src.pycoingecko_extra.time.sleep")
+    @unittest.mock.patch("pycoingecko_extra.pycoingecko_extra.time.sleep")
     def test_multiple_rate_limited_success(self, sleep_patch):
         # patch time.sleep in the imported module so it doesn't block test
         sleep_patch.return_value = True
@@ -1754,7 +1753,7 @@ class TestWrapper(unittest.TestCase):
         assert result["history"] == history_json_response
 
     @responses.activate
-    @unittest.mock.patch("src.pycoingecko_extra.time.sleep")
+    @unittest.mock.patch("pycoingecko_extra.pycoingecko_extra.time.sleep")
     def test_multiple_rate_limited_failed(self, sleep_patch):
         # patch time.sleep in the imported module so it doesn't block test
         sleep_patch.return_value = True
