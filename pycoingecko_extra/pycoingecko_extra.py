@@ -19,8 +19,6 @@ error_msgs = dict(
     exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing _exp_limit. Queued calls are retained."
 )
 
-# TODO: Support when page range query only specifies page_start
-
 
 def validate_page_range(page_start, page_end):
     """Validates user supplied values for page_start and page_end"""
@@ -99,6 +97,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
 
     def _reset_queued_state(self):
         self._queued_calls = defaultdict(list)
+        self._page_range_qids = list()
         self._flatten_qids = list()
         self._infer_page_end_qids = list()
 
@@ -109,43 +108,41 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
             )
         self._queued_calls[qid].append((fn, args, kwargs))
 
-    def _execute_single(self, fn, *args, **kwargs):
-        # Implementation of exponential backoff for single call to deal with server side rate limiting
-        exp = 0
-        res = None
-        while res is None and exp < self._exp_limit + 1:
-            try:
-                res = fn(*args, **kwargs)
-            except requests.exceptions.ConnectionError:
-                # this is a subclass of requests.exceptions.RequestException that is a failure condition
-                raise
-            except requests.exceptions.RequestException as e:
-                if e.response.status_code == RATE_LIMIT_STATUS_CODE:
-                    secs = 2 ** exp
-                    logger.info(f"Rate limited: sleeping {secs} seconds")
-                    time.sleep(secs)
-                    exp += 1
-                else:
-                    # Any non 429 http respose error code is a failure condition
-                    raise e
-        return res
-
     def _execute_queued(self):
         """Execute all queued calls"""
         results = dict()
         progress_updates = 0
         call_count = 0
         for (qid, call_list) in self._queued_calls.items():
-            is_paginated = len(call_list) > 1
-            if is_paginated:
+            is_page_range_query = qid in self._page_range_qids
+            if is_page_range_query:
                 results[qid] = list()
             for (fn, args, kwargs) in call_list:
                 # make api call (with retries)
-                res = self._execute_single(fn, *args, **kwargs)
+                exp = 0
+                res = None
+                infer_page_end = qid in self._infer_page_end_qids
+                # TODO: use infer page end to add more queries to queue after first call is made (parse n per page and total from first response header)
+                while res is None and exp < self._exp_limit + 1:
+                    try:
+                        res = fn(*args, **kwargs)
+                    except requests.exceptions.ConnectionError:
+                        # this is a subclass of requests.exceptions.RequestException that is a failure condition
+                        raise
+                    except requests.exceptions.RequestException as e:
+                        if e.response.status_code == RATE_LIMIT_STATUS_CODE:
+                            secs = 2 ** exp
+                            logger.info(f"Rate limited: sleeping {secs} seconds")
+                            time.sleep(secs)
+                            exp += 1
+                        else:
+                            # Any non 429 http respose error code is a failure condition
+                            raise e
+                # determine if we were successful
                 if res is None:
                     raise Exception(error_msgs["exp_limit_reached"])
                 # store the result in our results cache
-                if is_paginated:
+                if is_page_range_query:
                     results[qid].append(res)
                 else:
                     results[qid] = res
@@ -187,6 +184,8 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                 else:
                     # one or more of page_start and page_end is defined
                     validate_page_range(page_start, page_end)
+                    # mark this qid as representing a page range query
+                    self._page_range_qids.append(qid)
                     # queue a single call per page in range
                     if page_end:
                         for i, page in enumerate(range(page_start, page_end + 1)):
