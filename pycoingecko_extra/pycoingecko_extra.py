@@ -19,6 +19,8 @@ error_msgs = dict(
     exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing _exp_limit. Queued calls are retained."
 )
 
+# TODO: Support when page range query only specifies page_start
+
 
 def validate_page_range(page_start, page_end):
     """Validates user supplied values for page_start and page_end"""
@@ -63,8 +65,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                 f"Wrapper class overwrote existing methods on CoinGeckoAPI class: {overriden_methods}"
             )
         # setup wrapper instance fields, for managing queued calls and rate limit behavior
-        self._queued_calls = defaultdict(list)
-        self._flatten_qids = list()
+        self._reset_queued_state()
         self._exp_limit = kwargs.get("_exp_limit", 8)
         self._progress_interval = kwargs.get("_progress_interval", 10)
         logger.setLevel(kwargs.get("_log_level", 20))
@@ -94,73 +95,77 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
             v = getattr(self, attr)
             if callable(v) and not attr.startswith("_") and attr not in new_methods:
                 pagination = attr in paginated_fns
-                setattr(self, attr, partial(self.method_queueable, v, pagination))
+                setattr(self, attr, partial(self._method_queueable, v, pagination))
 
-    def queue_single(self, qid, fn, dup_check, *args, **kwargs):
+    def _reset_queued_state(self):
+        self._queued_calls = defaultdict(list)
+        self._flatten_qids = list()
+        self._infer_page_end_qids = list()
+
+    def _queue_single(self, qid, fn, dup_check, *args, **kwargs):
         if dup_check and qid in self._queued_calls:
             logger.warning(
                 f"Warning: multiple calls queued with identical qid: {qid}. Most recent call will overwrite old call."
             )
         self._queued_calls[qid].append((fn, args, kwargs))
 
-    def execute_queued(self):
-        """Generic implementation of exponential backoff for sequence of calls to coingecko api to deal with rate limiting
-        Logs progress updates (percentage of calls completed) at configurable intervals
-        """
+    def _execute_single(self, fn, *args, **kwargs):
+        # Implementation of exponential backoff for single call to deal with server side rate limiting
+        exp = 0
+        res = None
+        while res is None and exp < self._exp_limit + 1:
+            try:
+                res = fn(*args, **kwargs)
+            except requests.exceptions.ConnectionError:
+                # this is a subclass of requests.exceptions.RequestException that is a failure condition
+                raise
+            except requests.exceptions.RequestException as e:
+                if e.response.status_code == RATE_LIMIT_STATUS_CODE:
+                    secs = 2 ** exp
+                    logger.info(f"Rate limited: sleeping {secs} seconds")
+                    time.sleep(secs)
+                    exp += 1
+                else:
+                    # Any non 429 http respose error code is a failure condition
+                    raise e
+        return res
+
+    def _execute_queued(self):
+        """Execute all queued calls"""
         results = dict()
         progress_updates = 0
-        i = 0
-        try:
-            for (qid, call_list) in self._queued_calls.items():
-                is_paginated = len(call_list) > 1
+        call_count = 0
+        for (qid, call_list) in self._queued_calls.items():
+            is_paginated = len(call_list) > 1
+            if is_paginated:
+                results[qid] = list()
+            for (fn, args, kwargs) in call_list:
+                # make api call (with retries)
+                res = self._execute_single(fn, *args, **kwargs)
+                if res is None:
+                    raise Exception(error_msgs["exp_limit_reached"])
+                # store the result in our results cache
                 if is_paginated:
-                    results[qid] = list()
-                for (fn, args, kwargs) in call_list:
-                    exp = 0
-                    res = None
-                    while res is None and exp < self._exp_limit + 1:
-                        try:
-                            res = fn(*args, **kwargs)
-                        except requests.exceptions.ConnectionError as e:
-                            # this is a subclass of requests.exceptions.RequestException that is a failure condition
-                            raise e
-                        except requests.exceptions.RequestException as e:
-                            if e.response.status_code == RATE_LIMIT_STATUS_CODE:
-                                secs = 2 ** exp
-                                logger.info(f"Rate limited: sleeping {secs} seconds")
-                                time.sleep(secs)
-                                exp += 1
-                            else:
-                                # Any non 429 http respose error code is a failure condition
-                                raise e
-                    # check if we were successful
-                    if exp == self._exp_limit + 1:
-                        raise Exception(error_msgs["exp_limit_reached"])
-                    # store the result in our results cache
-                    if is_paginated:
-                        results[qid].append(res)
-                    else:
-                        results[qid] = res
-                    # log progress
-                    progress = i / len(self._queued_calls) * 100
-                    if progress > (progress_updates + 1) * self._progress_interval:
-                        logger.info(f"Progress: {math.floor(progress)}%")
-                        progress_updates += 1
-                    # increment call counter
-                    i += 1
-            # optionally flatten and page range responses if user desires
-            for qid in self._queued_calls.keys():
-                if qid in self._flatten_qids:
-                    results[qid] = flatten(results[qid])
-            logger.info(f"Progress: 100%")
-        except BaseException:
-            raise
-        finally:
-            self._queued_calls = defaultdict(list)
-            self._flatten_qids = list()
+                    results[qid].append(res)
+                else:
+                    results[qid] = res
+                # log progress
+                progress = call_count / len(self._queued_calls) * 100
+                if progress > (progress_updates + 1) * self._progress_interval:
+                    logger.info(f"Progress: {math.floor(progress)}%")
+                    progress_updates += 1
+                # increment call counter
+                call_count += 1
+
+        # optionally flatten and page range responses if user desires
+        for qid in self._queued_calls.keys():
+            if qid in self._flatten_qids:
+                results[qid] = flatten(results[qid])
+
+        logger.info(f"Progress: 100%")
         return results
 
-    def method_queueable(self, fn, pagination, *args, **kwargs):
+    def _method_queueable(self, fn, pagination, *args, **kwargs):
         """Runs method normally is 'qid' not in kwargs. Queues method call for later execution if 'qid' in kwargs"""
         qid = kwargs.get("qid")
         if qid:
@@ -178,23 +183,42 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                     # 1. paged endpoint but no paging arguments specified (api uses default of page 1)
                     # 2. paged endpoint and single page specified (supported by base api client)
                     dup_check = True
-                    self.queue_single(qid, fn, dup_check, *args, **kwargs)
+                    self._queue_single(qid, fn, dup_check, *args, **kwargs)
                 else:
                     # one or more of page_start and page_end is defined
                     validate_page_range(page_start, page_end)
                     # queue a single call per page in range
-                    for i, page in enumerate(range(page_start, page_end + 1)):
-                        # all queued requests after first are allowed to have same qid, as they are part of a page range query
-                        dup_check = i == 0
-                        self.queue_single(
-                            qid, fn, dup_check, *args, page=page, **kwargs
+                    if page_end:
+                        for i, page in enumerate(range(page_start, page_end + 1)):
+                            # all queued requests after first are allowed to have same qid, as they are part of a page range query
+                            dup_check = i == 0
+                            self._queue_single(
+                                qid, fn, dup_check, *args, page=page, **kwargs
+                            )
+                    else:
+                        # when only page_start is specified, we want to queue a request for all available pages
+                        # this can only be determined at execution time so we queue a single request now and the
+                        # rest will be queued as a part of execute_many
+                        dup_check = True
+                        self._queue_single(
+                            qid, fn, dup_check, *args, page=page_start, **kwargs
                         )
+                        self._infer_page_end_qids.append(qid)
                     # optionally mark these calls as flattenable
                     if flat:
                         self._flatten_qids.append(qid)
             else:
                 # queueable and pagination disabled
                 dup_check = True
-                self.queue_single(qid, fn, dup_check, *args, **kwargs)
+                self._queue_single(qid, fn, dup_check, *args, **kwargs)
         else:
             return fn(*args, **kwargs)
+
+    def execute_queued(self):
+        try:
+            results = self._execute_queued()
+        except BaseException:
+            raise
+        finally:
+            self._reset_queued_state()
+        return results
