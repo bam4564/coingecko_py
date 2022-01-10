@@ -3,8 +3,11 @@ import math
 import logging
 import requests
 import inspect
+import itertools 
+from collections import defaultdict 
 from functools import partial
 from pycoingecko import CoinGeckoAPI
+from requests import exceptions
 
 # This sets the root logger to write to stdout (your console).
 logging.basicConfig()
@@ -16,22 +19,29 @@ error_msgs = dict(
     exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing _exp_limit. Queued calls are retained."
 )
 
-
-def method_queueable(self, fn, *args, **kwargs):
-    """Runs method normally is 'qid' not in kwargs. Queues method call for later execution if 'qid' in kwargs"""
-    qid = kwargs.get("qid")
-    if qid:
-        del kwargs["qid"]
-        if qid in self._queued_calls:
-            logger.warning(
-                f"Warning: multiple calls queued with identical qid: {qid}. Most recent call will overwrite old call."
-            )
-        self._queued_calls[qid] = (fn, args, kwargs)
+def validate_page_range(page_start, page_end): 
+    """ Validates user supplied values for page_start and page_end """
+    if not page_start: 
+        raise ValueError("page_end was defined but page_start was not")
+    if not (isinstance(page_start, int) and isinstance(page_end, int)): 
+        raise ValueError(f"one or more of page_start: {page_start} or page_end: {page_end} was not an int")
+    if page_end < page_start: 
+        raise ValueError(f"page_end: {page_end} less than page_start: {page_start}")
+    if page_start <= 0 or page_end <= 0: 
+        raise ValueError(f"page_start: {page_start} or page_end: {page_end} was less than or equal to 0")
+    
+def flatten(data):
+    # data should be either a list of lists or a list of dictionaries. it is also non-empty 
+    d = data[0]
+    if isinstance(d, list): 
+        return list(itertools.chain(*data))
+    elif isinstance(d, dict): 
+        return {k: v for d in data for k, v in d.items()}
     else:
-        return fn(*args, **kwargs)
-
+        raise Exception(f"Response of unsupported type: {type(d)}")
 
 class CoinGeckoAPIExtra(CoinGeckoAPI):
+    
     def __init__(self, *args, **kwargs):
         # setup base class normally, removing kwargs specific to the wrapper
         filter_kwargs = ["_exp_limit", "_progress_interval", "_log_level"]
@@ -47,15 +57,45 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                 f"Wrapper class overwrote existing methods on CoinGeckoAPI class: {overriden_methods}"
             )
         # setup wrapper instance fields, for managing queued calls and rate limit behavior
-        self._queued_calls = dict()
+        self._queued_calls = defaultdict(list)
+        self._flatten_qids = list()
         self._exp_limit = kwargs.get("_exp_limit", 8)
         self._progress_interval = kwargs.get("_progress_interval", 10)
         logger.setLevel(kwargs.get("_log_level", 20))
         # decorate bound methods on base class that correspond to api calls to enable queueing
+        # add page range query support to all functions that support pagination 
+        # the base api client makes this impossible to dete
+        paginated_fns = [
+            # coins 
+            'get_coins_markets',
+            'get_coin_ticker_by_id', 
+            'get_coin_status_updates_by_id', 
+            # exchanges
+            'get_exchanges_list',
+            'get_exchanges_tickers_by_id', 
+            'get_exchanges_status_updates_by_id', 
+            # finance
+            'get_finance_platforms',
+            'get_finance_products', 
+            # indexes 
+            'get_indexes', 
+            # derivatives 
+            'get_derivatives_exchanges', 
+            # status 
+            'get_status_updates', 
+        ]
         for attr in dir(self):
             v = getattr(self, attr)
             if callable(v) and not attr.startswith("_") and attr not in new_methods:
-                setattr(self, attr, partial(method_queueable, self, v))
+                pagination = attr in paginated_fns
+                setattr(self, attr, partial(self.method_queueable, v, pagination))
+
+    def queue_single(self, qid, fn, dup_check, *args, **kwargs): 
+        if dup_check and qid in self._queued_calls:
+            logger.warning(
+                f"Warning: multiple calls queued with identical qid: {qid}. Most recent call will overwrite old call."
+            )
+        self._queued_calls[qid].append((fn, args, kwargs))
 
     def execute_queued(self):
         """Generic implementation of exponential backoff for sequence of calls to coingecko api to deal with rate limiting
@@ -63,30 +103,90 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         """
         results = dict()
         progress_updates = 0
-        for i, ((qid), (fn, args, kwargs)) in enumerate(self._queued_calls.items()):
-            exp = 0
-            while results.get(qid) is None and exp < self._exp_limit + 1:
-                try:
-                    results[qid] = fn(*args, **kwargs)
-                except requests.exceptions.ConnectionError as e:
-                    # this is a subclass of requests.exceptions.RequestException that is a failure condition
-                    raise e
-                except requests.exceptions.RequestException as e:
-                    if e.response.status_code == RATE_LIMIT_STATUS_CODE:
-                        secs = 2 ** exp
-                        logger.info(f"Rate limited: sleeping {secs} seconds")
-                        time.sleep(secs)
-                        exp += 1
-                    else:
-                        # Any non 429 http respose error code is a failure condition
-                        raise e
-            if exp == self._exp_limit + 1:
-                raise Exception(error_msgs["exp_limit_reached"])
-            progress = i / len(self._queued_calls) * 100
-            if progress > (progress_updates + 1) * self._progress_interval:
-                logger.info(f"Progress: {math.floor(progress)}%")
-                progress_updates += 1
-        logger.info(f"Progress: 100%")
-        # reset the call queue
-        self._queued_calls = dict()
+        i = 0
+        try: 
+            for (qid, call_list) in self._queued_calls.items():
+                is_paginated = len(call_list) > 1
+                if is_paginated: 
+                    results[qid] = list()
+                for (fn, args, kwargs) in call_list: 
+                    exp = 0
+                    res = None
+                    while res is None and exp < self._exp_limit + 1:
+                        try:
+                            res = fn(*args, **kwargs)
+                        except requests.exceptions.ConnectionError as e:
+                            # this is a subclass of requests.exceptions.RequestException that is a failure condition
+                            raise e
+                        except requests.exceptions.RequestException as e:
+                            if e.response.status_code == RATE_LIMIT_STATUS_CODE:
+                                secs = 2 ** exp
+                                logger.info(f"Rate limited: sleeping {secs} seconds")
+                                time.sleep(secs)
+                                exp += 1
+                            else:
+                                # Any non 429 http respose error code is a failure condition
+                                raise e
+                    # check if we were successful 
+                    if exp == self._exp_limit + 1:
+                        raise Exception(error_msgs["exp_limit_reached"])
+                    # store the result in our results cache 
+                    if is_paginated: 
+                        results[qid].append(res)
+                    else: 
+                        results[qid] = res
+                    # log progress 
+                    progress = i / len(self._queued_calls) * 100
+                    if progress > (progress_updates + 1) * self._progress_interval:
+                        logger.info(f"Progress: {math.floor(progress)}%")
+                        progress_updates += 1
+                    # increment call counter 
+                    i += 1
+            # optionally flatten and page range responses if user desires 
+            for qid in self._queued_calls.keys():
+                if qid in self._flatten_qids: 
+                    results[qid] = flatten(results[qid])
+            logger.info(f"Progress: 100%")
+        except BaseException: 
+            raise 
+        finally: 
+            self._queued_calls = defaultdict(list)
+            self._flatten_qids = list() 
         return results
+    
+    def method_queueable(self, fn, pagination, *args, **kwargs):
+        """Runs method normally is 'qid' not in kwargs. Queues method call for later execution if 'qid' in kwargs"""
+        qid = kwargs.get("qid")
+        if qid:
+            try: 
+                qid = str(qid)
+            except: 
+                raise ValueError(f"Could not coerce qid to string")
+            del kwargs["qid"]
+            if pagination: 
+                page = kwargs.get("page")
+                page_start = kwargs.get("_page_start")
+                page_end = kwargs.get("_page_end")
+                flat = kwargs.get("_flat")
+                if not (page or page_start or page_end) or page: 
+                    # 1. paged endpoint but no paging arguments specified (api uses default of page 1)
+                    # 2. paged endpoint and single page specified (supported by base api client)
+                    dup_check = True 
+                    self.queue_single(qid, fn, dup_check, *args, **kwargs)
+                else: 
+                    # one or more of page_start and page_end is defined
+                    validate_page_range(page_start, page_end)
+                    # queue a single call per page in range 
+                    for i, page in enumerate(range(page_start, page_end+1)):
+                        # all queued requests after first are allowed to have same qid, as they are part of a page range query 
+                        dup_check = i == 0
+                        self.queue_single(qid, fn, dup_check, *args, page=page, **kwargs)
+                    # optionally mark these calls as flattenable 
+                    if flat:
+                        self._flatten_qids.append(qid)
+            else:
+                # queueable and pagination disabled 
+                dup_check = True 
+                self.queue_single(qid, fn, dup_check, *args, **kwargs)
+        else:
+            return fn(*args, **kwargs)
