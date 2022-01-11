@@ -24,6 +24,7 @@ error_msgs = dict(
 
 class CoinGeckoAPIExtra(CoinGeckoAPI):
 
+    # Base class makes this impossible to determine via introspection so these were manually aggregated
     paginated_fns = [
         # coins
         "get_coins_markets",
@@ -44,11 +45,14 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         "get_status_updates",
     ]
 
+    defaults = dict(_exp_limit=8, _progress_interval=10, _log_level=logging.INFO)
+
+    _include_resp = False
+
     def __init__(self, *args, **kwargs):
         # setup base class normally, removing kwargs specific to the wrapper
-        filter_kwargs = ["_exp_limit", "_progress_interval", "_log_level"]
         super().__init__(
-            *args, **{k: v for k, v in kwargs.items() if k not in filter_kwargs}
+            *args, **{k: v for k, v in kwargs.items() if k not in self.defaults.keys()}
         )
         # perform instrospection to ensure no overrides of base class, and to get new methods of this subclass
         # we need the list of new methods so we ensure we only decorate methods of base class
@@ -56,10 +60,9 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         new_methods = self._get_new_method_names()
         # setup wrapper instance fields, for managing queued calls, rate limit behavior, pagination
         self._reset_state()
-        self._exp_limit = kwargs.get("_exp_limit", 8)
-        self._progress_interval = kwargs.get("_progress_interval", 10)
-        logger.setLevel(kwargs.get("_log_level", logging.INFO))
-        self._include_response = False
+        for k, v in self.defaults.items():
+            setattr(self, k, kwargs.get(k) or v)
+        logger.setLevel(self._log_level)
         # decorate bound methods on base class that correspond to api calls to enable
         # queueing and page range query support for pagination enabled functions
         for attr in dir(self):
@@ -87,7 +90,6 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         cls = inherited_class[0]
         common = cls.__dict__.keys() & self.__class__.__dict__.keys()
         overrides = set(
-            # filter out builtin methods as these exist on all classes
             m
             for m in common
             if cls.__dict__[m] != self.__class__.__dict__[m] and not m.startswith("__")
@@ -130,12 +132,12 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         self._queued_calls[qid].append((fn, args, kwargs))
 
     @contextmanager
-    def include_response(self):
-        self._include_response = True
+    def _include_response(self):
+        self._include_resp = True
         yield
-        self._include_response = False
+        self._include_resp = False
 
-    def _CoinGeckoAPI__request(self, url, include_response=False):
+    def _CoinGeckoAPI__request(self, url):
         logger.debug(f"HTTPS Request: {url}")
         try:
             response = self.session.get(url, timeout=self.request_timeout)
@@ -144,7 +146,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         try:
             response.raise_for_status()
             content = json.loads(response.content.decode("utf-8"))
-            if self._include_response:
+            if self._include_resp:
                 return content, response
             else:
                 return content
@@ -191,7 +193,7 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         while res is None and exp < self._exp_limit + 1:
             try:
                 if include_response:
-                    with self.include_response():
+                    with self._include_response():
                         res, response = fn(*args, **kwargs)
                         return res, response
                 else:
@@ -218,12 +220,10 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         # impute calls related to page range queries where page_end is not specified
         res_cache = self._impute_page_range_calls()
         # execute all queued calls
-        results = dict()
-        for qid in self._page_range_qids:
-            results[qid] = list()
+        results = {qid: list() for qid in self._page_range_qids}
         last_progress = 0
         call_count = 0
-        num_calls = sum([len(v) for _, v in self._queued_calls.items()])
+        num_calls = sum([len(v) for v in self._queued_calls.values()])
         include_response = False
         for (qid, call_list) in self._queued_calls.items():
             call_list = deque(call_list)

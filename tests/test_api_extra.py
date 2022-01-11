@@ -282,7 +282,7 @@ class TestWrapper(unittest.TestCase):
     # ---------- MULTIPLE QUEUED CALLS + SERVER SIDE RATE LIMITING  ----------
 
     @responses.activate
-    def test_page_range_query_page_start_only(self):
+    def test_page_range_query_page_start_page_end(self):
         page_start = 2
         page_end = 4
         npages = page_end - page_start + 1
