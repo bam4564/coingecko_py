@@ -1780,4 +1780,93 @@ class TestWrapper(unittest.TestCase):
         assert str(e.value) == error_msgs["exp_limit_reached"]
         assert len(self.cg._queued_calls) == 0
 
+    @responses.activate
+    def test_page_range_query(self):
+        bitcoin_json_sample = {
+            "name": "Bitcoin",
+            "tickers": [
+                {
+                    "base": "BTC",
+                    "target": "USDT",
+                    "market": {
+                        "name": "BW.com",
+                        "identifier": "bw",
+                        "has_trading_incentive": False,
+                    },
+                    "last": 7963.0,
+                    "    volume": 93428.7568,
+                    "converted_last": {
+                        "btc": 0.99993976,
+                        "eth": 31.711347,
+                        "usd": 7979.23,
+                    },
+                    "converted_volume": {
+                        "btc": 93423,
+                        "eth": 2962752,
+                        "usd": 745489919,
+                    },
+                    "    bid_ask_spread_percentage": 0.111969,
+                    "timestamp": "2019-05-24T11:20:14+00:00",
+                    "is_anomaly": False,
+                    "is_stale": False,
+                    "trade_url": "https://www.bw.com/trade/btc_us    dt",
+                    "coin_id": "bitcoin",
+                }
+            ],
+        }
+        history_json_sample = {
+            "id": "bitcoin",
+            "symbol": "btc",
+            "name": "Bitcoin",
+            "localization": {
+                "en": "Bitcoin",
+                "es": "Bitcoin",
+                "de": "Bitcoin",
+                "nl": "Bitcoin",
+                "pt": "Bitcoin",
+                "fr": "Bitcoin",
+                "it": "Bitcoin",
+                "hu": "Bitcoin",
+                "ro": "Bitcoin",
+                "sv": "Bitcoin",
+                "pl": "Bitcoin",
+                "id": "Bitcoin",
+                "zh": "比特币",
+                "zh-tw": "比特幣",
+                "ja": "ビットコイン",
+                "ko": "비트코인",
+                "ru": "биткоина",
+                "ar": "بيتكوين",
+                "th": "บิตคอยน์",
+                "vi": "Bitcoin",
+                "tr": "Bitcoin",
+            },
+        }
+
+        responses.add(
+            responses.GET,
+            "https://api.coingecko.com/api/v3/coins/bitcoin/tickers",
+            json=bitcoin_json_sample,
+            status=200,
+        )
+        responses.add(
+            responses.GET,
+            "https://api.coingecko.com/api/v3/coins/bitcoin/history?date=27-08-2018",
+            json=history_json_sample,
+            status=200,
+        )
+
+        self.cg.get_coin_ticker_by_id("bitcoin", qid="one")
+        assert len(self.cg._queued_calls) == 1
+        self.cg.get_coin_history_by_id("bitcoin", "27-08-2018", qid="two")
+        assert len(self.cg._queued_calls) == 2
+        response = self.cg.execute_queued()
+        assert len(self.cg._queued_calls) == 0
+
+        assert response["one"] == bitcoin_json_sample
+        assert response["two"] == history_json_sample
+
+
+
+
     # TODO: Add tests to ensure that input kwargs that configure extension are found as instance properties

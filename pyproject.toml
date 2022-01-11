@@ -8,14 +8,17 @@ readme = "README.md"
 homepage = "https://github.com/brycemorrow4564/pycoingecko-extra"
 repository = "https://github.com/brycemorrow4564/pycoingecko-extra"
 packages = [
-    { include = "pycoingecko_extra" }
+    { include = "pycoingecko_extra" }, 
+    { include = "tests" }
 ]
+exclude = ["tests"]
 
 [tool.poetry.scripts]                                                           
-test = "test_runner:run_tests"  
+test = "tests.scripts.runner:run_tests"  
+get_data = "tests.scripts.get_test_data:get_data"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 pycoingecko = "*"
 requests = "^2.27.1"
 
