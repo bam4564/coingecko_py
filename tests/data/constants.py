@@ -1,5 +1,7 @@
+from collections import OrderedDict
+
 """ Maps url to tuple of [endpoint_name, args, kwargs] """
-url_to_endpoint = {
+url_to_endpoint = OrderedDict(**{
     "https://api.coingecko.com/api/v3/ping": ["ping", [], {}],
     "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd": [
         "get_price",
@@ -88,4 +90,4 @@ url_to_endpoint = {
         [],
         {},
     ],
-}
+})

@@ -195,7 +195,8 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                         res, response = fn(*args, **kwargs)
                         return res, response
                 else:
-                    return fn(*args, **kwargs)
+                    res = fn(*args, **kwargs)
+                    return res
             except requests.exceptions.ConnectionError:
                 # this is a subclass of requests.exceptions.RequestException that is a failure condition
                 raise
