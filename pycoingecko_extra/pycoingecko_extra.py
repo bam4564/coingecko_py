@@ -2,11 +2,12 @@ import time
 import math
 import logging
 import requests
-import inspect
 import itertools
+import json 
 from typing import List, Set
 from collections import defaultdict, deque
 from functools import partial
+from contextlib import contextmanager
 
 from pycoingecko import CoinGeckoAPI
 
@@ -53,11 +54,12 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         # we need the list of new methods so we ensure we only decorate methods of base class
         self._detect_overrides()
         new_methods = self._get_new_method_names()
-        # setup wrapper instance fields, for managing queued calls and rate limit behavior
-        self._reset_queued_state()
+        # setup wrapper instance fields, for managing queued calls, rate limit behavior, pagination 
+        self._reset_state()
         self._exp_limit = kwargs.get("_exp_limit", 8)
         self._progress_interval = kwargs.get("_progress_interval", 10)
         logger.setLevel(kwargs.get("_log_level", logging.INFO))
+        self._include_response = False 
         # decorate bound methods on base class that correspond to api calls to enable
         # queueing and page range query support for pagination enabled functions
         for attr in dir(self):
@@ -77,68 +79,124 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         my_methods = set([attr for attr in dir(self) if callable(getattr(self, attr))])
         return my_methods - inherited_methods
 
-    def _detect_overrides(self):
+    def _detect_overrides(self, whitelist=set(['_CoinGeckoAPI__request'])) -> None:
         # ensure we are not overridding any methods on the base class. if this occurs, the method names in the wrapper need to be changed
         inherited_class = self.__class__.__bases__
         if len(inherited_class) != 1:
             raise ValueError("Parent class introspection broken")
         cls = inherited_class[0]
         common = cls.__dict__.keys() & self.__class__.__dict__.keys()
-        overrides = [
+        overrides = set(
             # filter out builtin methods as these exist on all classes
-            m
-            for m in common
+            m for m in common
             if cls.__dict__[m] != self.__class__.__dict__[m] and not m.startswith("__")
-        ]
+        )
+        if not all(v in overrides for v in whitelist): 
+            raise ValueError("Methods whitelisted for override didn't exist on base class")
+        overrides = overrides - whitelist
         if overrides:
             raise Exception(
                 f"API Client extension overwrote methods in base class: {overrides}"
             )
 
-    def _validate_page_range(page_start, page_end):
+    def _validate_page_range(self, page_start, page_end) -> None:
         """Validates user supplied values for page_start and page_end"""
         if not page_start:
-            raise ValueError("page_end was defined but page_start was not")
-        if not (isinstance(page_start, int) and isinstance(page_end, int)):
-            raise ValueError(
-                f"one or more of page_start: {page_start} or page_end: {page_end} was not an int"
-            )
-        if page_end < page_start:
+            raise ValueError("page_start must be defined")
+        if not isinstance(page_start, int): 
+            raise ValueError("page_start must be int")
+        if page_end is not None and not isinstance(page_end, int): 
+            raise ValueError("page_end was specified but was not an int")
+        if page_end is not None and page_end < page_start:
             raise ValueError(f"page_end: {page_end} less than page_start: {page_start}")
-        if page_start <= 0 or page_end <= 0:
+        if page_start <= 0 :
             raise ValueError(
-                f"page_start: {page_start} or page_end: {page_end} was less than or equal to 0"
+                f"page_start: {page_start} was less than or equal to 0"
+            )
+        if page_end is not None and page_end <= 0:
+            raise ValueError(
+                f"page_end: {page_end} was less than or equal to 0"
             )
 
-    def _flatten(data):
-        # data should be either a list of lists or a list of dictionaries. it is also non-empty
-        d = data[0]
-        if isinstance(d, list):
-            return list(itertools.chain(*data))
-        elif isinstance(d, dict):
-            return {k: v for d in data for k, v in d.items()}
-        else:
-            raise Exception(f"Response of unsupported type: {type(d)}")
-
-    def _reset_queued_state(self):
+    def _reset_state(self) -> None:
         self._queued_calls = defaultdict(list)
         self._page_range_qids = list()
-        self._flatten_qids = list()
         self._infer_page_end_qids = list()
 
-    def _queue_single(self, qid, fn, dup_check, *args, **kwargs):
+    def _queue_single(self, qid, fn, dup_check, *args, **kwargs) -> None:
         if dup_check and qid in self._queued_calls:
             logger.warning(
                 f"Warning: multiple calls queued with identical qid: {qid}. Most recent call will overwrite old call."
             )
         self._queued_calls[qid].append((fn, args, kwargs))
 
-    def _execute_single(self, fn, *args, **kwargs):
+    @contextmanager
+    def include_response(self): 
+        self._include_response = True 
+        yield 
+        self._include_response = False 
+
+    def _CoinGeckoAPI__request(self, url, include_response=False):
+        logger.debug(f"HTTPS Request: {url}")
+        try:
+            response = self.session.get(url, timeout=self.request_timeout)
+        except requests.exceptions.RequestException:
+            raise
+        try:
+            response.raise_for_status()
+            content = json.loads(response.content.decode('utf-8'))
+            if self._include_response: 
+                return content, response 
+            else: 
+                return content 
+        except Exception as e:
+            try:
+                content = json.loads(response.content.decode('utf-8'))
+                raise ValueError(content)
+            except json.decoder.JSONDecodeError:
+                pass
+            raise
+
+    def _impute_page_range_calls(self): 
+        items = self._queued_calls.items()
+        res_cache = dict()
+        for qid, call_list in items: 
+            infer_page_end = qid in self._infer_page_end_qids
+            if infer_page_end: 
+                if len(call_list) != 1: 
+                    raise ValueError("Implementation error. infer_page_end was true but more than one call in call_list")
+                fn, args, kwargs = call_list[0]
+                page_start = kwargs['page']
+                is_page_range_query = True 
+                include_response = True 
+                res, response = self._execute_single(
+                    {}, is_page_range_query, include_response, qid, fn, *args, **kwargs
+                )
+                res_cache[(qid, page_start)] = res 
+                per_page = int(response.headers['Per-Page'])
+                total = int(response.headers['Total'])
+                page_end = math.ceil(total / per_page)
+                # note: we already queued a request for page_start so we begin at page_start + 1 
+                for page in range(page_start + 1, page_end + 1): 
+                    self._queue_single(
+                        qid, fn, False, *args, **{**kwargs, 'page': page}
+                    )
+        return res_cache
+
+    def _execute_single(self, res_cache, is_page_range_query, include_response, qid, fn, *args, **kwargs): 
         exp = 0
-        res = None
+        if is_page_range_query: 
+            res = res_cache.get((qid, kwargs['page']), None)
+        else: 
+            res = None
         while res is None and exp < self._exp_limit + 1:
             try:
-                res = fn(*args, **kwargs)
+                if include_response:
+                    with self.include_response(): 
+                        res, response = fn(*args, **kwargs)
+                        return res, response 
+                else:
+                    return fn(*args, **kwargs)
             except requests.exceptions.ConnectionError:
                 # this is a subclass of requests.exceptions.RequestException that is a failure condition
                 raise
@@ -151,51 +209,41 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                 else:
                     # Any non 429 http respose error code is a failure condition
                     raise e
-        return res
+        if exp == self._exp_limit + 1: 
+            raise Exception(error_msgs["exp_limit_reached"])
+        return res 
 
     def _execute_queued(self):
-        """Execute all queued calls"""
+        """ Execute all queued calls
+        """
+        # impute calls related to page range queries where page_end is not specified 
+        res_cache = self._impute_page_range_calls()
+        # execute all queued calls 
         results = dict()
-        progress_updates = 0
+        last_progress = 0
         call_count = 0
+        num_calls = sum([len(v) for k, v in self._queued_calls.items()])
         for (qid, call_list) in self._queued_calls.items():
             call_list = deque(call_list)
-            infer_page_end = qid in self._infer_page_end_qids
             is_page_range_query = qid in self._page_range_qids
             if is_page_range_query:
                 results[qid] = list()
-            first_request = True
             while call_list:
                 # make api call (with retries)
                 fn, args, kwargs = call_list.popleft()
-                res = self._execute_single(fn, *args, **kwargs)
-                # determine if we were successful
-                if res is None:
-                    raise Exception(error_msgs["exp_limit_reached"])
-                # add extra calls if this is our first call and we are inferring page end
-                if first_request and infer_page_end:
-                    # TODO: add more queries to queue after first call is made (parse n per page and total from first response header)
-                    pass
+                res = self._execute_single(res_cache, is_page_range_query, False, qid, fn, *args, **kwargs)
                 # store the result in our results cache
                 if is_page_range_query:
                     results[qid].append(res)
                 else:
                     results[qid] = res
                 # log progress
-                progress = call_count / len(self._queued_calls) * 100
-                if progress > (progress_updates + 1) * self._progress_interval:
-                    logger.info(f"Progress: {math.floor(progress)}%")
-                    progress_updates += 1
-                # call book keeping updates
                 call_count += 1
-                first_request = False
-
-        # optionally flatten and page range responses if user desires
-        for qid in self._queued_calls.keys():
-            if qid in self._flatten_qids:
-                results[qid] = self._flatten(results[qid])
-
-        logger.info(f"Progress: 100%")
+                progress = call_count / num_calls * 100
+                next_progress = last_progress + self._progress_interval
+                if progress >= next_progress:
+                    logger.info(f"Progress: {math.floor(progress)}%")
+                    last_progress = progress
         return results
 
     def _method_queueable(self, fn, pagination, *args, **kwargs):
@@ -211,7 +259,9 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                 page = kwargs.get("page")
                 page_start = kwargs.get("_page_start")
                 page_end = kwargs.get("_page_end")
-                flat = kwargs.get("_flat")
+                for k in ['_page_start', '_page_end']: 
+                    if k in kwargs: 
+                        del kwargs[k]
                 if not (page or page_start or page_end) or page:
                     # 1. paged endpoint but no paging arguments specified (api uses default of page 1)
                     # 2. paged endpoint and single page specified (supported by base api client)
@@ -237,9 +287,6 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
                             qid, fn, True, *args, page=page_start, **kwargs
                         )
                         self._infer_page_end_qids.append(qid)
-                    # optionally mark these calls as flattenable
-                    if flat:
-                        self._flatten_qids.append(qid)
             else:
                 # queueable and pagination disabled
                 self._queue_single(qid, fn, True, *args, **kwargs)
@@ -252,5 +299,5 @@ class CoinGeckoAPIExtra(CoinGeckoAPI):
         except BaseException:
             raise
         finally:
-            self._reset_queued_state()
+            self._reset_state()
         return results

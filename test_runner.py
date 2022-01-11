@@ -41,4 +41,4 @@ def run_tests():
             )
     # TODO: Generate output coverage report and use this to create badge in readme
     # subprocess.run("pytest --cov tests ".split(" "))
-    subprocess.run("pytest tests ".split(" "))
+    subprocess.run("pytest -p no:cacheprovider tests ".split(" "))
