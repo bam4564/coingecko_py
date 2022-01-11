@@ -1866,7 +1866,4 @@ class TestWrapper(unittest.TestCase):
         assert response["one"] == bitcoin_json_sample
         assert response["two"] == history_json_sample
 
-
-
-
     # TODO: Add tests to ensure that input kwargs that configure extension are found as instance properties
