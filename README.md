@@ -15,6 +15,16 @@ This module is intended to serve as a drop-in replacement for the pycoingecko ap
 
 To give users confidence that this is true, the unit tests for this package clone the tests from the base package, replace all instances of the base class with this modules' subclass, and include these tests in the full test suite (which includes robust tests for new features). 
 
+## Outline 
+[Installation](#installation)
+[Usage](#usage)
+[Examples - Mitigate Rate Limiting](#examples---mitigate-rate-limiting)
+[Examples - Page Range Queries](#examples---page-range-queries)
+[Client Configuration](#client-configuration)
+[Summary](#summary)
+[Development and Testing](#development-and-testing)
+[License](#license)
+
 ## Installation 
 
 PyPI
@@ -36,7 +46,7 @@ cg = CoinGeckoAPIExtra()
 ```
 If you make this change to an existing script, it will function exactly the same as before as `CoinGeckoAPIExtra` is a subclass of `CoinGeckoAPI`. 
 
-## Examples - Rate Limiting  
+## Examples - Mitigate Rate Limiting  
 
 - This functionality is available for **all** endpoints available on the base client. 
 - All instances of `cg` you see in code blocks below (and in other sections) are an instance of `CoinGeckoAPIExtra`. 
@@ -126,7 +136,7 @@ Here is an example that uses the client to query for a single page of data
 cg.get_coin_ticker_by_id('bitcoin', page=2, per_page=50)
 ```
 
-Page range queries allow you to request a range of pages in a **single** api call. Internally the client will have to request all pages, but the user will only have to make one call. 
+Page range queries allow you to request a range of pages in a **single** client call.
 
 Here is an example of doing pagination using the base api client functionality 
 ```python 
@@ -146,13 +156,13 @@ Both code blocks produce equivalent output. The return value of a page range que
 
 It's important to note that `qid` must be included as a keyword argument for page range queries. Thus, page range queries will also automatically deal with rate limiting as detailed in the [rate limiting](#examples---rate-limiting) section. 
 
-The coolest thing about page range queries is that you can perform them without specifying a `page_end`. This will result in the retrival of all data pages. 
+The coolest thing about page range queries is that you can perform them without specifying a `page_end`. This will result in the retrival of all available data pages from `page_start` onwards. 
 ```python 
 cg.get_coin_ticker_by_id('bitcoin', qid="data", page_start=1)
 data = cg.execute_queued()['data']
 ```
 
-This is actually hard to simulate with the base api client itself. For each of it's api endpoints methods, it only returns the data. It discards the HTTP response that includes headers which give users details about how many total pages exist. Using the base client, you would continually need to increment a counter and continue requesting pages until you found an empty data object. But since the api returns different types of data objects for different paginated endpoints (dict, list, etc.), you would need to have a different empty condition for different paginated endpoints.  
+This is actually hard to simulate with the base api client itself. For each of it's api endpoints methods, it only returns the data. It discards the HTTP response that includes headers which give users details about how many total pages exist. Using the base client, you would continually need to increment a counter and continue requesting pages until you found an empty data object. But since the api returns different types of data objects for different paginated endpoints (dict, list, etc.), you would need to have a different **empty** condition for different paginated endpoints.  
 
 ## Client Configuration
 
@@ -162,7 +172,7 @@ The extended client supports multiple configuration options which impact its beh
 | --- | --- | --- |
 | exp_limit | 8 | Max exponent (2<sup>exp_limit</sup>) for exponential backoff retries. |
 | progress_interval | 10 | Min percent interval at which to log progress of queued api calls |
-| log_level | 20 | python [logging](https://docs.python.org/3/library/logging.html) log level |
+| log_level | 20 | python [logging](https://docs.python.org/3/library/logging.html) log level for client log messages |
 
 The API client doesn't print any messages, but has logs at the following levels. 
 - 10 (logging.DEBUG) will provide logs about internal state of client. 
@@ -182,11 +192,11 @@ To summarize all the above functionality of this package in a single section
 - `CoinGeckoAPIExtra` is an extended version of `CoinGeckoAPI` that can serve as a drop in replacement. 
 - It's extra features are accessible in the following ways 
   - `cg.execute_queued` is the only public method added to the client. It takes no input arguments and returns a dictionary that maps `qid` values to the corresponding queued api call. 
-  - You can queue api calls by include the keyword argument `qid` in an api call. When you include the kwarg `qid` the function call does not return anything (as it was queued for later execution). 
+  - You can queue api calls by include the keyword argument `qid` in a client call. When you include the kwarg `qid` the function call does not return anything (as it was queued for later execution). 
   - Queued calls benefit from the clients internal strategy for mitigating server side rate limiting. 
   - Page range queries allow you to request a range of data pages in a single client call. 
     - If `page_start` and `page_end` are both defined, it will return all data pages in range. 
-    - If `page_start` is defined and `page_end` is not, it will return all data pages from `page_start` onwards 
+    - If `page_start` is defined and `page_end` is not, it will return all data pages from `page_start` onwards.
     - Page range queries must be queued (include `qid` in their call signature). 
 
 ## Development and Testing 
