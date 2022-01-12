@@ -13,7 +13,7 @@ This allows us to
 
 
 def run_tests():
-    USE_CACHED = False  # For development purposes only
+    USE_CACHED = True  # For development purposes only
     TEST_FILE_PATH = "./tests/test_api.py"
     if USE_CACHED:
         if not os.path.exists(TEST_FILE_PATH):

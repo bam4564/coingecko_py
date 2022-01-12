@@ -6,7 +6,7 @@ from tests.data.constants import url_to_endpoint
 
 
 def get_data():
-    cg = CoinGeckoAPIExtra(_log_level=20)
+    cg = CoinGeckoAPIExtra(log_level=20)
     # create data file for non-paginated endpoints
     results = dict()
     for url in url_to_endpoint.keys():

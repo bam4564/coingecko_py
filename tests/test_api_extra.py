@@ -219,7 +219,7 @@ class TestWrapper(unittest.TestCase):
             queued += 1
             assert len(self.cg._queued_calls) == queued
 
-        self.cg._exp_limit = num_calls
+        self.cg.exp_limit = num_calls
         response = self.cg.execute_queued()
         assert len(self.cg._queued_calls) == 0
         assert len(responses.calls) == total_calls
@@ -273,7 +273,7 @@ class TestWrapper(unittest.TestCase):
             queued += 1
             assert len(self.cg._queued_calls) == queued
 
-        self.cg._exp_limit = num_calls
+        self.cg.exp_limit = num_calls
         with pytest.raises(Exception) as e:
             self.cg.execute_queued()
         assert str(e.value) == error_msgs["exp_limit_reached"]
@@ -282,7 +282,7 @@ class TestWrapper(unittest.TestCase):
     # ---------- MULTIPLE QUEUED CALLS + SERVER SIDE RATE LIMITING  ----------
 
     @responses.activate
-    def test_page_range_query_page_start_page_end(self):
+    def test_page_range_querypage_startpage_end(self):
         page_start = 2
         page_end = 4
         npages = page_end - page_start + 1
@@ -308,8 +308,8 @@ class TestWrapper(unittest.TestCase):
                 *args,
                 **kwargs,
                 qid=url,
-                _page_start=page_start,
-                _page_end=page_end,
+                page_start=page_start,
+                page_end=page_end,
                 per_page=5
             )
             assert len(self.cg._queued_calls.keys()) == i + 1
@@ -326,7 +326,7 @@ class TestWrapper(unittest.TestCase):
             assert self.expected_response_paged[purl] == res[pi]
 
     @responses.activate
-    def test_page_range_query_page_start_no_page_end(self):
+    def test_page_range_querypage_start_nopage_end(self):
         page_start = 2
         page_end = 4
         npages = page_end - page_start + 1
@@ -358,7 +358,7 @@ class TestWrapper(unittest.TestCase):
             endpoint_name, args, kwargs = url_to_endpoint[url]
             assert "page" not in kwargs
             getattr(self.cg, endpoint_name)(
-                *args, **kwargs, qid=url, _page_start=page_start, per_page=5
+                *args, **kwargs, qid=url, page_start=page_start, per_page=5
             )
             assert len(self.cg._queued_calls.keys()) == i + 1
             assert len(self.cg._queued_calls[url]) == 1
