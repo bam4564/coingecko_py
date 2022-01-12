@@ -279,10 +279,10 @@ class TestWrapper(unittest.TestCase):
         assert str(e.value) == error_msgs["exp_limit_reached"]
         assert len(self.cg._queued_calls) == 0
 
-    # ---------- MULTIPLE QUEUED CALLS + SERVER SIDE RATE LIMITING  ----------
+    # ---------- PAGE RANGE QUERIES ----------
 
     @responses.activate
-    def test_page_range_querypage_startpage_end(self):
+    def test_page_range_query_page_start_end(self):
         page_start = 2
         page_end = 4
         npages = page_end - page_start + 1
@@ -326,7 +326,7 @@ class TestWrapper(unittest.TestCase):
             assert self.expected_response_paged[purl] == res[pi]
 
     @responses.activate
-    def test_page_range_querypage_start_nopage_end(self):
+    def test_page_range_query_page_start(self):
         page_start = 2
         page_end = 4
         npages = page_end - page_start + 1
@@ -372,5 +372,3 @@ class TestWrapper(unittest.TestCase):
             page = int(extract_from_querystring(purl, {"page"})["page"])
             pi = page - page_start
             assert self.expected_response_paged[purl] == res[pi]
-
-    # TODO: Add tests to ensure that input kwargs that configure extension are found as instance properties

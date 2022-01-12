@@ -14,7 +14,6 @@ def with_keys(d: dict, keep_keys: List[str]):
 
 
 def update_querystring(url: str, params: dict):
-    """Update the querystring of a url with a dict of values"""
     url_parts = list(urlparse.urlparse(url))
     query = dict(urlparse.parse_qsl(url_parts[4]))
     query.update(params)
