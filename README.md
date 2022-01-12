@@ -16,13 +16,21 @@ This module is intended to serve as a drop-in replacement for the pycoingecko ap
 To give users confidence that this is true, the unit tests for this package clone the tests from the base package, replace all instances of the base class with this modules' subclass, and include these tests in the full test suite (which includes robust tests for new features). 
 
 ## Outline 
+
 [Installation](#installation)
+
 [Usage](#usage)
+
 [Examples - Mitigate Rate Limiting](#examples---mitigate-rate-limiting)
+
 [Examples - Page Range Queries](#examples---page-range-queries)
+
 [Client Configuration](#client-configuration)
+
 [Summary](#summary)
+
 [Development and Testing](#development-and-testing)
+
 [License](#license)
 
 ## Installation 
