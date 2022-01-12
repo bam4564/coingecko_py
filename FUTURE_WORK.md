@@ -4,3 +4,5 @@
 - Add pre-commit hook to 
   - auto-run unit tests 
   - run black code formatting 
+- Remove magic numbers for page ranges in generated data 
+  - use environment variables 

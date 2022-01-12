@@ -183,9 +183,9 @@ The extended client supports multiple configuration options which impact its beh
 | log_level | 20 | python [logging](https://docs.python.org/3/library/logging.html) log level for client log messages |
 
 The API client doesn't print any messages, but has logs at the following levels. 
-- 10 (logging.DEBUG) will provide logs about internal state of client. 
-- 20 (logging.INFO) progress logs and other useful info exists at this level. 
-- 30 (logging.WARNING) useful warnings. I don't recommend any level higher than this. 
+- 10 (`logging.DEBUG`) will provide logs about internal state of client. 
+- 20 (`logging.INFO`) progress logs and other useful info exists at this level. 
+- 30 (`logging.WARNING`) useful warnings. I don't recommend any level higher than this. 
 See [here](https://docs.python.org/3/library/logging.html#levels) for more info on log levels. 
 
 Here's an example of how to configure the client with non-default values. 
