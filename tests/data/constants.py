@@ -3,21 +3,21 @@ from collections import OrderedDict
 """ Maps url to tuple of [endpoint_name, args, kwargs] """
 url_to_endpoint = OrderedDict(
     **{
-        "https://api.coingecko.com/api/v3/ping": ["ping", [], {}],
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd": [
-            "get_price",
-            ["bitcoin", "usd"],
-            {},
-        ],
-        "https://api.coingecko.com/api/v3/simple/token_price/ethereum?include_market_cap=true&include_24hr_vol=true&include_last_updated_at=true&contract_addresses=0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE&vs_currencies=bnb": [
-            "get_token_price",
-            ["ethereum", "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE", "bnb"],
-            dict(
-                include_market_cap="true",
-                include_24hr_vol="true",
-                include_last_updated_at="true",
-            ),
-        ],
+        # "https://api.coingecko.com/api/v3/ping": ["ping", [], {}],
+        # "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd": [
+        #     "get_price",
+        #     ["bitcoin", "usd"],
+        #     {},
+        # ],
+        # "https://api.coingecko.com/api/v3/simple/token_price/ethereum?include_market_cap=true&include_24hr_vol=true&include_last_updated_at=true&contract_addresses=0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE&vs_currencies=bnb": [
+        #     "get_token_price",
+        #     ["ethereum", "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE", "bnb"],
+        #     dict(
+        #         include_market_cap="true",
+        #         include_24hr_vol="true",
+        #         include_last_updated_at="true",
+        #     ),
+        # ],
         "https://api.coingecko.com/api/v3/simple/supported_vs_currencies": [
             "get_supported_vs_currencies",
             [],

@@ -6,23 +6,23 @@
     "/simple/price": {
         "args": [],
         "kwargs": {
-            "ids": "string",
-            "vs_currencies": "string",
-            "include_market_cap": "string",
-            "include_24hr_vol": "string",
-            "include_24hr_change": "string",
-            "include_last_updated_at": "string"
+            "ids": "bitcoin,ethereum",
+            "vs_currencies": "eth",
+            "include_market_cap": "true",
+            "include_24hr_vol": "true",
+            "include_24hr_change": "true",
+            "include_last_updated_at": "true"
         }
     },
     "/simple/token_price/{id}": {
-        "args": [],
+        "args": ["ethereum"],
         "kwargs": {
-            "contract_addresses": "string",
-            "vs_currencies": "string",
-            "include_market_cap": "string",
-            "include_24hr_vol": "string",
-            "include_24hr_change": "string",
-            "include_last_updated_at": "string"
+            "contract_addresses": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+            "vs_currencies": "btc",
+            "include_market_cap": "true",
+            "include_24hr_vol": "true",
+            "include_24hr_change": "true",
+            "include_last_updated_at": "true"
         }
     },
     "/simple/supported_vs_currencies": {
@@ -32,97 +32,96 @@
     "/coins/list": {
         "args": [],
         "kwargs": {
-            "include_platform": "boolean"
+            "include_platform": "true"
         }
     },
     "/coins/markets": {
         "args": [],
         "kwargs": {
-            "vs_currency": "string",
-            "ids": "string",
-            "category": "string",
-            "order": "string",
-            "per_page": "integer",
-            "page": "integer",
-            "sparkline": "boolean",
-            "price_change_percentage": "string"
+            "vs_currency": "eth",
+            "ids": "bitcoin,ethereum",
+            "order": "volume_desc",
+            "per_page": "5",
+            "page": "2",
+            "sparkline": true,
+            "price_change_percentage": "24h"
         }
     },
     "/coins/{id}": {
-        "args": [],
+        "args": ["solana"],
         "kwargs": {
-            "localization": "string",
-            "tickers": "boolean",
-            "market_data": "boolean",
-            "community_data": "boolean",
-            "developer_data": "boolean",
-            "sparkline": "boolean"
+            "localization": "true",
+            "tickers": true,
+            "market_data": true,
+            "community_data": true,
+            "developer_data": true,
+            "sparkline": true
         }
     },
     "/coins/{id}/tickers": {
-        "args": [],
+        "args": ["solana"],
         "kwargs": {
-            "exchange_ids": "string",
-            "include_exchange_logo": "string",
-            "page": "integer",
-            "order": "string",
-            "depth": "string"
+            "exchange_ids": "binance",
+            "include_exchange_logo": "true",
+            "page": 3,
+            "order": "trust_score_asc",
+            "depth": "true"
         }
     },
     "/coins/{id}/history": {
-        "args": [],
+        "args": ["bitcoin"],
         "kwargs": {
-            "date": "string",
-            "localization": "string"
+            "date": "30-12-2017",
+            "localization": "true"
         }
     },
     "/coins/{id}/market_chart": {
-        "args": [],
+        "args": ["ethereum"],
         "kwargs": {
-            "vs_currency": "string",
-            "days": "string",
-            "interval": "string"
+            "vs_currency": "bnb",
+            "days": "14",
+            "interval": "daily"
         }
     },
     "/coins/{id}/market_chart/range": {
-        "args": [],
+        "args": ["ethereum"],
         "kwargs": {
-            "vs_currency": "string",
-            "from": "string",
-            "to": "string"
+            "vs_currency": "eur",
+            "from": "1392577232",
+            "to": "1422577232"
         }
     },
     "/coins/{id}/status_updates": {
-        "args": [],
+        "args": ["bitcoin"],
         "kwargs": {
-            "per_page": "integer",
-            "page": "integer"
+            "per_page": 5,
+            "page": 3
         }
     },
     "/coins/{id}/contract/{contract_address}": {
-        "args": [],
+        "args": ["ethereum", "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"],
         "kwargs": {}
     },
     "/coins/{id}/contract/{contract_address}/market_chart/": {
-        "args": [],
+        "args": ["ethereum", "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"],
         "kwargs": {
-            "vs_currency": "string",
-            "days": "string"
+            "vs_currency": "bnb",
+            "days": "20"
         }
     },
     "/coins/{id}/contract/{contract_address}/market_chart/range": {
-        "args": [],
+        "args": ["ethereum", "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"],
         "kwargs": {
-            "vs_currency": "string",
-            "from": "string",
-            "to": "string"
+            "vs_currency": "jpy",
+            "from": "1392577232",
+            "to": "1422577232"
         }
     },
     "/coins/{id}/ohlc": {
-        "args": [],
+        "args": ["bitcoin"],
         "kwargs": {
-            "vs_currency": "string",
-            "days": "integer"
+            "vs_currency": "jpy",
+            "days": 69
         }
     },
     "/asset_platforms": {
@@ -136,14 +135,14 @@
     "/coins/categories": {
         "args": [],
         "kwargs": {
-            "order": "string"
+            "order": "name_desc"
         }
     },
     "/exchanges": {
         "args": [],
         "kwargs": {
-            "per_page": "integer",
-            "page": "string"
+            "per_page": 4,
+            "page": 3
         }
     },
     "/exchanges/list": {
@@ -151,40 +150,42 @@
         "kwargs": {}
     },
     "/exchanges/{id}": {
-        "args": [],
+        "args": ["aave"],
         "kwargs": {}
     },
     "/exchanges/{id}/tickers": {
-        "args": [],
+        "args": ["binance"],
         "kwargs": {
-            "coin_ids": "string",
-            "include_exchange_logo": "string",
-            "page": "integer",
-            "depth": "string",
-            "order": "string"
+            "coin_ids": "bitcoin,ethereum",
+            "include_exchange_logo": "true",
+            "page": 4,
+            "depth": "true",
+            "order": "trust_score_desc"
         }
     },
     "/finance_platforms": {
         "args": [],
         "kwargs": {
-            "per_page": "integer"
+            "page": 2, 
+            "per_page": 5
         }
     },
     "/finance_products": {
         "args": [],
         "kwargs": {
-            "per_page": "integer"
+            "page": 2, 
+            "per_page": 5
         }
     },
     "/indexes": {
         "args": [],
         "kwargs": {
-            "per_page": "integer",
-            "page": "integer"
+            "page": 2, 
+            "per_page": 5
         }
     },
     "/indexes/{market_id}/{id}": {
-        "args": [],
+        "args": ["jex_futures", "ETH"],
         "kwargs": {}
     },
     "/indexes/list": {
@@ -194,21 +195,21 @@
     "/derivatives": {
         "args": [],
         "kwargs": {
-            "include_tickers": "string"
+            "include_tickers": "unexpired"
         }
     },
     "/derivatives/exchanges": {
         "args": [],
         "kwargs": {
-            "order": "string",
-            "per_page": "integer",
-            "page": "integer"
+            "order": "name_desc",
+            "per_page": 5,
+            "page": 3
         }
     },
     "/derivatives/exchanges/{id}": {
-        "args": [],
+        "args": ["binance_futures"],
         "kwargs": {
-            "include_tickers": "string"
+            "include_tickers": "unexpired"
         }
     },
     "/derivatives/exchanges/list": {
@@ -216,25 +217,25 @@
         "kwargs": {}
     },
     "/exchanges/{id}/status_updates": {
-        "args": [],
+        "args": ["binance"],
         "kwargs": {
-            "per_page": "integer",
-            "page": "integer"
+            "per_page": 6,
+            "page": 2
         }
     },
     "/exchanges/{id}/volume_chart": {
-        "args": [],
+        "args": ["binance"],
         "kwargs": {
-            "days": "integer"
+            "days": 10
         }
     },
     "/status_updates": {
         "args": [],
         "kwargs": {
-            "category": "string",
-            "project_type": "string",
-            "per_page": "integer",
-            "page": "integer"
+            "category": "exchange_listing",
+            "project_type": "coin",
+            "per_page": 5,
+            "page": 5
         }
     },
     "/exchange_rates": {
@@ -244,7 +245,7 @@
     "/search": {
         "args": [],
         "kwargs": {
-            "query": "string"
+            "query": "olympus"
         }
     },
     "/search/trending": {
@@ -260,7 +261,7 @@
         "kwargs": {}
     },
     "/companies/public_treasury/{coin_id}": {
-        "args": [],
+        "args": ["bitcoin"],
         "kwargs": {}
     }
 }
