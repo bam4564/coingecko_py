@@ -1,0 +1,8 @@
+- Note that `qid` must be a string in the README
+- Expose list of paginated endpoints via a public method on client 
+- Temporal granularity control 
+- Add pre-commit hook to 
+  - auto-run unit tests 
+  - run black code formatting 
+- Remove magic numbers for page ranges in generated data 
+  - use environment variables 
