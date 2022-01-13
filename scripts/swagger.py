@@ -92,6 +92,15 @@ def generate_test_data_template():
         
 
 def generate_test_data(): 
+    # Get base url 
+    with open(FORMATTED_SPEC_PATH, 'r') as f: 
+        spec = json.loads(f.read())
+    host = spec['host']
+    basePath = spec['basePath']
+    schemes = spec['schemes']
+    assert len(schemes) == 1
+    scheme = schemes[0]
+    # Get test call spec 
     with open(TEST_API_DATA_PATH, 'r') as f: 
         test_api_calls = json.loads(f.read())
     # Generate urls to request from the test api call spec 
@@ -104,15 +113,18 @@ def generate_test_data():
         url = url_template
         for i, p in enumerate(path_args): 
             url = url.replace(p, "{" + str(i) + "}")
-        # add args to path
-        url = url.format(*args)
-        # add kwargs as query string parameters 
+        # construct full url 
         url_parts = list(urlparse.urlparse(url))
+        url_parts[0] = scheme
+        url_parts[1] = host
+        # add args to path
+        url_parts[2] = basePath + url.format(*args)
+        # add kwargs as query string parameters 
         query = dict(urlparse.parse_qsl(url_parts[4]))
         query.update(kwargs)
         url_parts[4] = urlencode(query)
         url = urlparse.urlunparse(url_parts)
-        urls.append((url_template, 'https://api.coingecko.com/api/v3' + url))
+        urls.append((url_template, url))
     # perform api calls to get test data for mock based testing. 
     pool_manager = urllib3.PoolManager(num_pools=4, maxsize=4)
     data = dict()
@@ -122,6 +134,7 @@ def generate_test_data():
         if r.status != 200: 
             raise Exception(r.status)
         content = json.loads(r.data.decode('utf-8'))
+        assert content 
         data[url_template] = content
     # write responses to file 
     with open(TEST_API_RESPONSES_PATH, 'w') as f: 

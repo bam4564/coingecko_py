@@ -41,8 +41,8 @@
             "vs_currency": "eth",
             "ids": "bitcoin,ethereum",
             "order": "volume_desc",
-            "per_page": "5",
-            "page": "2",
+            "per_page": 5,
+            "page": 1,
             "sparkline": true,
             "price_change_percentage": "24h"
         }
@@ -87,8 +87,8 @@
         "args": ["ethereum"],
         "kwargs": {
             "vs_currency": "eur",
-            "from": "1392577232",
-            "to": "1422577232"
+            "from": "1622520000",
+            "to": "1638334800"
         }
     },
     "/coins/{id}/status_updates": {
@@ -99,29 +99,29 @@
         }
     },
     "/coins/{id}/contract/{contract_address}": {
-        "args": ["ethereum", "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"],
+        "args": ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"],
         "kwargs": {}
     },
     "/coins/{id}/contract/{contract_address}/market_chart/": {
-        "args": ["ethereum", "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"],
+        "args": ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"],
         "kwargs": {
             "vs_currency": "bnb",
             "days": "20"
         }
     },
     "/coins/{id}/contract/{contract_address}/market_chart/range": {
-        "args": ["ethereum", "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"],
+        "args": ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"],
         "kwargs": {
             "vs_currency": "eur",
-            "from": "1392577232",
-            "to": "1422577232"
+            "from": "1622520000",
+            "to": "1638334800"
         }
     },
     "/coins/{id}/ohlc": {
         "args": ["bitcoin"],
         "kwargs": {
             "vs_currency": "eur",
-            "days": 3
+            "days": 7
         }
     },
     "/asset_platforms": {
