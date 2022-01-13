@@ -11,8 +11,8 @@ packages = [
     { include = "pycoingecko_extra" }, 
     { include = "tests" }, 
     { include = "scripts" }, 
-    { include = "client" }, 
     { include = "swagger_client", from = "client" }
+    
 ]
 exclude = ["tests", "scripts"]
 
@@ -21,17 +21,13 @@ test = "tests.scripts.runner:run_tests"
 get_data = "tests.scripts.get_test_data:get_data"
 generate_client = "scripts.swagger:generate_client" 
 generate_test_data = "scripts.swagger:generate_test_data" 
-generate_test_data_template = "scripts.swagger:generate_test_data_template" 
+generate_test_data_template = "scripts.swagger:generate_test_data_template"
 
 [tool.poetry.dependencies]
 python = "^3.7"
 pycoingecko = "*"
 requests = "*"
-certifi = "^14.05.14"
-six = "^1.10"
 python_dateutil = "^2.5.3"
-setuptools = "^21.0.0"
-urllib3 = "^1.15.1"
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"

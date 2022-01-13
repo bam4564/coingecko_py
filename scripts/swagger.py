@@ -10,6 +10,8 @@ from urllib.parse import urlencode
 import urllib3
 import toml
 
+from scripts.utils import materialize_url_template
+
 RAW_SPEC_PATH = "./swagger_specs/swagger.json"
 FORMATTED_SPEC_PATH = "./swagger_specs/swagger_processed.json"
 SWAGGER_CLIENT_PATH = "./client"
@@ -102,39 +104,16 @@ def generate_test_data_template():
 
 
 def generate_test_data():
-    # Get base url
-    with open(FORMATTED_SPEC_PATH, "r") as f:
-        spec = json.loads(f.read())
-    host = spec["host"]
-    basePath = spec["basePath"]
-    schemes = spec["schemes"]
-    assert len(schemes) == 1
-    scheme = schemes[0]
-    # Get test call spec
     with open(TEST_API_DATA_PATH, "r") as f:
         test_api_calls = json.loads(f.read())
     # Generate urls to request from the test api call spec
-    urls = list()
-    for url_template, data in test_api_calls.items():
-        args = data["args"]
-        kwargs = data["kwargs"]
-        # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
-        path_args = re.findall("({[^}]*})", url_template)
-        url = url_template
-        for i, p in enumerate(path_args):
-            url = url.replace(p, "{" + str(i) + "}")
-        # construct full url
-        url_parts = list(urlparse.urlparse(url))
-        url_parts[0] = scheme
-        url_parts[1] = host
-        # add args to path
-        url_parts[2] = basePath + url.format(*args)
-        # add kwargs as query string parameters
-        query = dict(urlparse.parse_qsl(url_parts[4]))
-        query.update(kwargs)
-        url_parts[4] = urlencode(query)
-        url = urlparse.urlunparse(url_parts)
-        urls.append((url_template, url))
+    urls = [
+        (
+            url_template, 
+            materialize_url_template(url_template, data['args'], data["kwargs"])
+        )
+        for url_template, data in test_api_calls.items()
+    ]
     # perform api calls to get test data for mock based testing.
     pool_manager = urllib3.PoolManager(num_pools=4, maxsize=4)
     data = dict()

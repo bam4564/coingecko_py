@@ -203,6 +203,7 @@ class RESTClientObject(object):
                     raise ApiException(status=0, reason=msg)
             # For `GET`, `HEAD`
             else:
+                print('fuck it up', method, url, query_params, headers)
                 r = self.pool_manager.request(method, url,
                                               fields=query_params,
                                               preload_content=_preload_content,
