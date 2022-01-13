@@ -1,0 +1,170 @@
+{
+    "/ping": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/simple/price": {
+        "args": ["bitcoin", "usd"],
+        "kwargs": {}
+    },
+    "/simple/token_price/{id}": {
+        "args": ["ethereum"],
+        "kwargs": {
+            "include_market_cap" : "true",
+            "include_24hr_vol" : "true",
+            "include_last_updated_at" : "true"
+        }
+    },
+    "/simple/supported_vs_currencies": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/list": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/markets": {
+        "args": [],
+        "kwargs": {"vs_currency": "usd"}
+    },
+    "/coins/{id}": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/tickers": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/history": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/market_chart": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/market_chart/range": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/status_updates": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/contract/{contract_address}": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/contract/{contract_address}/market_chart/": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/contract/{contract_address}/market_chart/range": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/{id}/ohlc": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/asset_platforms": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/categories/list": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/coins/categories": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/exchanges": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/exchanges/list": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/exchanges/{id}": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/exchanges/{id}/tickers": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/finance_platforms": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/finance_products": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/indexes": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/indexes/{market_id}/{id}": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/indexes/list": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/derivatives": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/derivatives/exchanges": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/derivatives/exchanges/{id}": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/derivatives/exchanges/list": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/exchanges/{id}/status_updates": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/exchanges/{id}/volume_chart": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/status_updates": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/exchange_rates": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/search": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/search/trending": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/global": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/global/decentralized_finance_defi": {
+        "args": [],
+        "kwargs": {}
+    },
+    "/companies/public_treasury/{coin_id}": {
+        "args": [],
+        "kwargs": {}
+    }
+}

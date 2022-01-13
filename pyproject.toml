@@ -9,24 +9,35 @@ homepage = "https://github.com/brycemorrow4564/pycoingecko-extra"
 repository = "https://github.com/brycemorrow4564/pycoingecko-extra"
 packages = [
     { include = "pycoingecko_extra" }, 
-    { include = "tests" }
+    { include = "tests" }, 
+    { include = "scripts" }, 
+    { include = "client" }, 
+    { include = "swagger_client", from = "client" }
 ]
-exclude = ["tests"]
+exclude = ["tests", "scripts"]
 
 [tool.poetry.scripts]                                                           
 test = "tests.scripts.runner:run_tests"  
 get_data = "tests.scripts.get_test_data:get_data"
+generate_client = "scripts.swagger:generate_client" 
+generate_test_data = "scripts.swagger:generate_test_data" 
 
 [tool.poetry.dependencies]
 python = "^3.7"
 pycoingecko = "*"
-requests = "^2.27.1"
+requests = "*"
+certifi = "^14.05.14"
+six = "^1.10"
+python_dateutil = "^2.5.3"
+setuptools = "^21.0.0"
+urllib3 = "^1.15.1"
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 black = {version = "^21.12b0", allow-prereleases = true}
+toml = "^0.10.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
