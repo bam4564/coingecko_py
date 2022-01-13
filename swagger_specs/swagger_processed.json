@@ -987,7 +987,7 @@
                     },
                     {
                         "name": "page",
-                        "in": "path",
+                        "in": "query",
                         "description": "page of results (paginated to 100 by default)",
                         "required": false,
                         "type": "string"
@@ -1020,21 +1020,21 @@
                     },
                     {
                         "name": "page",
-                        "in": "path",
+                        "in": "query",
                         "description": "page of results (paginated to 100 by default)",
                         "required": false,
                         "type": "string"
                     },
                     {
                         "name": "start_at",
-                        "in": "path",
+                        "in": "query",
                         "description": "start date of the financial products",
                         "required": false,
                         "type": "string"
                     },
                     {
                         "name": "end_at",
-                        "in": "path",
+                        "in": "query",
                         "description": "end date of the financial products",
                         "required": false,
                         "type": "string"

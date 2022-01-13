@@ -369,25 +369,25 @@ except ApiException as e:
 
 # create an instance of the API class
 api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
-page = 'page_example' # str | page of results (paginated to 100 by default)
 per_page = 56 # int | Total results per page (optional)
+page = 'page_example' # str | page of results (paginated to 100 by default) (optional)
 
 try:
     # List all finance platforms
-    api_instance.finance_platforms_get(page, per_page=per_page)
+    api_instance.finance_platforms_get(per_page=per_page, page=page)
 except ApiException as e:
     print("Exception when calling CoingeckoApi->finance_platforms_get: %s\n" % e)
 
 # create an instance of the API class
 api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
-page = 'page_example' # str | page of results (paginated to 100 by default)
-start_at = 'start_at_example' # str | start date of the financial products
-end_at = 'end_at_example' # str | end date of the financial products
 per_page = 56 # int | Total results per page (optional)
+page = 'page_example' # str | page of results (paginated to 100 by default) (optional)
+start_at = 'start_at_example' # str | start date of the financial products (optional)
+end_at = 'end_at_example' # str | end date of the financial products (optional)
 
 try:
     # List all finance products
-    api_instance.finance_products_get(page, start_at, end_at, per_page=per_page)
+    api_instance.finance_products_get(per_page=per_page, page=page, start_at=start_at, end_at=end_at)
 except ApiException as e:
     print("Exception when calling CoingeckoApi->finance_products_get: %s\n" % e)
 

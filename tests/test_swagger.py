@@ -1,25 +1,24 @@
-from cmath import exp
 from collections import defaultdict
 import json
 import pytest
 import unittest
 import responses 
+from copy import copy 
 from requests.exceptions import HTTPError
 
 # from pycoingecko_extra.pycoingecko_extra import CoinGeckoAPIExtra, error_msgs
 # from pycoingecko_extra.utils import extract_from_querystring, remove_from_querystring
 # from tests.data.constants import url_to_endpoint 
-from swagger_client import ApiClient, api_client
-from pycoingecko_extra import CoinGeckoAPIClient
 from scripts.utils import materialize_url_template
-from client.swagger_client.api import CoingeckoApi
+from scripts.swagger import get_parameters
+from pycoingecko_extra import CoinGeckoAPI
 
 TEST_ID = "TESTING_ID"
 
 
 @pytest.fixture(scope="class")
 def cg(request):
-    request.cls.cg = CoingeckoApi(api_client=CoinGeckoAPIClient())
+    request.cls.cg = CoinGeckoAPI()
 
 
 @pytest.fixture(scope="class")
@@ -42,6 +41,18 @@ def test_api_calls(request):
 class MockResponse:
     def __init__(self, status_code):
         self.status_code = status_code
+
+def update_args_kwargs(url_template, args, kwargs):
+    args = copy(args)
+    kwargs = copy(kwargs)
+    params = get_parameters(url_template)
+    for p in params: 
+        if p['required'] and p['in'] == 'query':  
+            name = p['name']
+            args.append(kwargs[name])
+            del kwargs[name] 
+    return args, kwargs 
+
 
 @pytest.mark.usefixtures("cg")
 @pytest.mark.usefixtures("expected_response")
@@ -67,25 +78,31 @@ class TestWrapper(unittest.TestCase):
                     json=expected_response,
                     status=200,
                 )
+                args, kwargs = update_args_kwargs(url_template, args, kwargs)
                 response = getattr(self.cg, method_name)(*args, **kwargs)
                 assert response == expected_response
             except:
-                # Log call info on failure
                 print(url, args, kwargs)
                 raise
 
-    # @responses.activate
-    # def test_failed_normal(self):
-    #     for url, (endpoint_name, args, kwargs) in url_to_endpoint.items():
-    #         responses.add(
-    #             responses.GET,
-    #             url,
-    #             status=404,
-    #         )
-    #         with pytest.raises(HTTPError) as HE:
-    #             getattr(self.cg, endpoint_name)(*args, **kwargs)
-    #             # If we get past this call, an error was not raised
-    #             print(url)
-    #             print(endpoint_name)
-    #             print(args)
-    #             print(kwargs)
+    @responses.activate
+    def test_failed_normal(self):
+        for url_template, method_name in self.url_to_method.items(): 
+            try: 
+                expected_response = self.expected_response[url_template]
+                assert expected_response
+                test_call = self.test_api_calls[url_template]
+                args = test_call['args']
+                kwargs = test_call['kwargs']
+                url = materialize_url_template(url_template, args, kwargs)
+                responses.add(
+                    responses.GET,
+                    url,
+                    status=404,
+                )
+                args, kwargs = update_args_kwargs(url_template, args, kwargs)
+                with pytest.raises(HTTPError) as HE:
+                    getattr(self.cg, method_name)(*args, **kwargs)
+            except:
+                print(url, args, kwargs)
+                raise

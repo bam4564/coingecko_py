@@ -2701,47 +2701,47 @@ class CoingeckoApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def finance_platforms_get(self, page, **kwargs):  # noqa: E501
+    def finance_platforms_get(self, **kwargs):  # noqa: E501
         """List all finance platforms  # noqa: E501
 
         List all finance platforms  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.finance_platforms_get(page, async_req=True)
+        >>> thread = api.finance_platforms_get(async_req=True)
         >>> result = thread.get()
 
         :param async_req bool
-        :param str page: page of results (paginated to 100 by default) (required)
         :param int per_page: Total results per page
+        :param str page: page of results (paginated to 100 by default)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
         if kwargs.get('async_req'):
-            return self.finance_platforms_get_with_http_info(page, **kwargs)  # noqa: E501
+            return self.finance_platforms_get_with_http_info(**kwargs)  # noqa: E501
         else:
-            (data) = self.finance_platforms_get_with_http_info(page, **kwargs)  # noqa: E501
+            (data) = self.finance_platforms_get_with_http_info(**kwargs)  # noqa: E501
             return data
 
-    def finance_platforms_get_with_http_info(self, page, **kwargs):  # noqa: E501
+    def finance_platforms_get_with_http_info(self, **kwargs):  # noqa: E501
         """List all finance platforms  # noqa: E501
 
         List all finance platforms  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.finance_platforms_get_with_http_info(page, async_req=True)
+        >>> thread = api.finance_platforms_get_with_http_info(async_req=True)
         >>> result = thread.get()
 
         :param async_req bool
-        :param str page: page of results (paginated to 100 by default) (required)
         :param int per_page: Total results per page
+        :param str page: page of results (paginated to 100 by default)
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['page', 'per_page']  # noqa: E501
+        all_params = ['per_page', 'page']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -2756,20 +2756,16 @@ class CoingeckoApi(object):
                 )
             params[key] = val
         del params['kwargs']
-        # verify the required parameter 'page' is set
-        if ('page' not in params or
-                params['page'] is None):
-            raise ValueError("Missing the required parameter `page` when calling `finance_platforms_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'page' in params:
-            path_params['page'] = params['page']  # noqa: E501
 
         query_params = []
         if 'per_page' in params:
             query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -2796,51 +2792,51 @@ class CoingeckoApi(object):
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
 
-    def finance_products_get(self, page, start_at, end_at, **kwargs):  # noqa: E501
+    def finance_products_get(self, **kwargs):  # noqa: E501
         """List all finance products  # noqa: E501
 
         List all finance products  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.finance_products_get(page, start_at, end_at, async_req=True)
+        >>> thread = api.finance_products_get(async_req=True)
         >>> result = thread.get()
 
         :param async_req bool
-        :param str page: page of results (paginated to 100 by default) (required)
-        :param str start_at: start date of the financial products (required)
-        :param str end_at: end date of the financial products (required)
         :param int per_page: Total results per page
+        :param str page: page of results (paginated to 100 by default)
+        :param str start_at: start date of the financial products
+        :param str end_at: end date of the financial products
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
         """
         kwargs['_return_http_data_only'] = True
         if kwargs.get('async_req'):
-            return self.finance_products_get_with_http_info(page, start_at, end_at, **kwargs)  # noqa: E501
+            return self.finance_products_get_with_http_info(**kwargs)  # noqa: E501
         else:
-            (data) = self.finance_products_get_with_http_info(page, start_at, end_at, **kwargs)  # noqa: E501
+            (data) = self.finance_products_get_with_http_info(**kwargs)  # noqa: E501
             return data
 
-    def finance_products_get_with_http_info(self, page, start_at, end_at, **kwargs):  # noqa: E501
+    def finance_products_get_with_http_info(self, **kwargs):  # noqa: E501
         """List all finance products  # noqa: E501
 
         List all finance products  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.finance_products_get_with_http_info(page, start_at, end_at, async_req=True)
+        >>> thread = api.finance_products_get_with_http_info(async_req=True)
         >>> result = thread.get()
 
         :param async_req bool
-        :param str page: page of results (paginated to 100 by default) (required)
-        :param str start_at: start date of the financial products (required)
-        :param str end_at: end date of the financial products (required)
         :param int per_page: Total results per page
+        :param str page: page of results (paginated to 100 by default)
+        :param str start_at: start date of the financial products
+        :param str end_at: end date of the financial products
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
-        all_params = ['page', 'start_at', 'end_at', 'per_page']  # noqa: E501
+        all_params = ['per_page', 'page', 'start_at', 'end_at']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -2855,32 +2851,20 @@ class CoingeckoApi(object):
                 )
             params[key] = val
         del params['kwargs']
-        # verify the required parameter 'page' is set
-        if ('page' not in params or
-                params['page'] is None):
-            raise ValueError("Missing the required parameter `page` when calling `finance_products_get`")  # noqa: E501
-        # verify the required parameter 'start_at' is set
-        if ('start_at' not in params or
-                params['start_at'] is None):
-            raise ValueError("Missing the required parameter `start_at` when calling `finance_products_get`")  # noqa: E501
-        # verify the required parameter 'end_at' is set
-        if ('end_at' not in params or
-                params['end_at'] is None):
-            raise ValueError("Missing the required parameter `end_at` when calling `finance_products_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'page' in params:
-            path_params['page'] = params['page']  # noqa: E501
-        if 'start_at' in params:
-            path_params['start_at'] = params['start_at']  # noqa: E501
-        if 'end_at' in params:
-            path_params['end_at'] = params['end_at']  # noqa: E501
 
         query_params = []
         if 'per_page' in params:
             query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
+        if 'start_at' in params:
+            query_params.append(('start_at', params['start_at']))  # noqa: E501
+        if 'end_at' in params:
+            query_params.append(('end_at', params['end_at']))  # noqa: E501
 
         header_params = {}
 

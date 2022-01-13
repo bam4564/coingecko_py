@@ -1397,7 +1397,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **finance_platforms_get**
-> finance_platforms_get(page, per_page=per_page)
+> finance_platforms_get(per_page=per_page, page=page)
 
 List all finance platforms
 
@@ -1413,12 +1413,12 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.CoingeckoApi()
-page = 'page_example' # str | page of results (paginated to 100 by default)
 per_page = 56 # int | Total results per page (optional)
+page = 'page_example' # str | page of results (paginated to 100 by default) (optional)
 
 try:
     # List all finance platforms
-    api_instance.finance_platforms_get(page, per_page=per_page)
+    api_instance.finance_platforms_get(per_page=per_page, page=page)
 except ApiException as e:
     print("Exception when calling CoingeckoApi->finance_platforms_get: %s\n" % e)
 ```
@@ -1427,8 +1427,8 @@ except ApiException as e:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **str**| page of results (paginated to 100 by default) | 
  **per_page** | **int**| Total results per page | [optional] 
+ **page** | **str**| page of results (paginated to 100 by default) | [optional] 
 
 ### Return type
 
@@ -1446,7 +1446,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **finance_products_get**
-> finance_products_get(page, start_at, end_at, per_page=per_page)
+> finance_products_get(per_page=per_page, page=page, start_at=start_at, end_at=end_at)
 
 List all finance products
 
@@ -1462,14 +1462,14 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.CoingeckoApi()
-page = 'page_example' # str | page of results (paginated to 100 by default)
-start_at = 'start_at_example' # str | start date of the financial products
-end_at = 'end_at_example' # str | end date of the financial products
 per_page = 56 # int | Total results per page (optional)
+page = 'page_example' # str | page of results (paginated to 100 by default) (optional)
+start_at = 'start_at_example' # str | start date of the financial products (optional)
+end_at = 'end_at_example' # str | end date of the financial products (optional)
 
 try:
     # List all finance products
-    api_instance.finance_products_get(page, start_at, end_at, per_page=per_page)
+    api_instance.finance_products_get(per_page=per_page, page=page, start_at=start_at, end_at=end_at)
 except ApiException as e:
     print("Exception when calling CoingeckoApi->finance_products_get: %s\n" % e)
 ```
@@ -1478,10 +1478,10 @@ except ApiException as e:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **str**| page of results (paginated to 100 by default) | 
- **start_at** | **str**| start date of the financial products | 
- **end_at** | **str**| end date of the financial products | 
  **per_page** | **int**| Total results per page | [optional] 
+ **page** | **str**| page of results (paginated to 100 by default) | [optional] 
+ **start_at** | **str**| start date of the financial products | [optional] 
+ **end_at** | **str**| end date of the financial products | [optional] 
 
 ### Return type
 
