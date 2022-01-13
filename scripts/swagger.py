@@ -1,9 +1,13 @@
 import json 
 import os 
 import ast 
+import re 
 import subprocess
 import pkg_resources
+import urllib.parse as urlparse
+from urllib.parse import urlencode
 
+import urllib3
 import toml
 
 RAW_SPEC_PATH = './swagger_specs/swagger.json'
@@ -14,6 +18,7 @@ SWAGGER_API_CLIENT_PATH = os.path.join("./client/swagger_client/api/", f"{SWAGGE
 URL_TO_METHOD_PATH = "./data/url_to_method.json"
 POETRY_PROJECT_FILE_PATH = './pyproject.toml'
 TEST_API_DATA_PATH = 'data/test_api_calls.json'
+TEST_API_RESPONSES_PATH = 'data/test_api_responses.json'
 SWAGGER_REQUIREMENTS_PATH = os.path.join(SWAGGER_CLIENT_PATH, 'requirements.txt')
 SWAGGER_REQUIREMENTS_DEV_PATH = os.path.join(SWAGGER_CLIENT_PATH, 'test-requirements.txt')
 
@@ -87,6 +92,39 @@ def generate_test_data_template():
         
 
 def generate_test_data(): 
-    with open(URL_TO_METHOD_PATH, 'r') as f: 
-        url_to_method = json.loads(f.read())
+    with open(TEST_API_DATA_PATH, 'r') as f: 
+        test_api_calls = json.loads(f.read())
+    # Generate urls to request from the test api call spec 
+    urls = list()
+    for url_template, data in test_api_calls.items(): 
+        args = data['args']
+        kwargs = data['kwargs']
+        # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
+        path_args = re.findall("({[^}]*})", url_template)
+        url = url_template
+        for i, p in enumerate(path_args): 
+            url = url.replace(p, "{" + str(i) + "}")
+        # add args to path
+        url = url.format(*args)
+        # add kwargs as query string parameters 
+        url_parts = list(urlparse.urlparse(url))
+        query = dict(urlparse.parse_qsl(url_parts[4]))
+        query.update(kwargs)
+        url_parts[4] = urlencode(query)
+        url = urlparse.urlunparse(url_parts)
+        urls.append((url_template, 'https://api.coingecko.com/api/v3' + url))
+    # perform api calls to get test data for mock based testing. 
+    pool_manager = urllib3.PoolManager(num_pools=4, maxsize=4)
+    data = dict()
+    for url_template, url in urls: 
+        print(url)
+        r = pool_manager.request("GET", url)
+        if r.status != 200: 
+            raise Exception(r.status)
+        content = json.loads(r.data.decode('utf-8'))
+        data[url_template] = content
+    # write responses to file 
+    with open(TEST_API_RESPONSES_PATH, 'w') as f: 
+        f.write(json.dumps(data, indent=4))
+
     

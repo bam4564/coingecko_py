@@ -112,7 +112,7 @@
     "/coins/{id}/contract/{contract_address}/market_chart/range": {
         "args": ["ethereum", "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"],
         "kwargs": {
-            "vs_currency": "jpy",
+            "vs_currency": "eur",
             "from": "1392577232",
             "to": "1422577232"
         }
@@ -120,8 +120,8 @@
     "/coins/{id}/ohlc": {
         "args": ["bitcoin"],
         "kwargs": {
-            "vs_currency": "jpy",
-            "days": 69
+            "vs_currency": "eur",
+            "days": 3
         }
     },
     "/asset_platforms": {
