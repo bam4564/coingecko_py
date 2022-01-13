@@ -52,35 +52,35 @@ from swagger_client.rest import ApiException
 from pprint import pprint
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # List all asset platforms (Blockchain networks)
     api_instance.asset_platforms_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->asset_platforms_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->asset_platforms_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 order = 'order_example' # str | valid values: <b>market_cap_desc (default), market_cap_asc, name_desc, name_asc, market_cap_change_24h_desc and market_cap_change_24h_asc</b> (optional)
 
 try:
     # List all categories with market data
     api_instance.coins_categories_get(order=order)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_categories_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_categories_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # List all categories
     api_instance.coins_categories_list_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_categories_list_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_categories_list_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | Asset platform (See asset_platforms endpoint for list of options)
 contract_address = 'contract_address_example' # str | Token's contract address
 
@@ -88,10 +88,10 @@ try:
     # Get coin info from contract address
     api_instance.coins_id_contract_contract_address_get(id, contract_address)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_contract_contract_address_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_contract_contract_address_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | The id of the platform issuing tokens (See asset_platforms endpoint for list of options)
 contract_address = 'contract_address_example' # str | Token's contract address
 vs_currency = 'vs_currency_example' # str | The target currency of market data (usd, eur, jpy, etc.)
@@ -101,10 +101,10 @@ try:
     # Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address 
     api_instance.coins_id_contract_contract_address_market_chart_get(id, contract_address, vs_currency, days)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_contract_contract_address_market_chart_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_contract_contract_address_market_chart_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | The id of the platform issuing tokens (See asset_platforms endpoint for list of options)
 contract_address = 'contract_address_example' # str | Token's contract address
 vs_currency = 'vs_currency_example' # str | The target currency of market data (usd, eur, jpy, etc.)
@@ -115,10 +115,10 @@ try:
     # Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address
     api_instance.coins_id_contract_contract_address_market_chart_range_get(id, contract_address, vs_currency, _from, to)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_contract_contract_address_market_chart_range_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_contract_contract_address_market_chart_range_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the coin id (can be obtained from /coins) eg. bitcoin
 localization = 'localization_example' # str | Include all localized languages in response (true/false) <b>[default: true]</b> (optional)
 tickers = true # bool | Include tickers data (true/false) <b>[default: true]</b> (optional)
@@ -131,10 +131,10 @@ try:
     # Get current data (name, price, market, ... including exchange tickers) for a coin
     api_instance.coins_id_get(id, localization=localization, tickers=tickers, market_data=market_data, community_data=community_data, developer_data=developer_data, sparkline=sparkline)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the coin id (can be obtained from /coins) eg. bitcoin
 _date = '_date_example' # str | The date of data snapshot in dd-mm-yyyy eg. 30-12-2017
 localization = 'localization_example' # str | Set to false to exclude localized languages in response (optional)
@@ -143,10 +143,10 @@ try:
     # Get historical data (name, price, market, stats) at a given date for a coin
     api_instance.coins_id_history_get(id, _date, localization=localization)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_history_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_history_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the coin id (can be obtained from /coins) eg. bitcoin
 vs_currency = 'vs_currency_example' # str | The target currency of market data (usd, eur, jpy, etc.)
 days = 'days_example' # str | Data up to number of days ago (eg. 1,14,30,max)
@@ -156,10 +156,10 @@ try:
     # Get historical market data include price, market cap, and 24h volume (granularity auto)
     api_instance.coins_id_market_chart_get(id, vs_currency, days, interval=interval)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_market_chart_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_market_chart_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the coin id (can be obtained from /coins) eg. bitcoin
 vs_currency = 'vs_currency_example' # str | The target currency of market data (usd, eur, jpy, etc.)
 _from = '_from_example' # str | From date in UNIX Timestamp (eg. 1392577232)
@@ -169,10 +169,10 @@ try:
     # Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)
     api_instance.coins_id_market_chart_range_get(id, vs_currency, _from, to)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_market_chart_range_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_market_chart_range_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the coin id (can be obtained from /coins/list) eg. bitcoin
 vs_currency = 'vs_currency_example' # str | The target currency of market data (usd, eur, jpy, etc.)
 days = 56 # int |  Data up to number of days ago (1/7/14/30/90/180/365/max)
@@ -182,10 +182,10 @@ try:
     api_response = api_instance.coins_id_ohlc_get(id, vs_currency, days)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_ohlc_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_ohlc_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the coin id (can be obtained from /coins) eg. bitcoin
 per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
@@ -194,10 +194,10 @@ try:
     # Get status updates for a given coin
     api_instance.coins_id_status_updates_get(id, per_page=per_page, page=page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_status_updates_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_status_updates_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the coin id (can be obtained from /coins/list) eg. bitcoin
 exchange_ids = 'exchange_ids_example' # str | filter results by exchange_ids (ref: v3/exchanges/list) (optional)
 include_exchange_logo = 'include_exchange_logo_example' # str | flag to show exchange_logo (optional)
@@ -209,20 +209,20 @@ try:
     # Get coin tickers (paginated to 100 items)
     api_instance.coins_id_tickers_get(id, exchange_ids=exchange_ids, include_exchange_logo=include_exchange_logo, page=page, order=order, depth=depth)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_id_tickers_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_id_tickers_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 include_platform = true # bool | flag to include platform contract addresses (eg. 0x.... for Ethereum based tokens).   valid values: true, false (optional)
 
 try:
     # List all supported coins id, name and symbol (no pagination required)
     api_instance.coins_list_get(include_platform=include_platform)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_list_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_list_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 vs_currency = 'vs_currency_example' # str | The target currency of market data (usd, eur, jpy, etc.)
 ids = 'ids_example' # str | The ids of the coin, comma separated crytocurrency symbols (base). refers to `/coins/list`. <b>When left empty, returns numbers the coins observing the params `limit` and `start`</b> (optional)
 category = 'category_example' # str | filter by coin category. Refer to /coin/categories/list (optional)
@@ -236,20 +236,20 @@ try:
     # List all supported coins price, market cap, volume, and market related data
     api_instance.coins_markets_get(vs_currency, ids=ids, category=category, order=order, per_page=per_page, page=page, sparkline=sparkline, price_change_percentage=price_change_percentage)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->coins_markets_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->coins_markets_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 coin_id = 'coin_id_example' # str | bitcoin or ethereum
 
 try:
     # Get public companies data
     api_instance.companies_public_treasury_coin_id_get(coin_id)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->companies_public_treasury_coin_id_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->companies_public_treasury_coin_id_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 order = 'order_example' # str | order results using following params name_asc，name_desc，open_interest_btc_asc，open_interest_btc_desc，trade_volume_24h_btc_asc，trade_volume_24h_btc_desc (optional)
 per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
@@ -258,10 +258,10 @@ try:
     # List all derivative exchanges
     api_instance.derivatives_exchanges_get(order=order, per_page=per_page, page=page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->derivatives_exchanges_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->derivatives_exchanges_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the exchange id (can be obtained from derivatives/exchanges/list) eg. bitmex
 include_tickers = 'include_tickers_example' # str | ['all', 'unexpired'] - expired to show unexpired tickers, all to list all tickers, leave blank to omit tickers data in response (optional)
 
@@ -269,38 +269,38 @@ try:
     # show derivative exchange data
     api_instance.derivatives_exchanges_id_get(id, include_tickers=include_tickers)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->derivatives_exchanges_id_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->derivatives_exchanges_id_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # List all derivative exchanges name and identifier
     api_instance.derivatives_exchanges_list_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->derivatives_exchanges_list_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->derivatives_exchanges_list_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 include_tickers = 'include_tickers_example' # str | ['all', 'unexpired'] - expired to show unexpired tickers, all to list all tickers, defaults to unexpired (optional)
 
 try:
     # List all derivative tickers
     api_instance.derivatives_get(include_tickers=include_tickers)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->derivatives_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->derivatives_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # Get BTC-to-Currency exchange rates
     api_instance.exchange_rates_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->exchange_rates_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->exchange_rates_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 per_page = 56 # int | Valid values: 1...250 Total results per page Default value:: 100 (optional)
 page = 'page_example' # str | page through results (optional)
 
@@ -308,20 +308,20 @@ try:
     # List all exchanges
     api_instance.exchanges_get(per_page=per_page, page=page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->exchanges_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->exchanges_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the exchange id (can be obtained from /exchanges/list) eg. binance
 
 try:
     # Get exchange volume in BTC and top 100 tickers only
     api_instance.exchanges_id_get(id)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->exchanges_id_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->exchanges_id_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the exchange id (can be obtained from /exchanges/list) eg. binance
 per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
@@ -330,10 +330,10 @@ try:
     # Get status updates for a given exchange
     api_instance.exchanges_id_status_updates_get(id, per_page=per_page, page=page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->exchanges_id_status_updates_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->exchanges_id_status_updates_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the exchange id (can be obtained from /exchanges/list) eg. binance
 coin_ids = 'coin_ids_example' # str | filter tickers by coin_ids (ref: v3/coins/list) (optional)
 include_exchange_logo = 'include_exchange_logo_example' # str | flag to show exchange_logo (optional)
@@ -345,10 +345,10 @@ try:
     # Get exchange tickers (paginated, 100 tickers per page)
     api_instance.exchanges_id_tickers_get(id, coin_ids=coin_ids, include_exchange_logo=include_exchange_logo, page=page, depth=depth, order=order)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->exchanges_id_tickers_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->exchanges_id_tickers_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | pass the exchange id (can be obtained from /exchanges/list) eg. binance
 days = 56 # int |  Data up to number of days ago (eg. 1,14,30)
 
@@ -356,19 +356,19 @@ try:
     # Get volume_chart data for a given exchange
     api_instance.exchanges_id_volume_chart_get(id, days)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->exchanges_id_volume_chart_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->exchanges_id_volume_chart_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # List all supported markets id and name (no pagination required)
     api_instance.exchanges_list_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->exchanges_list_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->exchanges_list_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 page = 'page_example' # str | page of results (paginated to 100 by default)
 per_page = 56 # int | Total results per page (optional)
 
@@ -376,10 +376,10 @@ try:
     # List all finance platforms
     api_instance.finance_platforms_get(page, per_page=per_page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->finance_platforms_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->finance_platforms_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 page = 'page_example' # str | page of results (paginated to 100 by default)
 start_at = 'start_at_example' # str | start date of the financial products
 end_at = 'end_at_example' # str | end date of the financial products
@@ -389,28 +389,28 @@ try:
     # List all finance products
     api_instance.finance_products_get(page, start_at, end_at, per_page=per_page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->finance_products_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->finance_products_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # Get cryptocurrency global decentralized finance(defi) data
     api_instance.global_decentralized_finance_defi_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->global_decentralized_finance_defi_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->global_decentralized_finance_defi_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # Get cryptocurrency global data
     api_instance.global_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->global_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->global_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
 
@@ -418,19 +418,19 @@ try:
     # List all market indexes
     api_instance.indexes_get(per_page=per_page, page=page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->indexes_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->indexes_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # list market indexes id and name
     api_instance.indexes_list_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->indexes_list_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->indexes_list_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 market_id = 'market_id_example' # str | pass the market id (can be obtained from /exchanges/list)
 id = 'id_example' # str | pass the index id (can be obtained from /indexes/list)
 
@@ -438,38 +438,38 @@ try:
     # get market index by market id and index id
     api_instance.indexes_market_id_id_get(market_id, id)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->indexes_market_id_id_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->indexes_market_id_id_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # Check API server status
     api_instance.ping_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->ping_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->ping_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 query = 'query_example' # str | Search string
 
 try:
     # Search for coins, categories and markets on CoinGecko
     api_instance.search_get(query)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->search_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->search_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # Get trending search coins (Top-7) on CoinGecko in the last 24 hours
     api_instance.search_trending_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->search_trending_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->search_trending_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 ids = 'ids_example' # str | id of coins, comma-separated if querying more than 1 coin *refers to <b>`coins/list`</b>
 vs_currencies = 'vs_currencies_example' # str | vs_currency of coins, comma-separated if querying more than 1 vs_currency *refers to <b>`simple/supported_vs_currencies`</b>
 include_market_cap = 'include_market_cap_example' # str | <b>true/false</b> to include market_cap, <b>default: false</b> (optional)
@@ -481,19 +481,19 @@ try:
     # Get the current price of any cryptocurrencies in any other supported currencies that you need.
     api_instance.simple_price_get(ids, vs_currencies, include_market_cap=include_market_cap, include_24hr_vol=include_24hr_vol, include_24hr_change=include_24hr_change, include_last_updated_at=include_last_updated_at)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->simple_price_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->simple_price_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 
 try:
     # Get list of supported_vs_currencies.
     api_instance.simple_supported_vs_currencies_get()
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->simple_supported_vs_currencies_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->simple_supported_vs_currencies_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 id = 'id_example' # str | The id of the platform issuing tokens (See asset_platforms endpoint for list of options)
 contract_addresses = 'contract_addresses_example' # str | The contract address of tokens, comma separated
 vs_currencies = 'vs_currencies_example' # str | vs_currency of coins, comma-separated if querying more than 1 vs_currency *refers to <b>`simple/supported_vs_currencies`</b>
@@ -506,10 +506,10 @@ try:
     # Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.
     api_instance.simple_token_price_id_get(id, contract_addresses, vs_currencies, include_market_cap=include_market_cap, include_24hr_vol=include_24hr_vol, include_24hr_change=include_24hr_change, include_last_updated_at=include_last_updated_at)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->simple_token_price_id_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->simple_token_price_id_get: %s\n" % e)
 
 # create an instance of the API class
-api_instance = swagger_client.SWAGGERCLIENTNAMEApi(swagger_client.ApiClient(configuration))
+api_instance = swagger_client.CoingeckoApi(swagger_client.ApiClient(configuration))
 category = 'category_example' # str | Filtered by category (eg. general, milestone, partnership, exchange_listing, software_release, fund_movement, new_listings, event) (optional)
 project_type = 'project_type_example' # str | Filtered by Project Type (eg. coin, market). If left empty returns both status from coins and markets. (optional)
 per_page = 56 # int | Total results per page (optional)
@@ -519,7 +519,7 @@ try:
     # List all status_updates with data (description, category, created_at, user, user_title and pin)
     api_instance.status_updates_get(category=category, project_type=project_type, per_page=per_page, page=page)
 except ApiException as e:
-    print("Exception when calling SWAGGERCLIENTNAMEApi->status_updates_get: %s\n" % e)
+    print("Exception when calling CoingeckoApi->status_updates_get: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -528,47 +528,47 @@ All URIs are relative to *https://api.coingecko.com/api/v3*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*SWAGGERCLIENTNAMEApi* | [**asset_platforms_get**](docs/SWAGGERCLIENTNAMEApi.md#asset_platforms_get) | **GET** /asset_platforms | List all asset platforms (Blockchain networks)
-*SWAGGERCLIENTNAMEApi* | [**coins_categories_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_categories_get) | **GET** /coins/categories | List all categories with market data
-*SWAGGERCLIENTNAMEApi* | [**coins_categories_list_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_categories_list_get) | **GET** /coins/categories/list | List all categories
-*SWAGGERCLIENTNAMEApi* | [**coins_id_contract_contract_address_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_contract_contract_address_get) | **GET** /coins/{id}/contract/{contract_address} | Get coin info from contract address
-*SWAGGERCLIENTNAMEApi* | [**coins_id_contract_contract_address_market_chart_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_contract_contract_address_market_chart_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/ | Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address 
-*SWAGGERCLIENTNAMEApi* | [**coins_id_contract_contract_address_market_chart_range_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_contract_contract_address_market_chart_range_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address
-*SWAGGERCLIENTNAMEApi* | [**coins_id_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_get) | **GET** /coins/{id} | Get current data (name, price, market, ... including exchange tickers) for a coin
-*SWAGGERCLIENTNAMEApi* | [**coins_id_history_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_history_get) | **GET** /coins/{id}/history | Get historical data (name, price, market, stats) at a given date for a coin
-*SWAGGERCLIENTNAMEApi* | [**coins_id_market_chart_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_market_chart_get) | **GET** /coins/{id}/market_chart | Get historical market data include price, market cap, and 24h volume (granularity auto)
-*SWAGGERCLIENTNAMEApi* | [**coins_id_market_chart_range_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_market_chart_range_get) | **GET** /coins/{id}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)
-*SWAGGERCLIENTNAMEApi* | [**coins_id_ohlc_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_ohlc_get) | **GET** /coins/{id}/ohlc | Get coin&#x27;s OHLC
-*SWAGGERCLIENTNAMEApi* | [**coins_id_status_updates_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_status_updates_get) | **GET** /coins/{id}/status_updates | Get status updates for a given coin
-*SWAGGERCLIENTNAMEApi* | [**coins_id_tickers_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_id_tickers_get) | **GET** /coins/{id}/tickers | Get coin tickers (paginated to 100 items)
-*SWAGGERCLIENTNAMEApi* | [**coins_list_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_list_get) | **GET** /coins/list | List all supported coins id, name and symbol (no pagination required)
-*SWAGGERCLIENTNAMEApi* | [**coins_markets_get**](docs/SWAGGERCLIENTNAMEApi.md#coins_markets_get) | **GET** /coins/markets | List all supported coins price, market cap, volume, and market related data
-*SWAGGERCLIENTNAMEApi* | [**companies_public_treasury_coin_id_get**](docs/SWAGGERCLIENTNAMEApi.md#companies_public_treasury_coin_id_get) | **GET** /companies/public_treasury/{coin_id} | Get public companies data
-*SWAGGERCLIENTNAMEApi* | [**derivatives_exchanges_get**](docs/SWAGGERCLIENTNAMEApi.md#derivatives_exchanges_get) | **GET** /derivatives/exchanges | List all derivative exchanges
-*SWAGGERCLIENTNAMEApi* | [**derivatives_exchanges_id_get**](docs/SWAGGERCLIENTNAMEApi.md#derivatives_exchanges_id_get) | **GET** /derivatives/exchanges/{id} | show derivative exchange data
-*SWAGGERCLIENTNAMEApi* | [**derivatives_exchanges_list_get**](docs/SWAGGERCLIENTNAMEApi.md#derivatives_exchanges_list_get) | **GET** /derivatives/exchanges/list | List all derivative exchanges name and identifier
-*SWAGGERCLIENTNAMEApi* | [**derivatives_get**](docs/SWAGGERCLIENTNAMEApi.md#derivatives_get) | **GET** /derivatives | List all derivative tickers
-*SWAGGERCLIENTNAMEApi* | [**exchange_rates_get**](docs/SWAGGERCLIENTNAMEApi.md#exchange_rates_get) | **GET** /exchange_rates | Get BTC-to-Currency exchange rates
-*SWAGGERCLIENTNAMEApi* | [**exchanges_get**](docs/SWAGGERCLIENTNAMEApi.md#exchanges_get) | **GET** /exchanges | List all exchanges
-*SWAGGERCLIENTNAMEApi* | [**exchanges_id_get**](docs/SWAGGERCLIENTNAMEApi.md#exchanges_id_get) | **GET** /exchanges/{id} | Get exchange volume in BTC and top 100 tickers only
-*SWAGGERCLIENTNAMEApi* | [**exchanges_id_status_updates_get**](docs/SWAGGERCLIENTNAMEApi.md#exchanges_id_status_updates_get) | **GET** /exchanges/{id}/status_updates | Get status updates for a given exchange
-*SWAGGERCLIENTNAMEApi* | [**exchanges_id_tickers_get**](docs/SWAGGERCLIENTNAMEApi.md#exchanges_id_tickers_get) | **GET** /exchanges/{id}/tickers | Get exchange tickers (paginated, 100 tickers per page)
-*SWAGGERCLIENTNAMEApi* | [**exchanges_id_volume_chart_get**](docs/SWAGGERCLIENTNAMEApi.md#exchanges_id_volume_chart_get) | **GET** /exchanges/{id}/volume_chart | Get volume_chart data for a given exchange
-*SWAGGERCLIENTNAMEApi* | [**exchanges_list_get**](docs/SWAGGERCLIENTNAMEApi.md#exchanges_list_get) | **GET** /exchanges/list | List all supported markets id and name (no pagination required)
-*SWAGGERCLIENTNAMEApi* | [**finance_platforms_get**](docs/SWAGGERCLIENTNAMEApi.md#finance_platforms_get) | **GET** /finance_platforms | List all finance platforms
-*SWAGGERCLIENTNAMEApi* | [**finance_products_get**](docs/SWAGGERCLIENTNAMEApi.md#finance_products_get) | **GET** /finance_products | List all finance products
-*SWAGGERCLIENTNAMEApi* | [**global_decentralized_finance_defi_get**](docs/SWAGGERCLIENTNAMEApi.md#global_decentralized_finance_defi_get) | **GET** /global/decentralized_finance_defi | Get cryptocurrency global decentralized finance(defi) data
-*SWAGGERCLIENTNAMEApi* | [**global_get**](docs/SWAGGERCLIENTNAMEApi.md#global_get) | **GET** /global | Get cryptocurrency global data
-*SWAGGERCLIENTNAMEApi* | [**indexes_get**](docs/SWAGGERCLIENTNAMEApi.md#indexes_get) | **GET** /indexes | List all market indexes
-*SWAGGERCLIENTNAMEApi* | [**indexes_list_get**](docs/SWAGGERCLIENTNAMEApi.md#indexes_list_get) | **GET** /indexes/list | list market indexes id and name
-*SWAGGERCLIENTNAMEApi* | [**indexes_market_id_id_get**](docs/SWAGGERCLIENTNAMEApi.md#indexes_market_id_id_get) | **GET** /indexes/{market_id}/{id} | get market index by market id and index id
-*SWAGGERCLIENTNAMEApi* | [**ping_get**](docs/SWAGGERCLIENTNAMEApi.md#ping_get) | **GET** /ping | Check API server status
-*SWAGGERCLIENTNAMEApi* | [**search_get**](docs/SWAGGERCLIENTNAMEApi.md#search_get) | **GET** /search | Search for coins, categories and markets on CoinGecko
-*SWAGGERCLIENTNAMEApi* | [**search_trending_get**](docs/SWAGGERCLIENTNAMEApi.md#search_trending_get) | **GET** /search/trending | Get trending search coins (Top-7) on CoinGecko in the last 24 hours
-*SWAGGERCLIENTNAMEApi* | [**simple_price_get**](docs/SWAGGERCLIENTNAMEApi.md#simple_price_get) | **GET** /simple/price | Get the current price of any cryptocurrencies in any other supported currencies that you need.
-*SWAGGERCLIENTNAMEApi* | [**simple_supported_vs_currencies_get**](docs/SWAGGERCLIENTNAMEApi.md#simple_supported_vs_currencies_get) | **GET** /simple/supported_vs_currencies | Get list of supported_vs_currencies.
-*SWAGGERCLIENTNAMEApi* | [**simple_token_price_id_get**](docs/SWAGGERCLIENTNAMEApi.md#simple_token_price_id_get) | **GET** /simple/token_price/{id} | Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.
-*SWAGGERCLIENTNAMEApi* | [**status_updates_get**](docs/SWAGGERCLIENTNAMEApi.md#status_updates_get) | **GET** /status_updates | List all status_updates with data (description, category, created_at, user, user_title and pin)
+*CoingeckoApi* | [**asset_platforms_get**](docs/CoingeckoApi.md#asset_platforms_get) | **GET** /asset_platforms | List all asset platforms (Blockchain networks)
+*CoingeckoApi* | [**coins_categories_get**](docs/CoingeckoApi.md#coins_categories_get) | **GET** /coins/categories | List all categories with market data
+*CoingeckoApi* | [**coins_categories_list_get**](docs/CoingeckoApi.md#coins_categories_list_get) | **GET** /coins/categories/list | List all categories
+*CoingeckoApi* | [**coins_id_contract_contract_address_get**](docs/CoingeckoApi.md#coins_id_contract_contract_address_get) | **GET** /coins/{id}/contract/{contract_address} | Get coin info from contract address
+*CoingeckoApi* | [**coins_id_contract_contract_address_market_chart_get**](docs/CoingeckoApi.md#coins_id_contract_contract_address_market_chart_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/ | Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address 
+*CoingeckoApi* | [**coins_id_contract_contract_address_market_chart_range_get**](docs/CoingeckoApi.md#coins_id_contract_contract_address_market_chart_range_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address
+*CoingeckoApi* | [**coins_id_get**](docs/CoingeckoApi.md#coins_id_get) | **GET** /coins/{id} | Get current data (name, price, market, ... including exchange tickers) for a coin
+*CoingeckoApi* | [**coins_id_history_get**](docs/CoingeckoApi.md#coins_id_history_get) | **GET** /coins/{id}/history | Get historical data (name, price, market, stats) at a given date for a coin
+*CoingeckoApi* | [**coins_id_market_chart_get**](docs/CoingeckoApi.md#coins_id_market_chart_get) | **GET** /coins/{id}/market_chart | Get historical market data include price, market cap, and 24h volume (granularity auto)
+*CoingeckoApi* | [**coins_id_market_chart_range_get**](docs/CoingeckoApi.md#coins_id_market_chart_range_get) | **GET** /coins/{id}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)
+*CoingeckoApi* | [**coins_id_ohlc_get**](docs/CoingeckoApi.md#coins_id_ohlc_get) | **GET** /coins/{id}/ohlc | Get coin&#x27;s OHLC
+*CoingeckoApi* | [**coins_id_status_updates_get**](docs/CoingeckoApi.md#coins_id_status_updates_get) | **GET** /coins/{id}/status_updates | Get status updates for a given coin
+*CoingeckoApi* | [**coins_id_tickers_get**](docs/CoingeckoApi.md#coins_id_tickers_get) | **GET** /coins/{id}/tickers | Get coin tickers (paginated to 100 items)
+*CoingeckoApi* | [**coins_list_get**](docs/CoingeckoApi.md#coins_list_get) | **GET** /coins/list | List all supported coins id, name and symbol (no pagination required)
+*CoingeckoApi* | [**coins_markets_get**](docs/CoingeckoApi.md#coins_markets_get) | **GET** /coins/markets | List all supported coins price, market cap, volume, and market related data
+*CoingeckoApi* | [**companies_public_treasury_coin_id_get**](docs/CoingeckoApi.md#companies_public_treasury_coin_id_get) | **GET** /companies/public_treasury/{coin_id} | Get public companies data
+*CoingeckoApi* | [**derivatives_exchanges_get**](docs/CoingeckoApi.md#derivatives_exchanges_get) | **GET** /derivatives/exchanges | List all derivative exchanges
+*CoingeckoApi* | [**derivatives_exchanges_id_get**](docs/CoingeckoApi.md#derivatives_exchanges_id_get) | **GET** /derivatives/exchanges/{id} | show derivative exchange data
+*CoingeckoApi* | [**derivatives_exchanges_list_get**](docs/CoingeckoApi.md#derivatives_exchanges_list_get) | **GET** /derivatives/exchanges/list | List all derivative exchanges name and identifier
+*CoingeckoApi* | [**derivatives_get**](docs/CoingeckoApi.md#derivatives_get) | **GET** /derivatives | List all derivative tickers
+*CoingeckoApi* | [**exchange_rates_get**](docs/CoingeckoApi.md#exchange_rates_get) | **GET** /exchange_rates | Get BTC-to-Currency exchange rates
+*CoingeckoApi* | [**exchanges_get**](docs/CoingeckoApi.md#exchanges_get) | **GET** /exchanges | List all exchanges
+*CoingeckoApi* | [**exchanges_id_get**](docs/CoingeckoApi.md#exchanges_id_get) | **GET** /exchanges/{id} | Get exchange volume in BTC and top 100 tickers only
+*CoingeckoApi* | [**exchanges_id_status_updates_get**](docs/CoingeckoApi.md#exchanges_id_status_updates_get) | **GET** /exchanges/{id}/status_updates | Get status updates for a given exchange
+*CoingeckoApi* | [**exchanges_id_tickers_get**](docs/CoingeckoApi.md#exchanges_id_tickers_get) | **GET** /exchanges/{id}/tickers | Get exchange tickers (paginated, 100 tickers per page)
+*CoingeckoApi* | [**exchanges_id_volume_chart_get**](docs/CoingeckoApi.md#exchanges_id_volume_chart_get) | **GET** /exchanges/{id}/volume_chart | Get volume_chart data for a given exchange
+*CoingeckoApi* | [**exchanges_list_get**](docs/CoingeckoApi.md#exchanges_list_get) | **GET** /exchanges/list | List all supported markets id and name (no pagination required)
+*CoingeckoApi* | [**finance_platforms_get**](docs/CoingeckoApi.md#finance_platforms_get) | **GET** /finance_platforms | List all finance platforms
+*CoingeckoApi* | [**finance_products_get**](docs/CoingeckoApi.md#finance_products_get) | **GET** /finance_products | List all finance products
+*CoingeckoApi* | [**global_decentralized_finance_defi_get**](docs/CoingeckoApi.md#global_decentralized_finance_defi_get) | **GET** /global/decentralized_finance_defi | Get cryptocurrency global decentralized finance(defi) data
+*CoingeckoApi* | [**global_get**](docs/CoingeckoApi.md#global_get) | **GET** /global | Get cryptocurrency global data
+*CoingeckoApi* | [**indexes_get**](docs/CoingeckoApi.md#indexes_get) | **GET** /indexes | List all market indexes
+*CoingeckoApi* | [**indexes_list_get**](docs/CoingeckoApi.md#indexes_list_get) | **GET** /indexes/list | list market indexes id and name
+*CoingeckoApi* | [**indexes_market_id_id_get**](docs/CoingeckoApi.md#indexes_market_id_id_get) | **GET** /indexes/{market_id}/{id} | get market index by market id and index id
+*CoingeckoApi* | [**ping_get**](docs/CoingeckoApi.md#ping_get) | **GET** /ping | Check API server status
+*CoingeckoApi* | [**search_get**](docs/CoingeckoApi.md#search_get) | **GET** /search | Search for coins, categories and markets on CoinGecko
+*CoingeckoApi* | [**search_trending_get**](docs/CoingeckoApi.md#search_trending_get) | **GET** /search/trending | Get trending search coins (Top-7) on CoinGecko in the last 24 hours
+*CoingeckoApi* | [**simple_price_get**](docs/CoingeckoApi.md#simple_price_get) | **GET** /simple/price | Get the current price of any cryptocurrencies in any other supported currencies that you need.
+*CoingeckoApi* | [**simple_supported_vs_currencies_get**](docs/CoingeckoApi.md#simple_supported_vs_currencies_get) | **GET** /simple/supported_vs_currencies | Get list of supported_vs_currencies.
+*CoingeckoApi* | [**simple_token_price_id_get**](docs/CoingeckoApi.md#simple_token_price_id_get) | **GET** /simple/token_price/{id} | Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.
+*CoingeckoApi* | [**status_updates_get**](docs/CoingeckoApi.md#status_updates_get) | **GET** /status_updates | List all status_updates with data (description, category, created_at, user, user_title and pin)
 
 ## Documentation For Models
 

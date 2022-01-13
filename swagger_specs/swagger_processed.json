@@ -14,7 +14,7 @@
         "/ping": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Check API server status",
                 "description": "Check API server status\n",
@@ -32,7 +32,7 @@
         "/simple/price": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get the current price of any cryptocurrencies in any other supported currencies that you need.",
                 "description": "",
@@ -93,7 +93,7 @@
         "/simple/token_price/{id}": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.",
                 "description": "",
@@ -161,7 +161,7 @@
         "/simple/supported_vs_currencies": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get list of supported_vs_currencies.",
                 "description": "",
@@ -178,7 +178,7 @@
         "/coins/list": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all supported coins id, name and symbol (no pagination required)",
                 "description": "Use this to obtain all the coins' id in order to make API calls",
@@ -204,7 +204,7 @@
         "/coins/markets": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all supported coins price, market cap, volume, and market related data",
                 "description": "Use this to obtain all the coins market data (price, market cap, volume)",
@@ -283,7 +283,7 @@
         "/coins/{id}": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get current data (name, price, market, ... including exchange tickers) for a coin",
                 "description": "Get current data (name, price, market, ... including exchange tickers) for a coin.<br><br> **IMPORTANT**:\n Ticker object is limited to 100 items, to get more tickers, use `/coins/{id}/tickers`\n Ticker `is_stale` is true when ticker that has not been updated/unchanged from the exchange for a while.\n Ticker `is_anomaly` is true if ticker's price is outliered by our system.\n You are responsible for managing how you want to display these information (e.g. footnote, different background, change opacity, hide)\n",
@@ -351,7 +351,7 @@
         "/coins/{id}/tickers": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get coin tickers (paginated to 100 items)",
                 "description": "Get coin tickers (paginated to 100 items)<br><br> **IMPORTANT**:\n Ticker `is_stale` is true when ticker that has not been updated/unchanged from the exchange for a while.\n Ticker `is_anomaly` is true if ticker's price is outliered by our system.\n You are responsible for managing how you want to display these information (e.g. footnote, different background, change opacity, hide)\n",
@@ -412,7 +412,7 @@
         "/coins/{id}/history": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get historical data (name, price, market, stats) at a given date for a coin",
                 "description": "Get historical data (name, price, market, stats) at a given date for a coin\n",
@@ -452,7 +452,7 @@
         "/coins/{id}/market_chart": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get historical market data include price, market cap, and 24h volume (granularity auto)",
                 "description": "Get historical market data include price, market cap, and 24h volume (granularity auto)\n <b>Minutely data will be used for duration within 1 day, Hourly data will be used for duration between 1 day and 90 days, Daily data will be used for duration above 90 days.</b>",
@@ -499,7 +499,7 @@
         "/coins/{id}/market_chart/range": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)",
                 "description": "Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)\n <b><ul><li>Data granularity is automatic (cannot be adjusted)</li><li>1 day from query time = 5 minute interval data</li><li>1 - 90 days from query time = hourly data</li><li>above 90 days from query time = daily data (00:00 UTC)</li></ul> </b>",
@@ -546,7 +546,7 @@
         "/coins/{id}/status_updates": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get status updates for a given coin",
                 "description": "Get status updates for a given coin",
@@ -586,7 +586,7 @@
         "/coins/{id}/contract/{contract_address}": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get coin info from contract address",
                 "description": "Get coin info from contract address",
@@ -619,7 +619,7 @@
         "/coins/{id}/contract/{contract_address}/market_chart/": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address ",
                 "description": "Get historical market data include price, market cap, and 24h volume (granularity auto)\n",
@@ -666,7 +666,7 @@
         "/coins/{id}/contract/{contract_address}/market_chart/range": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address",
                 "description": "Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)\n",
@@ -720,7 +720,7 @@
         "/coins/{id}/ohlc": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get coin's OHLC",
                 "description": "Candle's body:\n\n1 - 2 days: 30 minutes\n3 - 30 days: 4 hours\n31 and before: 4 days",
@@ -773,7 +773,7 @@
         "/asset_platforms": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all asset platforms (Blockchain networks)",
                 "description": "List all asset platforms",
@@ -790,7 +790,7 @@
         "/coins/categories/list": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all categories",
                 "description": "List all categories",
@@ -807,7 +807,7 @@
         "/coins/categories": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all categories with market data",
                 "description": "List all categories with market data",
@@ -833,7 +833,7 @@
         "/exchanges": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all exchanges",
                 "description": "List all exchanges",
@@ -866,7 +866,7 @@
         "/exchanges/list": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all supported markets id and name (no pagination required)",
                 "description": "Use this to obtain all the markets' id in order to make API calls",
@@ -883,7 +883,7 @@
         "/exchanges/{id}": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get exchange volume in BTC and top 100 tickers only",
                 "description": "Get exchange volume in BTC and tickers<br><br> **IMPORTANT**:\n Ticker object is limited to 100 items, to get more tickers, use `/exchanges/{id}/tickers`\n Ticker `is_stale` is true when ticker that has not been updated/unchanged from the exchange for a while.\n Ticker `is_anomaly` is true if ticker's price is outliered by our system.\n You are responsible for managing how you want to display these information (e.g. footnote, different background, change opacity, hide)\n",
@@ -909,7 +909,7 @@
         "/exchanges/{id}/tickers": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get exchange tickers (paginated, 100 tickers per page)",
                 "description": "Get exchange tickers (paginated)<br><br> **IMPORTANT**:\n Ticker `is_stale` is true when ticker that has not been updated/unchanged from the exchange for a while.\n Ticker `is_anomaly` is true if ticker's price is outliered by our system.\n You are responsible for managing how you want to display these information (e.g. footnote, different background, change opacity, hide)\n",
@@ -970,7 +970,7 @@
         "/finance_platforms": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all finance platforms",
                 "description": "List all finance platforms",
@@ -1003,7 +1003,7 @@
         "/finance_products": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all finance products",
                 "description": "List all finance products",
@@ -1050,7 +1050,7 @@
         "/indexes": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all market indexes",
                 "description": "List all market indexes",
@@ -1083,7 +1083,7 @@
         "/indexes/{market_id}/{id}": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "get market index by market id and index id",
                 "description": "get market index by market id and index id",
@@ -1116,7 +1116,7 @@
         "/indexes/list": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "list market indexes id and name",
                 "description": "list market indexes id and name",
@@ -1134,7 +1134,7 @@
         "/derivatives": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all derivative tickers",
                 "description": "List all derivative tickers",
@@ -1160,7 +1160,7 @@
         "/derivatives/exchanges": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all derivative exchanges",
                 "description": "List all derivative exchanges",
@@ -1200,7 +1200,7 @@
         "/derivatives/exchanges/{id}": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "show derivative exchange data",
                 "description": "show derivative exchange data",
@@ -1233,7 +1233,7 @@
         "/derivatives/exchanges/list": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all derivative exchanges name and identifier",
                 "description": "List all derivative exchanges name and identifier",
@@ -1251,7 +1251,7 @@
         "/exchanges/{id}/status_updates": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get status updates for a given exchange",
                 "description": "Get status updates for a given exchange",
@@ -1291,7 +1291,7 @@
         "/exchanges/{id}/volume_chart": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get volume_chart data for a given exchange",
                 "description": "Get volume_chart data for a given exchange",
@@ -1324,7 +1324,7 @@
         "/status_updates": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "List all status_updates with data (description, category, created_at, user, user_title and pin)",
                 "description": "List all status_updates with data (description, category, created_at, user, user_title and pin)\n",
@@ -1371,7 +1371,7 @@
         "/exchange_rates": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get BTC-to-Currency exchange rates",
                 "description": "Get BTC-to-Currency exchange rates\n",
@@ -1389,7 +1389,7 @@
         "/search": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Search for coins, categories and markets on CoinGecko",
                 "description": "Search for coins, categories and markets listed on CoinGecko ordered by largest Market Cap first",
@@ -1481,7 +1481,7 @@
         "/search/trending": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get trending search coins (Top-7) on CoinGecko in the last 24 hours",
                 "description": "Top-7 trending coins on CoinGecko as searched by users in the last 24 hours (Ordered by most popular first)",
@@ -1499,7 +1499,7 @@
         "/global": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get cryptocurrency global data",
                 "description": "Get cryptocurrency global data\n",
@@ -1517,7 +1517,7 @@
         "/global/decentralized_finance_defi": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get cryptocurrency global decentralized finance(defi) data",
                 "description": "Get Top 100 Cryptocurrency Global Eecentralized Finance(defi) data\n",
@@ -1553,7 +1553,7 @@
         "/companies/public_treasury/{coin_id}": {
             "get": {
                 "tags": [
-                    "SWAGGER_CLIENT_NAME"
+                    "coingecko"
                 ],
                 "summary": "Get public companies data",
                 "description": "Get public companies bitcoin or ethereum holdings (Ordered by total holdings descending)",

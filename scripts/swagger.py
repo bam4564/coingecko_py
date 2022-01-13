@@ -35,7 +35,7 @@ def generate_client():
         for path, path_spec in spec['paths'].items(): 
             assert len(path_spec.keys()) == 1
             assert "get" in path_spec
-            spec['paths'][path]['get']['tags'] = ['SWAGGER_CLIENT_NAME']
+            spec['paths'][path]['get']['tags'] = [SWAGGER_CLIENT_NAME]
     with open(FORMATTED_SPEC_PATH, 'w') as f: 
         f.write(json.dumps(spec, indent=4))
 
