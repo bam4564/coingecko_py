@@ -13,8 +13,10 @@ SWAGGER_CLIENT_NAME = 'coingecko'
 SWAGGER_API_CLIENT_PATH = os.path.join("./client/swagger_client/api/", f"{SWAGGER_CLIENT_NAME}_api.py")
 URL_TO_METHOD_PATH = "./data/url_to_method.json"
 POETRY_PROJECT_FILE_PATH = './pyproject.toml'
+TEST_API_DATA_PATH = 'data/test_api_calls.json'
 SWAGGER_REQUIREMENTS_PATH = os.path.join(SWAGGER_CLIENT_PATH, 'requirements.txt')
 SWAGGER_REQUIREMENTS_DEV_PATH = os.path.join(SWAGGER_CLIENT_PATH, 'test-requirements.txt')
+
 
 def generate_client(): 
     # pull the swagger spec from the coingecko website, write to local file 
@@ -67,6 +69,22 @@ def generate_client():
         assert package in deps 
         assert f"^{spec}" == deps[package]
 
+
+def generate_test_data_template(): 
+    template = dict() 
+    with open(FORMATTED_SPEC_PATH, 'r') as f: 
+        spec = json.loads(f.read())
+    for path, path_spec in spec['paths'].items(): 
+        template[path] = {"args": list(), "kwargs": dict()}
+        assert 'get' in path_spec
+        params = path_spec['get'].get("parameters", list())
+        for p in params: 
+            assert p['in'] in ['path', 'query']
+            if p['in'] == 'query': 
+                template[path]['kwargs'][p["name"]] = p["type"]
+    with open(TEST_API_DATA_PATH, 'w') as f: 
+        f.write(json.dumps(template, indent=4))
+        
 
 def generate_test_data(): 
     with open(URL_TO_METHOD_PATH, 'r') as f: 

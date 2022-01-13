@@ -4,15 +4,25 @@
         "kwargs": {}
     },
     "/simple/price": {
-        "args": ["bitcoin", "usd"],
-        "kwargs": {}
+        "args": [],
+        "kwargs": {
+            "ids": "string",
+            "vs_currencies": "string",
+            "include_market_cap": "string",
+            "include_24hr_vol": "string",
+            "include_24hr_change": "string",
+            "include_last_updated_at": "string"
+        }
     },
     "/simple/token_price/{id}": {
-        "args": ["ethereum"],
+        "args": [],
         "kwargs": {
-            "include_market_cap" : "true",
-            "include_24hr_vol" : "true",
-            "include_last_updated_at" : "true"
+            "contract_addresses": "string",
+            "vs_currencies": "string",
+            "include_market_cap": "string",
+            "include_24hr_vol": "string",
+            "include_24hr_change": "string",
+            "include_last_updated_at": "string"
         }
     },
     "/simple/supported_vs_currencies": {
@@ -21,35 +31,73 @@
     },
     "/coins/list": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "include_platform": "boolean"
+        }
     },
     "/coins/markets": {
         "args": [],
-        "kwargs": {"vs_currency": "usd"}
+        "kwargs": {
+            "vs_currency": "string",
+            "ids": "string",
+            "category": "string",
+            "order": "string",
+            "per_page": "integer",
+            "page": "integer",
+            "sparkline": "boolean",
+            "price_change_percentage": "string"
+        }
     },
     "/coins/{id}": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "localization": "string",
+            "tickers": "boolean",
+            "market_data": "boolean",
+            "community_data": "boolean",
+            "developer_data": "boolean",
+            "sparkline": "boolean"
+        }
     },
     "/coins/{id}/tickers": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "exchange_ids": "string",
+            "include_exchange_logo": "string",
+            "page": "integer",
+            "order": "string",
+            "depth": "string"
+        }
     },
     "/coins/{id}/history": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "date": "string",
+            "localization": "string"
+        }
     },
     "/coins/{id}/market_chart": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "vs_currency": "string",
+            "days": "string",
+            "interval": "string"
+        }
     },
     "/coins/{id}/market_chart/range": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "vs_currency": "string",
+            "from": "string",
+            "to": "string"
+        }
     },
     "/coins/{id}/status_updates": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "per_page": "integer",
+            "page": "integer"
+        }
     },
     "/coins/{id}/contract/{contract_address}": {
         "args": [],
@@ -57,15 +105,25 @@
     },
     "/coins/{id}/contract/{contract_address}/market_chart/": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "vs_currency": "string",
+            "days": "string"
+        }
     },
     "/coins/{id}/contract/{contract_address}/market_chart/range": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "vs_currency": "string",
+            "from": "string",
+            "to": "string"
+        }
     },
     "/coins/{id}/ohlc": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "vs_currency": "string",
+            "days": "integer"
+        }
     },
     "/asset_platforms": {
         "args": [],
@@ -77,11 +135,16 @@
     },
     "/coins/categories": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "order": "string"
+        }
     },
     "/exchanges": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "per_page": "integer",
+            "page": "string"
+        }
     },
     "/exchanges/list": {
         "args": [],
@@ -93,19 +156,32 @@
     },
     "/exchanges/{id}/tickers": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "coin_ids": "string",
+            "include_exchange_logo": "string",
+            "page": "integer",
+            "depth": "string",
+            "order": "string"
+        }
     },
     "/finance_platforms": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "per_page": "integer"
+        }
     },
     "/finance_products": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "per_page": "integer"
+        }
     },
     "/indexes": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "per_page": "integer",
+            "page": "integer"
+        }
     },
     "/indexes/{market_id}/{id}": {
         "args": [],
@@ -117,15 +193,23 @@
     },
     "/derivatives": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "include_tickers": "string"
+        }
     },
     "/derivatives/exchanges": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "order": "string",
+            "per_page": "integer",
+            "page": "integer"
+        }
     },
     "/derivatives/exchanges/{id}": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "include_tickers": "string"
+        }
     },
     "/derivatives/exchanges/list": {
         "args": [],
@@ -133,15 +217,25 @@
     },
     "/exchanges/{id}/status_updates": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "per_page": "integer",
+            "page": "integer"
+        }
     },
     "/exchanges/{id}/volume_chart": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "days": "integer"
+        }
     },
     "/status_updates": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "category": "string",
+            "project_type": "string",
+            "per_page": "integer",
+            "page": "integer"
+        }
     },
     "/exchange_rates": {
         "args": [],
@@ -149,7 +243,9 @@
     },
     "/search": {
         "args": [],
-        "kwargs": {}
+        "kwargs": {
+            "query": "string"
+        }
     },
     "/search/trending": {
         "args": [],
