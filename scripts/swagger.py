@@ -44,12 +44,12 @@ def generate_client():
         assert len(path_spec.keys()) == 1
         assert "get" in path_spec
         spec["paths"][path]["get"]["tags"] = [SWAGGER_CLIENT_NAME]
-    # TODO: The coingecko API spec has some errors. This fixes them. Will remove once they update their spec 
-    for p in ['/finance_platforms', '/finance_products']: 
-        for i, param in enumerate(spec["paths"][p]['get']['parameters']): 
-            if param['name'] in ['page', 'start_at', 'end_at']: 
+    # TODO: The coingecko API spec has some errors. This fixes them. Will remove once they update their spec
+    for p in ["/finance_platforms", "/finance_products"]:
+        for i, param in enumerate(spec["paths"][p]["get"]["parameters"]):
+            if param["name"] in ["page", "start_at", "end_at"]:
                 print("Performing spec fix for:", p)
-                spec["paths"][p]['get']['parameters'][i]["in"] = "query"
+                spec["paths"][p]["get"]["parameters"][i]["in"] = "query"
     with open(FORMATTED_SPEC_PATH, "w") as f:
         f.write(json.dumps(spec, indent=4))
 
@@ -115,8 +115,8 @@ def generate_test_data():
     # Generate urls to request from the test api call spec
     urls = [
         (
-            url_template, 
-            materialize_url_template(url_template, data['args'], data["kwargs"])
+            url_template,
+            materialize_url_template(url_template, data["args"], data["kwargs"]),
         )
         for url_template, data in test_api_calls.items()
     ]
@@ -136,13 +136,13 @@ def generate_test_data():
         f.write(json.dumps(data, indent=4))
 
 
-def get_parameters(url_template): 
+def get_parameters(url_template):
     with open(FORMATTED_SPEC_PATH, "r") as f:
         spec = json.loads(f.read())
-    return spec['paths'][url_template]['get'].get('parameters', [])
+    return spec["paths"][url_template]["get"].get("parameters", [])
 
 
-def get_api_method_names(): 
+def get_api_method_names():
     with open(URL_TO_METHOD_PATH, "r") as f:
         url_to_methods = json.loads(f.read())
     return list(url_to_methods.values())

@@ -4,7 +4,7 @@ import logging
 import requests
 import itertools
 import json
-import requests 
+import requests
 from typing import List, Set
 from collections import defaultdict, deque
 from functools import partial
@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-from client.swagger_client import ApiClient as ApiClientSwagger 
+from client.swagger_client import ApiClient as ApiClientSwagger
 from client.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
 
 from pycoingecko_extra.utils import without_keys, dict_get
@@ -28,15 +28,15 @@ error_msgs = dict(
     exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing exp_limit. Queued calls are retained."
 )
 
-class CoinGeckoAPIClient(ApiClientSwagger):
 
+class CoinGeckoAPIClient(ApiClientSwagger):
     def __init__(self):
         super().__init__()
-        # setup HTTP session  
+        # setup HTTP session
         self.request_timeout = 120
         self.session = requests.Session()
         retries = Retry(total=5, backoff_factor=0.5, status_forcelist=[502, 503, 504])
-        self.session.mount('https://', HTTPAdapter(max_retries=retries)) 
+        self.session.mount("https://", HTTPAdapter(max_retries=retries))
         self._include_resp = False
 
     @contextmanager
@@ -51,16 +51,12 @@ class CoinGeckoAPIClient(ApiClientSwagger):
         self._include_resp = False
 
     def call_api(
-        self, 
-        resource_path, 
-        method,
-        path_params,
-        query_params,
-        header_params,
-        **kwargs 
+        self, resource_path, method, path_params, query_params, header_params, **kwargs
     ):
-        args = list(path_params.values()) # dictionaries are ordered from python 3.6 on so this is fine. 
-        kwargs = {v[0]: v[1] for v in query_params} 
+        args = list(
+            path_params.values()
+        )  # dictionaries are ordered from python 3.6 on so this is fine.
+        kwargs = {v[0]: v[1] for v in query_params}
         url = materialize_url_template(resource_path, args, kwargs)
         logger.debug(f"HTTPS Request: {url}")
         assert method == "GET"
@@ -89,7 +85,11 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
     defaults = dict(exp_limit=8, progress_interval=10, log_level=logging.INFO)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, api_client=CoinGeckoAPIClient(), **without_keys(kwargs, self.defaults.keys()))
+        super().__init__(
+            *args,
+            api_client=CoinGeckoAPIClient(),
+            **without_keys(kwargs, self.defaults.keys()),
+        )
         # ensure that we don't override any methods from the base class, except call_api
         # setup wrapper instance fields, for managing queued calls, rate limit behavior, page range queries
         self._reset_state()
@@ -99,15 +99,11 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         # decorate bound methods on base class that correspond to api calls to enable
         # queueing and page range query support for page range query enabled functions
         method_names = get_api_method_names()
-        for name in method_names: 
+        for name in method_names:
             v = getattr(self, name)
-            page_range_query = False # TODO: enable pagination support
-            logger.debug(
-                f"Decorating: {name:60} page_range_query: {page_range_query}"
-            )
-            setattr(
-                self, name, partial(self._wrap_api_endpoint, v, page_range_query)
-            )
+            page_range_query = False  # TODO: enable pagination support
+            logger.debug(f"Decorating: {name:60} page_range_query: {page_range_query}")
+            setattr(self, name, partial(self._wrap_api_endpoint, v, page_range_query))
 
     def _validate_page_range(self, page_start, page_end) -> None:
         """Validates user supplied values for page_start and page_end"""
@@ -308,4 +304,3 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         finally:
             self._reset_state()
         return results
-

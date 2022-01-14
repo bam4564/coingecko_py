@@ -1,12 +1,13 @@
-import re 
-import json 
+import re
+import json
 
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 
 FORMATTED_SPEC_PATH = "./swagger_specs/swagger_processed.json"
 
-def get_url_base(): 
+
+def get_url_base():
     with open(FORMATTED_SPEC_PATH, "r") as f:
         spec = json.loads(f.read())
     host = spec["host"]
@@ -14,24 +15,25 @@ def get_url_base():
     schemes = spec["schemes"]
     assert len(schemes) == 1
     scheme = schemes[0]
-    url_parts = [scheme, host, basePath, '', '', '']
+    url_parts = [scheme, host, basePath, "", "", ""]
     url = urlparse.urlunparse(url_parts)
     return url
 
+
 def materialize_url_template(url_template, args, kwargs):
-    """ Converts url template to url to request from api by adding prefix and encoding args, kwargs 
+    """Converts url template to url to request from api by adding prefix and encoding args, kwargs
 
-        input: 
-            url_template = "/coins/{id}/contract/{contract_address}/market_chart/range"
-            args = ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"]
-            kwargs = {
-                "vs_currency": "eur",
-                "from": "1622520000",
-                "to": "1638334800"
-            }
+    input:
+        url_template = "/coins/{id}/contract/{contract_address}/market_chart/range"
+        args = ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"]
+        kwargs = {
+            "vs_currency": "eur",
+            "from": "1622520000",
+            "to": "1638334800"
+        }
 
-        output:  
-            https://api.coingecko.com/api/v3/coins/ethereum/contract/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/market_chart/range?vs_currency=eur&from=1622520000&to=1638334800
+    output:
+        https://api.coingecko.com/api/v3/coins/ethereum/contract/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/market_chart/range?vs_currency=eur&from=1622520000&to=1638334800
     """
     url_base = get_url_base()
     url_base_parts = list(urlparse.urlparse(url_base))
