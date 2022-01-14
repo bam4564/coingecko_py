@@ -88,7 +88,7 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         super().__init__(
             *args,
             api_client=CoinGeckoAPIClient(),
-            **without_keys(kwargs, self.defaults.keys()),
+            **without_keys(kwargs, *self.defaults.keys()),
         )
         # ensure that we don't override any methods from the base class, except call_api
         # setup wrapper instance fields, for managing queued calls, rate limit behavior, page range queries
@@ -258,7 +258,7 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
 
     def _queue_page_range_query(self, qid, fn, *args, **kwargs) -> None:
         page, page_start, page_end = dict_get(kwargs, "page", "page_start", "page_end")
-        kwargs = without_keys(kwargs, ["page_start", "page_end"])
+        kwargs = without_keys(kwargs, "page_start", "page_end")
         if not (page or page_start or page_end) or page:
             # 1. paged endpoint but no paging arguments specified (api uses default of page 1)
             # 2. paged endpoint and single page specified (supported by base api client)
@@ -288,7 +288,7 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         qid = kwargs.get("qid")
         if qid:
             qid = str(qid)
-            kwargs = without_keys(kwargs, ["qid"])
+            kwargs = without_keys(kwargs, "qid")
             if page_range_query:
                 self._queue_page_range_query(qid, fn, *args, **kwargs)
             else:
