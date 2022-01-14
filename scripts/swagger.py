@@ -140,3 +140,9 @@ def get_parameters(url_template):
     with open(FORMATTED_SPEC_PATH, "r") as f:
         spec = json.loads(f.read())
     return spec['paths'][url_template]['get'].get('parameters', [])
+
+
+def get_api_method_names(): 
+    with open(URL_TO_METHOD_PATH, "r") as f:
+        url_to_methods = json.loads(f.read())
+    return list(url_to_methods.values())

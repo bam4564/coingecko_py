@@ -18,7 +18,7 @@ TEST_ID = "TESTING_ID"
 
 @pytest.fixture(scope="class")
 def cg(request):
-    request.cls.cg = CoinGeckoAPI()
+    request.cls.cg = CoinGeckoAPI(log_level=10)
 
 
 @pytest.fixture(scope="class")
