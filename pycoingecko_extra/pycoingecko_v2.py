@@ -195,9 +195,9 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         while res is None and exp < self.exp_limit + 1:
             try:
                 if include_response:
-                    with self._include_response():
+                    with self.api_client._include_response():
                         res, response = fn(*args, **kwargs)
-                        return res, response
+                    return res, response
                 else:
                     res = fn(*args, **kwargs)
                     return res
