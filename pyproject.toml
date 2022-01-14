@@ -32,6 +32,7 @@ certifi = "^2017.4.17"
 six = "^1.10"
 urllib3 = "^1.26.8"
 setuptools = "^21.0.0"
+python-dotenv = "^0.19.2"
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"

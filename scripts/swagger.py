@@ -2,6 +2,7 @@ import json
 import os
 import ast
 import re
+import shutil
 import subprocess
 import pkg_resources
 import urllib.parse as urlparse
@@ -9,22 +10,22 @@ from urllib.parse import urlencode
 
 import urllib3
 import toml
+from dotenv import load_dotenv
 
-RAW_SPEC_PATH = "./swagger_specs/swagger.json"
-FORMATTED_SPEC_PATH = "./swagger_specs/swagger_processed.json"
-SWAGGER_CLIENT_PATH = "./client"
-SWAGGER_CLIENT_NAME = "coingecko"
-SWAGGER_API_CLIENT_PATH = os.path.join(
-    "./client/swagger_client/api/", f"{SWAGGER_CLIENT_NAME}_api.py"
-)
-URL_TO_METHOD_PATH = "./data/url_to_method.json"
-POETRY_PROJECT_FILE_PATH = "./pyproject.toml"
-TEST_API_DATA_PATH = "data/test_api_calls.json"
-TEST_API_RESPONSES_PATH = "data/test_api_responses.json"
-SWAGGER_REQUIREMENTS_PATH = os.path.join(SWAGGER_CLIENT_PATH, "requirements.txt")
-SWAGGER_REQUIREMENTS_DEV_PATH = os.path.join(
-    SWAGGER_CLIENT_PATH, "test-requirements.txt"
-)
+load_dotenv()
+
+
+RAW_SPEC_PATH = os.environ['RAW_SPEC_PATH']
+FORMATTED_SPEC_PATH = os.environ['FORMATTED_SPEC_PATH']
+SWAGGER_CLIENT_PATH = os.environ['SWAGGER_CLIENT_PATH']
+SWAGGER_CLIENT_NAME = os.environ['SWAGGER_CLIENT_NAME']
+SWAGGER_API_CLIENT_PATH = os.environ['SWAGGER_API_CLIENT_PATH']
+SWAGGER_DATA_PATH = os.environ['SWAGGER_DATA_PATH']
+URL_TO_METHOD_PATH = os.environ['URL_TO_METHOD_PATH']
+POETRY_PROJECT_FILE_PATH = os.environ['POETRY_PROJECT_FILE_PATH']
+TEST_API_DATA_PATH = os.environ['TEST_API_DATA_PATH']
+TEST_API_RESPONSES_PATH = os.environ['TEST_API_RESPONSES_PATH']
+SWAGGER_REQUIREMENTS_PATH = os.environ['SWAGGER_REQUIREMENTS_PATH']
 
 
 def generate_client():
@@ -51,13 +52,20 @@ def generate_client():
     with open(FORMATTED_SPEC_PATH, "w") as f:
         f.write(json.dumps(spec, indent=4))
 
+    # Remove previously generated client 
+    shutil.rmtree(SWAGGER_CLIENT_PATH)
+    os.mkdir(SWAGGER_CLIENT_PATH)
     # auto-generate a base api client
-    # subprocess.call(
-    #     # command will overwrite contents of directory
-    #     f"swagger-codegen generate -i {FORMATTED_SPEC_PATH} -l python -o {SWAGGER_CLIENT_PATH}".split(
-    #         " "
-    #     )
-    # )
+    subprocess.call(
+        # command will overwrite contents of directory
+        f"swagger-codegen generate -i {FORMATTED_SPEC_PATH} -l python -o {SWAGGER_CLIENT_PATH}".split(
+            " "
+        )
+    )
+
+    # generate directory for swagger data if it does not already exist 
+    if not os.path.isdir(SWAGGER_DATA_PATH): 
+        os.mkdir(SWAGGER_DATA_PATH)
 
     # get a mapping from url templates to auto-generated methods
     methods = []
@@ -101,6 +109,7 @@ def generate_client():
             assert op == ">="
             assert package in deps
             assert f"^{spec}" == deps[package]
+
 
 def generate_test_data_template():
     template = dict()
@@ -155,6 +164,18 @@ def get_url_to_methods():
     with open(URL_TO_METHOD_PATH, "r") as f:
         url_to_methods = json.loads(f.read())
     return url_to_methods
+
+
+def get_expected_response(): 
+    with open("swagger_data/test_api_responses.json", "r") as f:
+        expected_response = json.loads(f.read())
+    return expected_response
+
+
+def get_test_api_calls(): 
+    with open("swagger_data/test_api_calls.json", "r") as f:
+        test_api_calls = json.loads(f.read())
+    return test_api_calls
 
 
 def get_api_method_names():

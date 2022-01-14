@@ -1,3 +1,4 @@
+from cmath import exp
 import math
 import json
 import pytest
@@ -8,8 +9,15 @@ from collections import Counter
 from copy import copy
 from requests.exceptions import HTTPError
 
-from scripts.swagger import materialize_url_template
-from scripts.swagger import get_parameters, get_paginated_method_names
+
+from scripts.swagger import (
+    materialize_url_template, 
+    get_parameters, 
+    get_paginated_method_names,
+    get_url_to_methods, 
+    get_test_api_calls,
+    get_expected_response
+)
 from pycoingecko_extra.utils import (
     extract_from_querystring,
     sort_querystring,
@@ -29,12 +37,9 @@ def cg(request):
 
 @pytest.fixture(scope="class")
 def calls(request, cg):
-    with open("data/test_api_responses.json", "r") as f:
-        expected_response = json.loads(f.read())
-    with open("data/url_to_method.json", "r") as f:
-        url_to_method = json.loads(f.read())
-    with open("data/test_api_calls.json", "r") as f:
-        test_api_calls = json.loads(f.read())
+    url_to_method = get_url_to_methods()
+    expected_response = get_expected_response()
+    test_api_calls = get_test_api_calls()
     calls = list()
     for url_template, method_name in url_to_method.items():
         expected = expected_response[url_template]
