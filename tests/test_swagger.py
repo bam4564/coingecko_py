@@ -9,13 +9,13 @@ from functools import partial
 from copy import copy
 from requests.exceptions import HTTPError
 
-# from pycoingecko_extra.pycoingecko_extra import CoinGeckoAPIExtra, error_msgs
 # from pycoingecko_extra.utils import extract_from_querystring, remove_from_querystring
 from scripts.utils import materialize_url_template
 from scripts.swagger import get_parameters
 from pycoingecko_extra import CoinGeckoAPI, error_msgs
 
 TEST_ID = "TESTING_ID"
+TIME_PATH = "pycoingecko_extra.pycoingecko_v2.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)
@@ -39,7 +39,7 @@ def calls(request, cg):
         args = test_call["args"]
         kwargs = test_call["kwargs"]
         url = materialize_url_template(url_template, args, kwargs)
-        args, kwargs = update_args_kwargs(url_template, args, kwargs)
+        args, kwargs = transform_args_kwargs(url_template, args, kwargs)
         fn = getattr(request.cls.cg, method_name)
         calls.append((url, expected, fn, args, kwargs))
     request.cls.calls = calls
@@ -89,7 +89,10 @@ class FailThenSuccessServer:
             )
 
 
-def update_args_kwargs(url_template, args, kwargs):
+def transform_args_kwargs(url_template, args, kwargs):
+    """args and kwargs from input were used to materize url template
+    this function transforms them to be supplied to API client endpoint function
+    """
     args = copy(args)
     kwargs = copy(kwargs)
     params = get_parameters(url_template)
@@ -123,7 +126,7 @@ class TestWrapper(unittest.TestCase):
 
     @responses.activate
     def test_success_normal(self):
-        for url, expected, fn, args, kwargs in self.calls:
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -131,11 +134,12 @@ class TestWrapper(unittest.TestCase):
                 status=200,
             )
             response = fn(*args, **kwargs)
+            assert len(responses.calls) == i + 1
             assert response == expected
 
     @responses.activate
     def test_failed_normal(self):
-        for url, expected, fn, args, kwargs in self.calls:
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -143,10 +147,11 @@ class TestWrapper(unittest.TestCase):
             )
             with pytest.raises(HTTPError) as HE:
                 fn(*args, **kwargs)
+            assert len(responses.calls) == i + 1
 
     @responses.activate
     def test_success_queued(self):
-        for url, expected, fn, args, kwargs in self.calls:
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -156,11 +161,13 @@ class TestWrapper(unittest.TestCase):
             fn(*args, **kwargs, qid=TEST_ID)
             assert len(self.cg._queued_calls) == 1
             response = self.cg.execute_queued()[TEST_ID]
+            assert len(self.cg._queued_calls) == 0
+            assert len(responses.calls) == i + 1
             assert response == expected
 
     @responses.activate
     def test_failed_queued(self):
-        for url, expected, fn, args, kwargs in self.calls:
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -170,6 +177,8 @@ class TestWrapper(unittest.TestCase):
             assert len(self.cg._queued_calls) == 1
             with pytest.raises(HTTPError) as HE:
                 self.cg.execute_queued()
+            assert len(self.cg._queued_calls) == 0
+            assert len(responses.calls) == i + 1
 
     # ---------- MULTIPLE QUEUED CALLS + SERVER SIDE RATE LIMITING  ----------
 
@@ -185,16 +194,18 @@ class TestWrapper(unittest.TestCase):
             )
             fn(*args, **kwargs, qid=qid)
             assert len(self.cg._queued_calls) == i + 1
+            assert len(responses.calls) == 0
 
         response = self.cg.execute_queued()
         assert len(self.cg._queued_calls) == 0
+        assert len(responses.calls) == len(self.calls)
 
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             assert response[qid] == expected
 
     @responses.activate
-    @unittest.mock.patch("pycoingecko_extra.pycoingecko_v2.time.sleep")
+    @unittest.mock.patch(TIME_PATH)
     def test_multiple_rate_limited_success(self, sleep_patch):
         # patch time.sleep in the imported module so it doesn't block test
         sleep_patch.return_value = True
@@ -214,6 +225,7 @@ class TestWrapper(unittest.TestCase):
             )
             fn(*args, **kwargs, qid=qid)
             assert len(self.cg._queued_calls) == i + 1
+            assert len(responses.calls) == 0
 
         # execute calls
         response = self.cg.execute_queued()
@@ -237,15 +249,13 @@ class TestWrapper(unittest.TestCase):
                 assert responses.calls[i].response.status_code == 200
 
     @responses.activate
-    @unittest.mock.patch("pycoingecko_extra.pycoingecko_v2.time.sleep")
+    @unittest.mock.patch(TIME_PATH)
     def test_multiple_rate_limited_failed(self, sleep_patch):
         # patch time.sleep in the imported module so it doesn't block test
         sleep_patch.return_value = True
         self.cg.exp_limit = 2
         rate_limit_count = 10
-
         server = SuccessThenFailServer(rate_limit_count)
-        request_callback = getattr(server, "request_callback")
 
         # queue calls
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
@@ -253,11 +263,12 @@ class TestWrapper(unittest.TestCase):
             responses.add_callback(
                 responses.GET,
                 url,
-                callback=request_callback,
+                callback=getattr(server, "request_callback"),
                 content_type="application/json",
             )
             fn(*args, **kwargs, qid=qid)
             assert len(self.cg._queued_calls) == i + 1
+            assert len(responses.calls) == 0
 
         # execute calls
         # first rate_limit_count - 1 calls will succeed
