@@ -52,12 +52,12 @@ def generate_client():
         f.write(json.dumps(spec, indent=4))
 
     # auto-generate a base api client
-    subprocess.call(
-        # command will overwrite contents of directory
-        f"swagger-codegen generate -i {FORMATTED_SPEC_PATH} -l python -o {SWAGGER_CLIENT_PATH}".split(
-            " "
-        )
-    )
+    # subprocess.call(
+    #     # command will overwrite contents of directory
+    #     f"swagger-codegen generate -i {FORMATTED_SPEC_PATH} -l python -o {SWAGGER_CLIENT_PATH}".split(
+    #         " "
+    #     )
+    # )
 
     # get a mapping from url templates to auto-generated methods
     methods = []
@@ -77,19 +77,30 @@ def generate_client():
         f.write(json.dumps(url_to_method, indent=4))
 
     # validate that all requirements of generated client are met by the poetry project file
-    # with open(POETRY_PROJECT_FILE_PATH, "r") as f:
-    #     poetry = toml.loads(f.read())
-    #     deps = poetry["tool"]["poetry"]["dependencies"]
-    # with open(SWAGGER_REQUIREMENTS_PATH, "r") as f:
-    #     reqs = list(pkg_resources.parse_requirements(f))
-    # for r in reqs:
-    #     package = r.project_name.replace("-", "_")
-    #     assert len(r.specs) == 1
-    #     op, spec = r.specs[0]
-    #     assert op == ">="
-    #     assert package in deps
-    #     assert f"^{spec}" == deps[package]
-
+    with open(POETRY_PROJECT_FILE_PATH, "r") as f:
+        poetry = toml.loads(f.read())
+        deps = poetry["tool"]["poetry"]["dependencies"]
+    with open(SWAGGER_REQUIREMENTS_PATH, "r") as f:
+        reqs = list(pkg_resources.parse_requirements(f))
+    # had to manually update package versions specified in requirements.txt 
+    # as they were incompatible with poetry dependencies 
+    req_overrides = dict(
+        requests = "^2.27.1",
+        certifi = "^2017.4.17",
+        urllib3 = "^1.26.8",
+    )
+    for r in reqs:
+        package = r.project_name.replace("-", "_")
+        assert len(r.specs) == 1
+        op, spec = r.specs[0]
+        if package in req_overrides: 
+            # ensure this other package version already exists in poetry 
+            assert req_overrides[package] == deps[package]
+        else: 
+            # ensure version in requirements.txt exactly matches poetry dep
+            assert op == ">="
+            assert package in deps
+            assert f"^{spec}" == deps[package]
 
 def generate_test_data_template():
     template = dict()

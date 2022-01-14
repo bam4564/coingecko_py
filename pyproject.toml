@@ -26,8 +26,12 @@ generate_test_data_template = "scripts.swagger:generate_test_data_template"
 [tool.poetry.dependencies]
 python = "^3.7"
 pycoingecko = "*"
-requests = "*"
+requests = "^2.27.1"
 python_dateutil = "^2.5.3"
+certifi = "^2017.4.17"
+six = "^1.10"
+urllib3 = "^1.26.8"
+setuptools = "^21.0.0"
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"
