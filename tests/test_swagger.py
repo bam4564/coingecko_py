@@ -10,7 +10,7 @@ from copy import copy
 from requests.exceptions import HTTPError
 
 # from pycoingecko_extra.utils import extract_from_querystring, remove_from_querystring
-from scripts.utils import materialize_url_template
+from scripts.swagger import materialize_url_template
 from scripts.swagger import get_parameters
 from pycoingecko_extra import CoinGeckoAPI, error_msgs
 

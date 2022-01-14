@@ -16,7 +16,7 @@ from client.swagger_client import ApiClient as ApiClientSwagger
 from client.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
 
 from pycoingecko_extra.utils import without_keys, dict_get
-from scripts.utils import get_url_base, materialize_url_template
+from scripts.swagger import materialize_url_template
 from scripts.swagger import get_api_method_names
 
 logging.basicConfig()
@@ -33,6 +33,7 @@ class CoinGeckoAPIClient(ApiClientSwagger):
     def __init__(self):
         super().__init__()
         # setup HTTP session
+        # TODO: compare benefits of session vs pool 
         self.request_timeout = 120
         self.session = requests.Session()
         retries = Retry(total=5, backoff_factor=0.5, status_forcelist=[502, 503, 504])
@@ -80,6 +81,35 @@ class CoinGeckoAPIClient(ApiClientSwagger):
             raise
 
 
+class ResultsCache: 
+
+    def __init__(self): 
+        self.cache = dict()
+        self.page_range_query_first_call_keys = set() 
+
+    def put_page_range_unbounded_first_result(self, qid, page, data): 
+        assert page is not None 
+        self.page_range_query_first_call_keys.add((page, qid))
+        self.put_page_range_query(qid, data)
+
+    def check_contains_page_range_unbounded_first_result(self, qid, page): 
+        if page is None: 
+            return False
+        else: 
+            return (page, qid) in self.page_range_query_first_call_keys
+
+    def put(self, qid, data): 
+        self.cache[qid] = data 
+
+    def put_page_range_query(self, qid, data):
+        if qid not in self.cache: 
+            self.cache[qid] = list() 
+        self.cache[qid].append(data)
+
+    def data(self): 
+        return self.cache
+
+
 class CoinGeckoAPI(CoinGeckoApiSwagger):
 
     defaults = dict(exp_limit=8, progress_interval=10, log_level=logging.INFO)
@@ -90,7 +120,6 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
             api_client=CoinGeckoAPIClient(),
             **without_keys(kwargs, *self.defaults.keys()),
         )
-        # ensure that we don't override any methods from the base class, except call_api
         # setup wrapper instance fields, for managing queued calls, rate limit behavior, page range queries
         self._reset_state()
         for k, v in self.defaults.items():
@@ -140,14 +169,12 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
             )
         self._queued_calls[qid].append((fn, args, kwargs))
 
-    def _impute_page_range_calls(self):
+    def _impute_page_range_calls(self, res_cache: ResultsCache):
         """Finds each queued call that is a page range query where page_start is defined and page_end is not included.
         Executes each of these calls to get an HTTP header back containing information on how many pages exist. With
         this information, we queue the remainder of calls. We cache the result of the call we already executed in
         res_cache and return this value.
         """
-        res_cache = dict()
-        is_page_range_query = True
         include_response = True
         for qid in self._inferpage_end_qids:
             call_list = self._queued_calls[qid]
@@ -158,9 +185,9 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
             fn, args, kwargs = call_list[0]
             page_start = kwargs["page"]
             res, response = self._execute_single(
-                {}, is_page_range_query, include_response, qid, fn, *args, **kwargs
+                res_cache, include_response, qid, fn, *args, **kwargs
             )
-            res_cache[(qid, page_start)] = res
+            res_cache.put_page_range_unbounded_first_result(qid, page_start, res)
             per_page = int(response.headers["Per-Page"])
             total = int(response.headers["Total"])
             page_end = math.ceil(total / per_page)
@@ -172,10 +199,9 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
             for page in range(page_start + 1, page_end + 1):
                 logger.debug(f"queueing page: {page}")
                 self._queue_single(qid, fn, False, *args, **{**kwargs, "page": page})
-        return res_cache
 
     def _execute_single(
-        self, res_cache, is_page_range_query, include_response, qid, fn, *args, **kwargs
+        self, res_cache: ResultsCache, include_response, qid, fn, *args, **kwargs
     ):
         """Execute a single API call with exponential backoff retries to deal with server side rate limiting.
 
@@ -184,10 +210,7 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         of page range query calls.
         """
         exp = 0
-        if is_page_range_query:
-            res = res_cache.get((qid, kwargs["page"]), None)
-        else:
-            res = None
+        res = None
         while res is None and exp < self.exp_limit + 1:
             try:
                 if include_response:
@@ -220,33 +243,33 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         - Logs progress at configurable intervals
         """
         # impute calls related to page range queries where page_end is not specified
-        res_cache = self._impute_page_range_calls()
+        cache = ResultsCache()
+        self._impute_page_range_calls(cache)
         # execute all queued calls
-        results = {qid: list() for qid in self._page_range_qids}
         last_progress = 0
         call_count = 0
         num_calls = sum([len(v) for v in self._queued_calls.values()])
         include_response = False
         logger.info(f"Begin executing {num_calls} queued calls")
         for (qid, call_list) in self._queued_calls.items():
-            call_list = deque(call_list)
-            is_page_range_query = qid in self._page_range_qids
             for fn, args, kwargs in call_list:
-                # make api call (with retries)
+                # check if this call was already completed (first call in unbounded page range query)
+                if cache.check_contains_page_range_unbounded_first_result(qid, kwargs.get('page', None)): 
+                    continue 
+                # if cache miss, make api call (with retries)
                 res = self._execute_single(
-                    res_cache,
-                    is_page_range_query,
+                    cache,
                     include_response,
                     qid,
                     fn,
                     *args,
                     **kwargs,
                 )
-                # store the result in our results cache
-                if is_page_range_query:
-                    results[qid].append(res)
+                # store the result
+                if qid in self._page_range_qids:
+                    cache.put_page_range_query(qid, res)
                 else:
-                    results[qid] = res
+                    cache.put(qid, res)
                 # log progress
                 call_count += 1
                 progress = call_count / num_calls * 100
@@ -254,7 +277,7 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
                 if progress >= next_progress:
                     logger.info(f"Progress: {math.floor(progress)}%")
                     last_progress = progress
-        return results
+        return cache.data()
 
     def _queue_page_range_query(self, qid, fn, *args, **kwargs) -> None:
         page, page_start, page_end = dict_get(kwargs, "page", "page_start", "page_end")
