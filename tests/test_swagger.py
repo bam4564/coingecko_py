@@ -106,3 +106,53 @@ class TestWrapper(unittest.TestCase):
             except:
                 print(url, args, kwargs)
                 raise
+
+    @responses.activate
+    def test_success_queued(self):
+        for url_template, method_name in self.url_to_method.items(): 
+            try: 
+                expected_response = self.expected_response[url_template]
+                assert expected_response
+                test_call = self.test_api_calls[url_template]
+                args = test_call['args']
+                kwargs = test_call['kwargs']
+                url = materialize_url_template(url_template, args, kwargs)
+                responses.add(
+                    responses.GET,
+                    url,
+                    json=expected_response,
+                    status=200,
+                )
+                args, kwargs = update_args_kwargs(url_template, args, kwargs)
+                getattr(self.cg, method_name)(*args, **kwargs, qid=TEST_ID)
+                assert len(self.cg._queued_calls) == 1
+                response = self.cg.execute_queued()[TEST_ID]
+                assert response == expected_response
+            except:
+                print(url, args, kwargs)
+                raise
+
+    @responses.activate
+    def test_failed_queued(self):
+        for url_template, method_name in self.url_to_method.items(): 
+            try: 
+                expected_response = self.expected_response[url_template]
+                assert expected_response
+                test_call = self.test_api_calls[url_template]
+                args = test_call['args']
+                kwargs = test_call['kwargs']
+                url = materialize_url_template(url_template, args, kwargs)
+                responses.add(
+                    responses.GET,
+                    url,
+                    status=404,
+                )
+                args, kwargs = update_args_kwargs(url_template, args, kwargs)
+                # error is not thrown when queueing, but when executing
+                getattr(self.cg, method_name)(*args, **kwargs, qid=TEST_ID)
+                assert len(self.cg._queued_calls) == 1
+                with pytest.raises(HTTPError) as HE:
+                    self.cg.execute_queued()[TEST_ID]
+            except:
+                print(url, args, kwargs)
+                raise
