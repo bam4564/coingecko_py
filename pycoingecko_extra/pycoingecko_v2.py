@@ -17,7 +17,9 @@ from client.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
 
 from pycoingecko_extra.utils import without_keys, dict_get
 from scripts.swagger import (
-    materialize_url_template, get_api_method_names, get_paginated_method_names
+    materialize_url_template,
+    get_api_method_names,
+    get_paginated_method_names,
 )
 
 logging.basicConfig()
@@ -34,7 +36,7 @@ class CoinGeckoAPIClient(ApiClientSwagger):
     def __init__(self):
         super().__init__()
         # setup HTTP session
-        # TODO: compare benefits of session vs pool 
+        # TODO: compare benefits of session vs pool
         self.request_timeout = 120
         self.session = requests.Session()
         retries = Retry(total=5, backoff_factor=0.5, status_forcelist=[502, 503, 504])
@@ -82,32 +84,31 @@ class CoinGeckoAPIClient(ApiClientSwagger):
             raise
 
 
-class ResultsCache: 
-
-    def __init__(self): 
+class ResultsCache:
+    def __init__(self):
         self.cache = dict()
-        self.page_range_query_first_call_keys = set() 
+        self.page_range_query_first_call_keys = set()
 
-    def put_page_range_unbounded_first_result(self, qid, page, data): 
-        assert page is not None 
+    def put_page_range_unbounded_first_result(self, qid, page, data):
+        assert page is not None
         self.page_range_query_first_call_keys.add((page, qid))
         self.put_page_range_query(qid, data)
 
-    def check_contains_page_range_unbounded_first_result(self, qid, page): 
-        if page is None: 
+    def check_contains_page_range_unbounded_first_result(self, qid, page):
+        if page is None:
             return False
-        else: 
+        else:
             return (page, qid) in self.page_range_query_first_call_keys
 
-    def put(self, qid, data): 
-        self.cache[qid] = data 
+    def put(self, qid, data):
+        self.cache[qid] = data
 
     def put_page_range_query(self, qid, data):
-        if qid not in self.cache: 
-            self.cache[qid] = list() 
+        if qid not in self.cache:
+            self.cache[qid] = list()
         self.cache[qid].append(data)
 
-    def data(self): 
+    def data(self):
         return self.cache
 
 
@@ -255,8 +256,10 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         for (qid, call_list) in self._queued_calls.items():
             for fn, args, kwargs in call_list:
                 # check if this call was already completed (first call in unbounded page range query)
-                if cache.check_contains_page_range_unbounded_first_result(qid, kwargs.get('page', None)): 
-                    continue 
+                if cache.check_contains_page_range_unbounded_first_result(
+                    qid, kwargs.get("page", None)
+                ):
+                    continue
                 # if cache miss, make api call (with retries)
                 res = self._execute_single(
                     cache,

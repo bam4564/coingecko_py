@@ -106,6 +106,7 @@ def generate_test_data_template():
     with open(TEST_API_DATA_PATH, "w") as f:
         f.write(json.dumps(template, indent=4))
 
+
 def generate_test_data():
     with open(TEST_API_DATA_PATH, "r") as f:
         test_api_calls = json.loads(f.read())
@@ -132,28 +133,35 @@ def generate_test_data():
     with open(TEST_API_RESPONSES_PATH, "w") as f:
         f.write(json.dumps(data, indent=4))
 
+
 def get_parameters(url_template):
     with open(FORMATTED_SPEC_PATH, "r") as f:
         spec = json.loads(f.read())
     return spec["paths"][url_template]["get"].get("parameters", [])
 
-def get_url_to_methods(): 
+
+def get_url_to_methods():
     with open(URL_TO_METHOD_PATH, "r") as f:
         url_to_methods = json.loads(f.read())
     return url_to_methods
+
 
 def get_api_method_names():
     url_to_methods = get_url_to_methods()
     return list(url_to_methods.values())
 
+
 def get_paginated_method_names():
     url_to_methods = get_url_to_methods()
     paged_method_names = list()
     for url_template, method_name in url_to_methods.items():
-        params = filter(lambda p: p["name"] in ['page', 'per_page'], get_parameters(url_template))
-        if len(list(params)) == 2: 
+        params = filter(
+            lambda p: p["name"] in ["page", "per_page"], get_parameters(url_template)
+        )
+        if len(list(params)) == 2:
             paged_method_names.append(method_name)
     return paged_method_names
+
 
 def materialize_url_template(url_template, args, kwargs):
     """Converts url template to url to request from api by adding prefix and encoding args, kwargs
@@ -189,6 +197,7 @@ def materialize_url_template(url_template, args, kwargs):
     url_parts[4] = urlencode(query)
     url = urlparse.urlunparse(url_parts)
     return url
+
 
 def get_url_base():
     with open(FORMATTED_SPEC_PATH, "r") as f:

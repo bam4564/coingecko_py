@@ -35,9 +35,10 @@ def extract_from_querystring(url: str, params: List[str]):
     query = dict(urlparse.parse_qsl(url_parts[4]))
     return with_keys(query, params)
 
-def sort_querystring(url: str): 
-    # Sorts querystring by key in ascending order. Useful for normalization 
-    # when comparing two urls for equivalence 
+
+def sort_querystring(url: str):
+    # Sorts querystring by key in ascending order. Useful for normalization
+    # when comparing two urls for equivalence
     url_parts = list(urlparse.urlparse(url))
     query = dict(urlparse.parse_qsl(url_parts[4]))
     query = OrderedDict(sorted(query.items()))
