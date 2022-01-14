@@ -1,4 +1,5 @@
 from typing import List
+from collections import OrderedDict
 import urllib.parse as urlparse
 from urllib.parse import urlencode, urlunparse
 
@@ -33,6 +34,15 @@ def extract_from_querystring(url: str, params: List[str]):
     url_parts = list(urlparse.urlparse(url))
     query = dict(urlparse.parse_qsl(url_parts[4]))
     return with_keys(query, params)
+
+def sort_querystring(url: str): 
+    # Sorts querystring by key in ascending order. Useful for normalization 
+    # when comparing two urls for equivalence 
+    url_parts = list(urlparse.urlparse(url))
+    query = dict(urlparse.parse_qsl(url_parts[4]))
+    query = OrderedDict(sorted(query.items()))
+    url_parts[4] = urlencode(query)
+    return urlunparse(url_parts)
 
 
 def dict_get(obj, *args, default=None):

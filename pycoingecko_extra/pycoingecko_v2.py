@@ -7,7 +7,7 @@ import json
 import requests
 from typing import List, Set
 from collections import defaultdict, deque
-from functools import partial
+from functools import partial, wraps
 from contextlib import contextmanager
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -16,8 +16,9 @@ from client.swagger_client import ApiClient as ApiClientSwagger
 from client.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
 
 from pycoingecko_extra.utils import without_keys, dict_get
-from scripts.swagger import materialize_url_template
-from scripts.swagger import get_api_method_names
+from scripts.swagger import (
+    materialize_url_template, get_api_method_names, get_paginated_method_names
+)
 
 logging.basicConfig()
 logger = logging.getLogger("CoinGeckoAPIExtra")
@@ -128,9 +129,10 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
         # decorate bound methods on base class that correspond to api calls to enable
         # queueing and page range query support for page range query enabled functions
         method_names = get_api_method_names()
+        paginated_method_names = get_paginated_method_names()
         for name in method_names:
             v = getattr(self, name)
-            page_range_query = False  # TODO: enable pagination support
+            page_range_query = name in paginated_method_names
             logger.debug(f"Decorating: {name:60} page_range_query: {page_range_query}")
             setattr(self, name, partial(self._wrap_api_endpoint, v, page_range_query))
 
@@ -195,7 +197,6 @@ class CoinGeckoAPI(CoinGeckoApiSwagger):
                 f"page range query: {qid} page_start: {page_start:4} page_end: {page_end:4} per_page: {per_page:4} total: {total}"
             )
             # note: we already queued a request for page_start so we begin at page_start + 1
-            logger.debug(f"queueing page: {page_start}")
             for page in range(page_start + 1, page_end + 1):
                 logger.debug(f"queueing page: {page}")
                 self._queue_single(qid, fn, False, *args, **{**kwargs, "page": page})

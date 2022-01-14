@@ -1,5 +1,6 @@
-from collections import defaultdict
+from collections import Counter
 import contextlib
+import math 
 import json
 import pytest
 import unittest
@@ -11,11 +12,18 @@ from requests.exceptions import HTTPError
 
 # from pycoingecko_extra.utils import extract_from_querystring, remove_from_querystring
 from scripts.swagger import materialize_url_template
-from scripts.swagger import get_parameters
+from scripts.swagger import get_parameters, get_paginated_method_names
+from pycoingecko_extra.utils import (
+    extract_from_querystring, 
+    remove_from_querystring, 
+    sort_querystring, 
+    update_querystring, 
+    without_keys
+) 
 from pycoingecko_extra import CoinGeckoAPI, error_msgs
 
 TEST_ID = "TESTING_ID"
-TIME_PATH = "pycoingecko_extra.pycoingecko_v2.time.sleep"
+TIME_PATCH_PATH = "pycoingecko_extra.pycoingecko_v2.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)
@@ -108,6 +116,22 @@ def transform_args_kwargs(url_template, args, kwargs):
 @pytest.mark.usefixtures("calls")
 class TestWrapper(unittest.TestCase):
 
+    # ------------ NON-TEST UTILS ----------------------
+
+    def _assert_urls_call_count(self, expected_urls, responses):
+        """ Asserts that the expected set of requested urls matches the actual set of 
+            requested urls. Performs normalization on url querystrings so order of 
+            query string params between compared urls does not matter. 
+        """
+        counter = Counter([sort_querystring(url) for url in expected_urls])
+        actual_call_counter = Counter()
+        for c in responses.calls: 
+            actual_call_counter[sort_querystring(c.request.url)] += 1
+        if counter - actual_call_counter: 
+            diffa = counter - actual_call_counter
+            diffb = actual_call_counter - counter
+        assert counter == actual_call_counter
+
     # ------------ TEST CONNECTION FAILED (Normal + Queued) ----------------------
 
     @responses.activate
@@ -126,6 +150,7 @@ class TestWrapper(unittest.TestCase):
 
     @responses.activate
     def test_success_normal(self):
+        expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
@@ -133,24 +158,30 @@ class TestWrapper(unittest.TestCase):
                 json=expected,
                 status=200,
             )
+            expected_urls.append(url)
             response = fn(*args, **kwargs)
             assert len(responses.calls) == i + 1
             assert response == expected
+        self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
     def test_failed_normal(self):
+        expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
                 status=404,
             )
+            expected_urls.append(url)
             with pytest.raises(HTTPError) as HE:
                 fn(*args, **kwargs)
             assert len(responses.calls) == i + 1
+        self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
     def test_success_queued(self):
+        expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
@@ -158,32 +189,38 @@ class TestWrapper(unittest.TestCase):
                 json=expected,
                 status=200,
             )
+            expected_urls.append(url)
             fn(*args, **kwargs, qid=TEST_ID)
             assert len(self.cg._queued_calls) == 1
             response = self.cg.execute_queued()[TEST_ID]
             assert len(self.cg._queued_calls) == 0
             assert len(responses.calls) == i + 1
             assert response == expected
+        self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
     def test_failed_queued(self):
+        expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
                 status=404,
             )
+            expected_urls.append(url)
             fn(*args, **kwargs, qid=TEST_ID)
             assert len(self.cg._queued_calls) == 1
             with pytest.raises(HTTPError) as HE:
                 self.cg.execute_queued()
             assert len(self.cg._queued_calls) == 0
             assert len(responses.calls) == i + 1
+        self._assert_urls_call_count(expected_urls, responses)
 
     # ---------- MULTIPLE QUEUED CALLS + SERVER SIDE RATE LIMITING  ----------
 
     @responses.activate
     def test_multiple_queued(self):
+        expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             responses.add(
@@ -192,6 +229,7 @@ class TestWrapper(unittest.TestCase):
                 json=expected,
                 status=200,
             )
+            expected_urls.append(url)
             fn(*args, **kwargs, qid=qid)
             assert len(self.cg._queued_calls) == i + 1
             assert len(responses.calls) == 0
@@ -204,8 +242,10 @@ class TestWrapper(unittest.TestCase):
             qid = str(i)
             assert response[qid] == expected
 
+        self._assert_urls_call_count(expected_urls, responses)
+
     @responses.activate
-    @unittest.mock.patch(TIME_PATH)
+    @unittest.mock.patch(TIME_PATCH_PATH)
     def test_multiple_rate_limited_success(self, sleep_patch):
         # patch time.sleep in the imported module so it doesn't block test
         sleep_patch.return_value = True
@@ -214,6 +254,7 @@ class TestWrapper(unittest.TestCase):
         total_calls = len(calls) * num_attempts
 
         # queue calls
+        expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             server = FailThenSuccessServer(num_attempts, expected)
@@ -223,6 +264,7 @@ class TestWrapper(unittest.TestCase):
                 callback=getattr(server, "request_callback"),
                 content_type="application/json",
             )
+            expected_urls = expected_urls + [url] * num_attempts
             fn(*args, **kwargs, qid=qid)
             assert len(self.cg._queued_calls) == i + 1
             assert len(responses.calls) == 0
@@ -248,16 +290,20 @@ class TestWrapper(unittest.TestCase):
             else:
                 assert responses.calls[i].response.status_code == 200
 
+        self._assert_urls_call_count(expected_urls, responses)
+
     @responses.activate
-    @unittest.mock.patch(TIME_PATH)
+    @unittest.mock.patch(TIME_PATCH_PATH)
     def test_multiple_rate_limited_failed(self, sleep_patch):
         # patch time.sleep in the imported module so it doesn't block test
         sleep_patch.return_value = True
         self.cg.exp_limit = 2
         rate_limit_count = 10
+        total_calls = rate_limit_count + self.cg.exp_limit
         server = SuccessThenFailServer(rate_limit_count)
 
         # queue calls
+        expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             responses.add_callback(
@@ -266,15 +312,18 @@ class TestWrapper(unittest.TestCase):
                 callback=getattr(server, "request_callback"),
                 content_type="application/json",
             )
+            # first rate_limit_count - 1 calls will succeed
+            # subsequent self.cg.exp_limit + 1 calls will be rate limited
+            # client will stop sending requests at this point as it hit exp_limit
+            if i < rate_limit_count - 1: 
+                expected_urls.append(url)
+            elif i == rate_limit_count - 1: 
+                expected_urls = expected_urls + [url] * (self.cg.exp_limit + 1)
             fn(*args, **kwargs, qid=qid)
             assert len(self.cg._queued_calls) == i + 1
             assert len(responses.calls) == 0
 
         # execute calls
-        # first rate_limit_count - 1 calls will succeed
-        # subsequent self.cg.exp_limit + 1 calls will be rate limited
-        # client will stop sending requests at this point as it hit exp_limit
-        total_calls = rate_limit_count + self.cg.exp_limit
         with pytest.raises(Exception) as e:
             self.cg.execute_queued()
         assert len(self.cg._queued_calls) == 0
@@ -290,3 +339,115 @@ class TestWrapper(unittest.TestCase):
                     responses.calls[i].response, requests.exceptions.RequestException
                 )
                 assert responses.calls[i].response.response.status_code == 429
+
+        self._assert_urls_call_count(expected_urls, responses)
+
+
+    # ---------- PAGE RANGE QUERIES ----------
+
+    @responses.activate
+    def test_page_range_query_page_start_end(self):
+        paginated_method_names = set(get_paginated_method_names())
+        page_start = 1
+        page_end = 3 
+        num_pages = page_end - page_start + 1
+        expected_paged = dict()
+        queued = 0
+        expected_urls = []
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            qid = str(i)
+            name = list(fn.args)[0].__name__ 
+            if name in paginated_method_names: 
+                paginated_method_names.remove(name)
+                qparams = extract_from_querystring(url, ['page'])
+                assert 'page' in qparams
+                # add a response for all urls that will be queried within the page range 
+                expected_paged[qid] = list() 
+                for new_page in range(page_start, page_end + 1): 
+                    url_paged = update_querystring(url, dict(page=new_page))
+                    expected_paged[qid].append([new_page, expected])
+                    expected_urls.append(url_paged)
+                    responses.add(
+                        responses.GET,
+                        url_paged,
+                        json=expected_paged[qid][-1],
+                        status=200,
+                    )
+                # queue a single page range query 
+                new_kwargs = without_keys(kwargs, "page")
+                fn(*args, **new_kwargs, qid=qid, page_start=page_start, page_end=page_end)
+                queued += 1
+                assert len(self.cg._queued_calls) == queued
+                assert len(responses.calls) == 0
+
+        # ensure we queued a test call for all paginated methods 
+        assert len(paginated_method_names) == 0
+
+        response = self.cg.execute_queued()
+        assert len(self.cg._queued_calls) == 0
+        assert len(responses.calls) == queued * num_pages
+
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            qid = str(i)
+            if list(fn.args)[0].__name__ in paginated_method_names: 
+                assert expected_paged[qid] == response[qid]
+
+        self._assert_urls_call_count(expected_urls, responses)
+
+    @responses.activate
+    def test_page_range_query_page_start_unbounded(self):
+        paginated_method_names = set(get_paginated_method_names())
+        page_start = 1
+        per_page = 5
+        total = 19 
+        num_pages = math.ceil(total / per_page)
+        page_end = page_start + num_pages - 1 # note, we won't pass page_end to the function call. this represents the mocked end of pages 
+        expected_paged = dict()
+        queued = 0
+        expected_urls = []
+
+        def callback_wrapper(data):
+            def callback(request):
+                return (200, {"Total": str(total), "Per-Page": str(per_page)}, json.dumps(data))
+            return callback
+
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            qid = str(i)
+            name = list(fn.args)[0].__name__
+            if name in paginated_method_names: 
+                paginated_method_names.remove(name)
+                qparams = extract_from_querystring(url, ['page'])
+                assert 'page' in qparams
+                # add a response for all urls that will be queried within the page range 
+                expected_paged[qid] = list() 
+                for new_page in range(page_start, page_end + 1): 
+                    url_paged = update_querystring(url, dict(page=new_page, per_page=per_page))
+                    expected_paged[qid].append([new_page, expected])
+                    expected_urls.append(url_paged)
+                    responses.add_callback(
+                        responses.GET,
+                        url_paged,
+                        callback=callback_wrapper(expected_paged[qid][-1]),
+                        content_type="application/json",
+                    )
+                # queue a single unbounded page range query 
+                new_kwargs = without_keys(kwargs, "page")
+                new_kwargs["per_page"] = per_page
+                fn(*args, **new_kwargs, qid=qid, page_start=page_start) # IMPORTANT: page_end omitted
+                queued += 1
+                assert len(self.cg._queued_calls) == queued
+                assert len(responses.calls) == 0
+
+        # ensure we queued a test call for all paginated methods 
+        assert len(paginated_method_names) == 0
+
+        response = self.cg.execute_queued()
+        assert len(self.cg._queued_calls) == 0
+        assert len(responses.calls) == queued * num_pages
+
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            qid = str(i)
+            if list(fn.args)[0].__name__ in paginated_method_names: 
+                assert expected_paged[qid] == response[qid]
+
+        self._assert_urls_call_count(expected_urls, responses)
