@@ -11,7 +11,6 @@ from collections import OrderedDict
 
 import urllib3
 import toml
-import marko
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -248,22 +247,13 @@ def get_url_base():
 
 
 def process_readme():
-
+    # process the client readme, which contains the section describing the auto-generation spec 
+    # and a table of all api endpoints, their paths, and their descriptions 
+    import re 
     with open("./swagger_client/README.md", "r") as f:
-        lines = f.read()
-    md = marko.parse(lines)
-    active_section = None
-    keep_sections = [SWAGGER_CLIENT_NAME, "Documentation for API Endpoints"]
-    section_map = OrderedDict()
-    for c in md.children:
-        if isinstance(c, marko.block.Heading):
-            heading_title = c.children[0].children
-            active_section = heading_title
-            section_map[active_section] = c
-        else:
-            if active_section in keep_sections:
-                section_map[active_section] = c
-    import itertools
-
-    # create new document with only required sections
-    new_lines = itertools.chain(*[v for v in section_map.values()])
+        text = f.read() 
+    pattern = "(# swagger-client\n.*)## Requirements.*(## Documentation for API Endpoints\n.*)## Documentation For Models"
+    matches = re.findall(pattern, text, re.DOTALL | re.MULTILINE | re.IGNORECASE) 
+    new_text = "".join(matches[0])
+    with open("test.md", 'w') as f: 
+        f.write(new_text)
