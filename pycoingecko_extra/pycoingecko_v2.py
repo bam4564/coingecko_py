@@ -2,18 +2,16 @@ import time
 import math
 import logging
 import requests
-import itertools
 import json
 import requests
-from typing import List, Set
-from collections import defaultdict, deque
-from functools import partial, wraps
+from collections import defaultdict
+from functools import partial
 from contextlib import contextmanager
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from requests.packages.urllib3.util import Retry
 
-from client.swagger_client import ApiClient as ApiClientSwagger
-from client.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
+from swagger_client import ApiClient as ApiClientSwagger
+from swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
 
 from pycoingecko_extra.utils import without_keys, dict_get
 from scripts.swagger import (

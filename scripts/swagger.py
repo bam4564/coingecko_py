@@ -7,25 +7,27 @@ import subprocess
 import pkg_resources
 import urllib.parse as urlparse
 from urllib.parse import urlencode
+from collections import OrderedDict
 
 import urllib3
 import toml
+import marko
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-RAW_SPEC_PATH = os.environ['RAW_SPEC_PATH']
-FORMATTED_SPEC_PATH = os.environ['FORMATTED_SPEC_PATH']
-SWAGGER_CLIENT_PATH = os.environ['SWAGGER_CLIENT_PATH']
-SWAGGER_CLIENT_NAME = os.environ['SWAGGER_CLIENT_NAME']
-SWAGGER_API_CLIENT_PATH = os.environ['SWAGGER_API_CLIENT_PATH']
-SWAGGER_DATA_PATH = os.environ['SWAGGER_DATA_PATH']
-URL_TO_METHOD_PATH = os.environ['URL_TO_METHOD_PATH']
-POETRY_PROJECT_FILE_PATH = os.environ['POETRY_PROJECT_FILE_PATH']
-TEST_API_DATA_PATH = os.environ['TEST_API_DATA_PATH']
-TEST_API_RESPONSES_PATH = os.environ['TEST_API_RESPONSES_PATH']
-SWAGGER_REQUIREMENTS_PATH = os.environ['SWAGGER_REQUIREMENTS_PATH']
+RAW_SPEC_PATH = os.environ["RAW_SPEC_PATH"]
+FORMATTED_SPEC_PATH = os.environ["FORMATTED_SPEC_PATH"]
+SWAGGER_CLIENT_PATH = os.environ["SWAGGER_CLIENT_PATH"]
+SWAGGER_CLIENT_NAME = os.environ["SWAGGER_CLIENT_NAME"]
+SWAGGER_API_CLIENT_PATH = os.environ["SWAGGER_API_CLIENT_PATH"]
+SWAGGER_DATA_PATH = os.environ["SWAGGER_DATA_PATH"]
+URL_TO_METHOD_PATH = os.environ["URL_TO_METHOD_PATH"]
+POETRY_PROJECT_FILE_PATH = os.environ["POETRY_PROJECT_FILE_PATH"]
+TEST_API_DATA_PATH = os.environ["TEST_API_DATA_PATH"]
+TEST_API_RESPONSES_PATH = os.environ["TEST_API_RESPONSES_PATH"]
+SWAGGER_REQUIREMENTS_PATH = os.environ["SWAGGER_REQUIREMENTS_PATH"]
 
 
 def generate_client():
@@ -52,8 +54,9 @@ def generate_client():
     with open(FORMATTED_SPEC_PATH, "w") as f:
         f.write(json.dumps(spec, indent=4))
 
-    # Remove previously generated client 
-    shutil.rmtree(SWAGGER_CLIENT_PATH)
+    # Remove previously generated client
+    if os.path.isdir(SWAGGER_CLIENT_PATH):
+        shutil.rmtree(SWAGGER_CLIENT_PATH)
     os.mkdir(SWAGGER_CLIENT_PATH)
     # auto-generate a base api client
     subprocess.call(
@@ -63,8 +66,8 @@ def generate_client():
         )
     )
 
-    # generate directory for swagger data if it does not already exist 
-    if not os.path.isdir(SWAGGER_DATA_PATH): 
+    # generate directory for swagger data if it does not already exist
+    if not os.path.isdir(SWAGGER_DATA_PATH):
         os.mkdir(SWAGGER_DATA_PATH)
 
     # get a mapping from url templates to auto-generated methods
@@ -90,21 +93,21 @@ def generate_client():
         deps = poetry["tool"]["poetry"]["dependencies"]
     with open(SWAGGER_REQUIREMENTS_PATH, "r") as f:
         reqs = list(pkg_resources.parse_requirements(f))
-    # had to manually update package versions specified in requirements.txt 
-    # as they were incompatible with poetry dependencies 
+    # had to manually update package versions specified in requirements.txt
+    # as they were incompatible with poetry dependencies
     req_overrides = dict(
-        requests = "^2.27.1",
-        certifi = "^2017.4.17",
-        urllib3 = "^1.26.8",
+        requests="^2.27.1",
+        certifi="^2017.4.17",
+        urllib3="^1.26.8",
     )
     for r in reqs:
         package = r.project_name.replace("-", "_")
         assert len(r.specs) == 1
         op, spec = r.specs[0]
-        if package in req_overrides: 
-            # ensure this other package version already exists in poetry 
+        if package in req_overrides:
+            # ensure this other package version already exists in poetry
             assert req_overrides[package] == deps[package]
-        else: 
+        else:
             # ensure version in requirements.txt exactly matches poetry dep
             assert op == ">="
             assert package in deps
@@ -166,13 +169,13 @@ def get_url_to_methods():
     return url_to_methods
 
 
-def get_expected_response(): 
+def get_expected_response():
     with open("swagger_data/test_api_responses.json", "r") as f:
         expected_response = json.loads(f.read())
     return expected_response
 
 
-def get_test_api_calls(): 
+def get_test_api_calls():
     with open("swagger_data/test_api_calls.json", "r") as f:
         test_api_calls = json.loads(f.read())
     return test_api_calls
@@ -242,3 +245,25 @@ def get_url_base():
     url_parts = [scheme, host, basePath, "", "", ""]
     url = urlparse.urlunparse(url_parts)
     return url
+
+
+def process_readme():
+
+    with open("./swagger_client/README.md", "r") as f:
+        lines = f.read()
+    md = marko.parse(lines)
+    active_section = None
+    keep_sections = [SWAGGER_CLIENT_NAME, "Documentation for API Endpoints"]
+    section_map = OrderedDict()
+    for c in md.children:
+        if isinstance(c, marko.block.Heading):
+            heading_title = c.children[0].children
+            active_section = heading_title
+            section_map[active_section] = c
+        else:
+            if active_section in keep_sections:
+                section_map[active_section] = c
+    import itertools
+
+    # create new document with only required sections
+    new_lines = itertools.chain(*[v for v in section_map.values()])

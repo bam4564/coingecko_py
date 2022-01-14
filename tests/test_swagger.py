@@ -11,12 +11,12 @@ from requests.exceptions import HTTPError
 
 
 from scripts.swagger import (
-    materialize_url_template, 
-    get_parameters, 
+    materialize_url_template,
+    get_parameters,
     get_paginated_method_names,
-    get_url_to_methods, 
+    get_url_to_methods,
     get_test_api_calls,
-    get_expected_response
+    get_expected_response,
 )
 from pycoingecko_extra.utils import (
     extract_from_querystring,

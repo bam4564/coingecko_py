@@ -134,6 +134,19 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "marko"
+version = "1.2.0"
+description = "A markdown parser with high extensibility."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+benchmark = ["commonmark (>=0.9,<1.0)", "markdown (>=3.3,<4.0)", "markdown-it-py (>=2.0,<3.0)", "mistune (>=2.0,<3.0)", "mistletoe (>=0.7,<1.0)"]
+codehilite = ["pygments"]
+toc = ["python-slugify"]
+
+[[package]]
 name = "mypy-extensions"
 version = "0.4.3"
 description = "Experimental type system extensions for programs checked with the mypy typechecker."
@@ -378,7 +391,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "ceeb9a30d2d9b6c91e9daddae361a4a2f944afec26568512f592a781ca6298d7"
+content-hash = "cf978da8ded5c7e6508957a38e52d2f485a749c8f872b9001a21f4b976d5b5f0"
 
 [metadata.files]
 atomicwrites = [
@@ -469,6 +482,10 @@ importlib-metadata = [
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
+]
+marko = [
+    {file = "marko-1.2.0-py3-none-any.whl", hash = "sha256:aa9fd81b02f64ab192404cbae5dfe812e337d3d04cefff8800a079c9dc9e5d28"},
+    {file = "marko-1.2.0.tar.gz", hash = "sha256:0befa554da3d14b7a38ac7473ffde60f1916fd1d0aaf67181ae70bfe00fdba18"},
 ]
 mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
