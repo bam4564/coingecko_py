@@ -61,6 +61,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.asset_platforms_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -96,6 +97,7 @@ cg = CoingeckoApi()
 order = 'order_example' # str | valid values: <b>market_cap_desc (default), market_cap_asc, name_desc, name_asc, market_cap_change_24h_desc and market_cap_change_24h_asc</b> (optional)
 
 res = cg.coins_categories_get(order=order)
+```
 
 ### Parameters
 
@@ -133,6 +135,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.coins_categories_list_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -169,6 +172,7 @@ id = 'id_example' # str | Asset platform (See asset_platforms endpoint for list 
 contract_address = 'contract_address_example' # str | Token's contract address
 
 res = cg.coins_id_contract_contract_address_get(id, contract_address)
+```
 
 ### Parameters
 
@@ -211,6 +215,7 @@ vs_currency = 'vs_currency_example' # str | The target currency of market data (
 days = 'days_example' # str | Data up to number of days ago (eg. 1,14,30,max)
 
 res = cg.coins_id_contract_contract_address_market_chart_get(id, contract_address, vs_currency, days)
+```
 
 ### Parameters
 
@@ -256,6 +261,7 @@ _from = '_from_example' # str | From date in UNIX Timestamp (eg. 1392577232)
 to = 'to_example' # str | To date in UNIX Timestamp (eg. 1422577232)
 
 res = cg.coins_id_contract_contract_address_market_chart_range_get(id, contract_address, vs_currency, _from, to)
+```
 
 ### Parameters
 
@@ -304,6 +310,7 @@ developer_data = true # bool | Include developer_data data (true/false) <b>[defa
 sparkline = true # bool | Include sparkline 7 days data (eg. true, false) <b>[default: false]</b> (optional)
 
 res = cg.coins_id_get(id, localization=localization, tickers=tickers, market_data=market_data, community_data=community_data, developer_data=developer_data, sparkline=sparkline)
+```
 
 ### Parameters
 
@@ -350,6 +357,7 @@ _date = '_date_example' # str | The date of data snapshot in dd-mm-yyyy eg. 30-1
 localization = 'localization_example' # str | Set to false to exclude localized languages in response (optional)
 
 res = cg.coins_id_history_get(id, _date, localization=localization)
+```
 
 ### Parameters
 
@@ -393,6 +401,7 @@ days = 'days_example' # str | Data up to number of days ago (eg. 1,14,30,max)
 interval = 'interval_example' # str | Data interval. Possible value: daily (optional)
 
 res = cg.coins_id_market_chart_get(id, vs_currency, days, interval=interval)
+```
 
 ### Parameters
 
@@ -437,6 +446,7 @@ _from = '_from_example' # str | From date in UNIX Timestamp (eg. 1392577232)
 to = 'to_example' # str | To date in UNIX Timestamp (eg. 1422577232)
 
 res = cg.coins_id_market_chart_range_get(id, vs_currency, _from, to)
+```
 
 ### Parameters
 
@@ -480,6 +490,7 @@ vs_currency = 'vs_currency_example' # str | The target currency of market data (
 days = 56 # int |  Data up to number of days ago (1/7/14/30/90/180/365/max)
 
 res = cg.coins_id_ohlc_get(id, vs_currency, days)
+```
 
 ### Parameters
 
@@ -522,6 +533,7 @@ per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
 
 res = cg.coins_id_status_updates_get(id, per_page=per_page, page=page)
+```
 
 ### Parameters
 
@@ -567,6 +579,7 @@ order = 'order_example' # str | valid values: <b>trust_score_desc (default), tru
 depth = 'depth_example' # str | flag to show 2% orderbook depth. valid values: true, false (optional)
 
 res = cg.coins_id_tickers_get(id, exchange_ids=exchange_ids, include_exchange_logo=include_exchange_logo, page=page, order=order, depth=depth)
+```
 
 ### Parameters
 
@@ -610,6 +623,7 @@ cg = CoingeckoApi()
 include_platform = true # bool | flag to include platform contract addresses (eg. 0x.... for Ethereum based tokens).   valid values: true, false (optional)
 
 res = cg.coins_list_get(include_platform=include_platform)
+```
 
 ### Parameters
 
@@ -655,6 +669,7 @@ sparkline = false # bool | Include sparkline 7 days data (eg. true, false) (opti
 price_change_percentage = 'price_change_percentage_example' # str | Include price change percentage in <b>1h, 24h, 7d, 14d, 30d, 200d, 1y</b> (eg. '`1h,24h,7d`' comma-separated, invalid values will be discarded) (optional)
 
 res = cg.coins_markets_get(vs_currency, ids=ids, category=category, order=order, per_page=per_page, page=page, sparkline=sparkline, price_change_percentage=price_change_percentage)
+```
 
 ### Parameters
 
@@ -700,6 +715,7 @@ cg = CoingeckoApi()
 coin_id = 'coin_id_example' # str | bitcoin or ethereum
 
 res = cg.companies_public_treasury_coin_id_get(coin_id)
+```
 
 ### Parameters
 
@@ -740,6 +756,7 @@ per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
 
 res = cg.derivatives_exchanges_get(order=order, per_page=per_page, page=page)
+```
 
 ### Parameters
 
@@ -781,6 +798,7 @@ id = 'id_example' # str | pass the exchange id (can be obtained from derivatives
 include_tickers = 'include_tickers_example' # str | ['all', 'unexpired'] - expired to show unexpired tickers, all to list all tickers, leave blank to omit tickers data in response (optional)
 
 res = cg.derivatives_exchanges_id_get(id, include_tickers=include_tickers)
+```
 
 ### Parameters
 
@@ -819,6 +837,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.derivatives_exchanges_list_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -854,6 +873,7 @@ cg = CoingeckoApi()
 include_tickers = 'include_tickers_example' # str | ['all', 'unexpired'] - expired to show unexpired tickers, all to list all tickers, defaults to unexpired (optional)
 
 res = cg.derivatives_get(include_tickers=include_tickers)
+```
 
 ### Parameters
 
@@ -891,6 +911,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.exchange_rates_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -927,6 +948,7 @@ per_page = 56 # int | Valid values: 1...250 Total results per page Default value
 page = 'page_example' # str | page through results (optional)
 
 res = cg.exchanges_get(per_page=per_page, page=page)
+```
 
 ### Parameters
 
@@ -966,6 +988,7 @@ cg = CoingeckoApi()
 id = 'id_example' # str | pass the exchange id (can be obtained from /exchanges/list) eg. binance
 
 res = cg.exchanges_id_get(id)
+```
 
 ### Parameters
 
@@ -1006,6 +1029,7 @@ per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
 
 res = cg.exchanges_id_status_updates_get(id, per_page=per_page, page=page)
+```
 
 ### Parameters
 
@@ -1051,6 +1075,7 @@ depth = 'depth_example' # str | flag to show 2% orderbook depth i.e., cost_to_mo
 order = 'order_example' # str | valid values: <b>trust_score_desc (default), trust_score_asc and volume_desc</b> (optional)
 
 res = cg.exchanges_id_tickers_get(id, coin_ids=coin_ids, include_exchange_logo=include_exchange_logo, page=page, depth=depth, order=order)
+```
 
 ### Parameters
 
@@ -1095,6 +1120,7 @@ id = 'id_example' # str | pass the exchange id (can be obtained from /exchanges/
 days = 56 # int |  Data up to number of days ago (eg. 1,14,30)
 
 res = cg.exchanges_id_volume_chart_get(id, days)
+```
 
 ### Parameters
 
@@ -1133,6 +1159,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.exchanges_list_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -1169,6 +1196,7 @@ per_page = 56 # int | Total results per page (optional)
 page = 'page_example' # str | page of results (paginated to 100 by default) (optional)
 
 res = cg.finance_platforms_get(per_page=per_page, page=page)
+```
 
 ### Parameters
 
@@ -1211,6 +1239,7 @@ start_at = 'start_at_example' # str | start date of the financial products (opti
 end_at = 'end_at_example' # str | end date of the financial products (optional)
 
 res = cg.finance_products_get(per_page=per_page, page=page, start_at=start_at, end_at=end_at)
+```
 
 ### Parameters
 
@@ -1251,6 +1280,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.global_decentralized_finance_defi_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -1285,6 +1315,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.global_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -1321,6 +1352,7 @@ per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
 
 res = cg.indexes_get(per_page=per_page, page=page)
+```
 
 ### Parameters
 
@@ -1359,6 +1391,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.indexes_list_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -1395,6 +1428,7 @@ market_id = 'market_id_example' # str | pass the market id (can be obtained from
 id = 'id_example' # str | pass the index id (can be obtained from /indexes/list)
 
 res = cg.indexes_market_id_id_get(market_id, id)
+```
 
 ### Parameters
 
@@ -1433,6 +1467,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.ping_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -1468,6 +1503,7 @@ cg = CoingeckoApi()
 query = 'query_example' # str | Search string
 
 res = cg.search_get(query)
+```
 
 ### Parameters
 
@@ -1505,6 +1541,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.search_trending_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -1543,6 +1580,7 @@ include_24hr_change = 'include_24hr_change_example' # str | <b>true/false</b> to
 include_last_updated_at = 'include_last_updated_at_example' # str | <b>true/false</b> to include last_updated_at of price, <b>default: false</b> (optional)
 
 res = cg.simple_price_get(ids, vs_currencies, include_market_cap=include_market_cap, include_24hr_vol=include_24hr_vol, include_24hr_change=include_24hr_change, include_last_updated_at=include_last_updated_at)
+```
 
 ### Parameters
 
@@ -1583,6 +1621,7 @@ from pycoingecko_extra import CoinGeckoAPIExtra
 cg = CoingeckoApi()
 
 res = cg.simple_supported_vs_currencies_get()
+```
 
 ### Parameters
 This endpoint does not need any parameter.
@@ -1622,6 +1661,7 @@ include_24hr_change = 'include_24hr_change_example' # str | <b>true/false</b> to
 include_last_updated_at = 'include_last_updated_at_example' # str | <b>true/false</b> to include last_updated_at of price, <b>default: false</b> (optional)
 
 res = cg.simple_token_price_id_get(id, contract_addresses, vs_currencies, include_market_cap=include_market_cap, include_24hr_vol=include_24hr_vol, include_24hr_change=include_24hr_change, include_last_updated_at=include_last_updated_at)
+```
 
 ### Parameters
 
@@ -1669,6 +1709,7 @@ per_page = 56 # int | Total results per page (optional)
 page = 56 # int | Page through results (optional)
 
 res = cg.status_updates_get(category=category, project_type=project_type, per_page=per_page, page=page)
+```
 
 ### Parameters
 

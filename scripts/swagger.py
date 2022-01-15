@@ -115,7 +115,34 @@ def generate_client():
             assert f"^{spec}" == deps[package]
 
     # process the generated README and create a new one
-    process_readme()
+    print(f"Generating: {PROJECT_API_DOCS_PATH}")
+    with open(SWAGGER_API_DOCS_PATH, "r") as f:
+        text = f.read()
+    import_old = "\n".join(
+        [
+            "from __future__ import print_function",
+            "import time",
+            "import swagger_client",
+            "from swagger_client.rest import ApiException",
+            "from pprint import pprint",
+        ]
+    )
+    import_new = "from pycoingecko_extra import CoinGeckoAPIExtra"
+    text = text.replace(import_old, import_new)
+    matches = re.findall(
+        "(try:\n.*?(api_instance\.[^\)]*?\)).*?)\n```",
+        text,
+        re.DOTALL | re.MULTILINE | re.IGNORECASE,
+    )
+    for m in matches:
+        text = text.replace(m[0], f"res = {m[1]}")
+    text = text.replace("swagger_client.", "")
+    text = text.replace("api_instance", "cg")
+    with open(PROJECT_API_DOCS_PATH, "w") as f:
+        f.write(text)
+
+    # auto-format generated code
+    subprocess.call(f"poetry run black .".split(" "))
 
 
 def generate_test_data_template():
@@ -249,26 +276,3 @@ def get_url_base():
     url_parts = [scheme, host, basePath, "", "", ""]
     url = urlparse.urlunparse(url_parts)
     return url
-
-
-def process_readme():
-    with open(SWAGGER_API_DOCS_PATH, "r") as f:
-        text = f.read()
-    import_old = """from __future__ import print_function
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint"""
-    import_new = "from pycoingecko_extra import CoinGeckoAPIExtra"
-    text = text.replace(import_old, import_new)
-    matches = re.findall(
-        "(try:\n.*?(api_instance\.[^\)]*?\)).*?```)",
-        text,
-        re.DOTALL | re.MULTILINE | re.IGNORECASE,
-    )
-    for m in matches:
-        text = text.replace(m[0], f"res = {m[1]}")
-    text = text.replace("swagger_client.", "")
-    text = text.replace("api_instance", "cg")
-    with open(PROJECT_API_DOCS_PATH, "w") as f:
-        f.write(text)
