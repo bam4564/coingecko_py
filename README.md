@@ -136,18 +136,9 @@ prices = {
 } 
 ```
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
 This approach to API design was loosely inspired by [dask's][https://docs.dask.org/en/stable/] approach to lazy execution of a sequence of operations on dataframes.
-=======
-This approach to API design was loosely inspired by [dask's](https://docs.dask.org/en/stable/) approach to lazy execution of a sequence of operations on dataframes.
 
 ### Examples - Page Range Queries 
-=======
-This approach to API design was loosely inspired by [dask's](https://docs.dask.org/en/stable/) approach to lazy execution of a sequence of operations on dataframes.
-
-## Examples - Page Range Queries 
->>>>>>> 514670a42137cf3bf58efbf2d218a4376e55bab8
 
 The coingecko api has a number of endpoints that support pagination. Pagination is a common api feature where you can request a specific page of data from an api. This is often necessary as some data objects are too large to return in a single api response. If you want all the data for a particular api call you are executing, you must request data from all pages. 
 
@@ -172,11 +163,7 @@ cg.get_coin_ticker_by_id('bitcoin', qid="data", page_start=1, page_end=100)
 data = cg.execute_queued()['data']
 ```
 
-<<<<<<< HEAD
 Both code blocks produce equivalent output. The return value of a page range query is a list of response data from each individual api call. So `data[0]` contains the result for page 1, `data[49]` contains the result for page 50.
-=======
-Both code blocks produce equivalent output. The return value of a page range query is a list of response data from each individual api call. So `data[0]` contains the result for page 1, `data[50]` contains the result for page 50.
->>>>>>> 514670a42137cf3bf58efbf2d218a4376e55bab8
 
 It's important to note that `qid` must be included as a keyword argument for page range queries. Thus, page range queries will also automatically deal with rate limiting as detailed in the [rate limiting](#examples---rate-limiting) section. 
 
@@ -191,10 +178,6 @@ This is actually hard to simulate with the base api client itself. For each of i
 ## Client Configuration
 
 The extended client supports multiple configuration options which impact its behavior. 
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> 514670a42137cf3bf58efbf2d218a4376e55bab8
 
 | Kwarg | Default | Description | 
 | --- | --- | --- |
