@@ -127,7 +127,7 @@ def generate_client():
             "from pprint import pprint",
         ]
     )
-    import_new = "from pycoingecko_extra import CoinGeckoAPIExtra"
+    import_new = "from py_coingecko import CoinGeckoAPIExtra"
     text = text.replace(import_old, import_new)
     matches = re.findall(
         r"(try:\n.*?(api_instance\.[^\)]*?\)).*?)\n```",
@@ -247,7 +247,7 @@ def materialize_url_template(url_template, args, kwargs):
     url_base = get_url_base()
     url_base_parts = list(urlparse.urlparse(url_base))
     # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
-    path_args = re.findall("({[^}]*})", url_template)
+    path_args = re.findall(r"({[^}]*})", url_template)
     url = url_template
     for i, p in enumerate(path_args):
         url = url.replace(p, "{" + str(i) + "}")

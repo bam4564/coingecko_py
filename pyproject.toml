@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pycoingecko_extra"
+name = "py_coingecko"
 version = "1.0.0"
 description = "An extension of the pycoingecko api client that introduces extra functionality like handling rate limiting and pagination."
 authors = ["Bryce Morrow <brycemorrow4564@gmail.com>"]
@@ -8,7 +8,7 @@ readme = "README.md"
 homepage = "https://github.com/brycemorrow4564/pycoingecko-extra"
 repository = "https://github.com/brycemorrow4564/pycoingecko-extra"
 packages = [
-    { include = "pycoingecko_extra" }, 
+    { include = "py_coingecko" }, 
     { include = "tests" }, 
     { include = "scripts" }, 
     { include = "swagger_client", from = "swagger_generated" }
@@ -24,7 +24,6 @@ generate_test_data_template = "scripts.swagger:generate_test_data_template"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-pycoingecko = "*"
 requests = "^2.27.1"
 python_dateutil = "^2.5.3"
 certifi = "^2017.4.17"
@@ -38,7 +37,7 @@ swagger_client = { path = "./swagger_generated", develop = true }
 responses = "^0.16.0"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
-black = {version = "^21.12b0", allow-prereleases = true}
+black = {version = "^21.12b0", allow-prereleases = true }
 toml = "^0.10.2"
 
 [build-system]

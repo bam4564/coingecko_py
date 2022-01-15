@@ -1,6 +1,6 @@
-# pycoingecko_extra 
+# py_coingecko 
 
-[![PyPi Version](https://img.shields.io/pypi/v/pycoingecko_extra.svg)](https://pypi.org/project/pycoingecko-extra/)
+[![PyPi Version](https://img.shields.io/pypi/v/py_coingecko.svg)](https://pypi.org/project/pycoingecko-extra/)
 ![GitHub](https://img.shields.io/github/license/brycemorrow4564/pycoingecko-extra)
 ![Tests](https://github.com/brycemorrow4564/pycoingecko-extra/actions/workflows/ci.yml/badge.svg)
 
@@ -37,7 +37,7 @@ To give users confidence that this is true, the unit tests for this package clon
 
 PyPI
 ```shell
-pip install pycoingecko_extra
+pip install py_coingecko
 ```
 
 ## Usage 
@@ -49,7 +49,7 @@ cg = CoinGeckoAPI()
 ```
 to 
 ```python
-from pycoingecko_extra import CoinGeckoAPIExtra
+from py_coingecko import CoinGeckoAPIExtra
 cg = CoinGeckoAPIExtra()
 ```
 If you make this change to an existing script, it will function exactly the same as before as `CoinGeckoAPIExtra` is a subclass of `CoinGeckoAPI`. 
@@ -82,7 +82,7 @@ The issue here is that the coingecko api performs server side rate limiting. If 
 
 Since the above code block would be sending 1000 api requests synchronously, it is likely to fail at some point if you have a decent internet connection. In order to get around this, you would have to add error detection and call management logic. If you are writing a complex app with many api calls, this can be really annoying. 
 
-The **pycoingecko_extra** client introduces a mechanism to queue api calls and execute a series of queued calls while performing **client side exponential backoff retries**. See [here](https://docs.aws.amazon.com/general/latest/gr/api-retries.html) for an explanation of this strategy. 
+The **py_coingecko** client introduces a mechanism to queue api calls and execute a series of queued calls while performing **client side exponential backoff retries**. See [here](https://docs.aws.amazon.com/general/latest/gr/api-retries.html) for an explanation of this strategy. 
 
 This allows you to write code without worrying about rate limiting! Here is a block of code that is equivalent to the above code block that won't error out due to rate limiting. 
 

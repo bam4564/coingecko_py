@@ -18,16 +18,16 @@ from scripts.swagger import (
     get_test_api_calls,
     get_expected_response,
 )
-from pycoingecko_extra.utils import (
+from py_coingecko.utils import (
     extract_from_querystring,
     sort_querystring,
     update_querystring,
     without_keys,
 )
-from pycoingecko_extra import CoinGeckoAPI, error_msgs
+from py_coingecko import CoinGeckoAPI, error_msgs
 
 TEST_ID = "TESTING_ID"
-TIME_PATCH_PATH = "pycoingecko_extra.pycoingecko_v2.time.sleep"
+TIME_PATCH_PATH = "py_coingecko.py_coingecko.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)
