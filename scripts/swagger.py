@@ -130,7 +130,7 @@ def generate_client():
     import_new = "from pycoingecko_extra import CoinGeckoAPIExtra"
     text = text.replace(import_old, import_new)
     matches = re.findall(
-        "(try:\n.*?(api_instance\.[^\)]*?\)).*?)\n```",
+        r"(try:\n.*?(api_instance\.[^\)]*?\)).*?)\n```",
         text,
         re.DOTALL | re.MULTILINE | re.IGNORECASE,
     )
