@@ -1,4 +1,3 @@
-from cmath import exp
 import math
 import json
 import pytest
@@ -172,8 +171,10 @@ class TestWrapper(unittest.TestCase):
                 status=404,
             )
             expected_urls.append(url)
-            with pytest.raises(HTTPError) as HE:
+            with pytest.raises(HTTPError) as exc_info:
                 fn(*args, **kwargs)
+            assert isinstance(exc_info.value.response, requests.Response)
+            assert exc_info.value.response.status_code == 404 
             assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
@@ -208,8 +209,10 @@ class TestWrapper(unittest.TestCase):
             expected_urls.append(url)
             fn(*args, **kwargs, qid=TEST_ID)
             assert len(self.cg._queued_calls) == 1
-            with pytest.raises(HTTPError) as HE:
+            with pytest.raises(HTTPError) as exc_info:
                 self.cg.execute_queued()
+            assert isinstance(exc_info.value.response, requests.Response)
+            assert exc_info.value.response.status_code == 404 
             assert len(self.cg._queued_calls) == 0
             assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)

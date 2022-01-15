@@ -26,11 +26,11 @@ get_cov = "scripts.github:get_cov_percent"
 [tool.poetry.dependencies]
 python = "^3.7"
 requests = "^2.27.1"
-python_dateutil = "^2.5.3"
-certifi = "^2017.4.17"
-six = "^1.10"
-urllib3 = "^1.26.8"
-setuptools = "^21.0.0"
+# python_dateutil = "^2.5.3"
+# certifi = "^2017.4.17"
+# six = "^1.10"
+# urllib3 = "^1.26.8"
+# setuptools = "^21.0.0"
 python-dotenv = "^0.19.2"
 swagger_client = { path = "./swagger_generated", develop = true } 
 

@@ -79,7 +79,7 @@ jobs:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: e454b900fe6518d21bdd25c9508d8a64
           filename: pycoingecko-extra__${{ env.BRANCH }}.json
-          label: Test Coverage
+          label: Pytest Coverage
           message: ${{ env.COVERAGE }}
           color: green
           namedLogo: pytest 

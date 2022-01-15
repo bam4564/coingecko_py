@@ -1,17 +1,21 @@
+from lib2to3.pytree import Base
 import time
 import math
 import logging
 import requests
 import json
 import requests
+from typing import Optional
 from collections import defaultdict
 from functools import partial
 from contextlib import contextmanager
+from requests import HTTPError, JSONDecodeError
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util import Retry
 
 from swagger_generated.swagger_client import ApiClient as ApiClientSwagger
 from swagger_generated.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
+from swagger_generated.swagger_client.rest import ApiException
 
 from py_coingecko.utils import without_keys, dict_get
 from scripts.swagger import (
@@ -30,6 +34,16 @@ error_msgs = dict(
 )
 
 
+class ApiResponseException(BaseException):
+    def __init__(
+        self, 
+        response: requests.Response, 
+        message: Optional[str] = None, 
+    ):
+        self.response = response 
+        self.message = message 
+
+
 class CoingeckoApiClient(ApiClientSwagger):
     def __init__(self):
         super().__init__()
@@ -37,8 +51,9 @@ class CoingeckoApiClient(ApiClientSwagger):
         # TODO: compare benefits of session vs pool
         self.request_timeout = 120
         self.session = requests.Session()
+        self.scheme = "https"
         retries = Retry(total=5, backoff_factor=0.5, status_forcelist=[502, 503, 504])
-        self.session.mount("https://", HTTPAdapter(max_retries=retries))
+        self.session.mount(f"{self.scheme}://", HTTPAdapter(max_retries=retries))
         self._include_response = False
 
     @contextmanager
@@ -60,27 +75,35 @@ class CoingeckoApiClient(ApiClientSwagger):
         )  # dictionaries are ordered from python 3.6 on so this is fine.
         kwargs = {v[0]: v[1] for v in query_params}
         url = materialize_url_template(resource_path, args, kwargs)
-        logger.debug(f"HTTPS Request: {url}")
+        logger.debug(f"{self.scheme} request: {url}")
         assert method == "GET"
+
         try:
             response = self.session.get(url, timeout=self.request_timeout)
         except requests.exceptions.RequestException:
             raise
-        try:
+
+        try: 
             response.raise_for_status()
-            content = json.loads(response.content.decode("utf-8"))
-            if self._include_response:
-                return content, response
-            else:
-                return content
-        except BaseException as e:
-            try:
-                content = json.loads(response.content.decode("utf-8"))
-                raise ValueError(content)
-            except json.decoder.JSONDecodeError:
-                pass
-            # Chain a ValueError encapsulating the response to whatever other exception was raised
-            raise ValueError(response) from e
+        except requests.HTTPError as e: 
+            logger.info(f"{self.scheme} response had failure status code: {e.response.status_code}")
+            raise e
+            
+        try: 
+            content = json.loads(response.content.decode("utf-8", "strict"))
+        except UnicodeDecodeError: 
+            raise requests.exceptions.ContentDecodingError(
+                0, f"Unable to decode bytes to utf-8 string", response=response
+            )
+        except BaseException: 
+            raise requests.exceptions.JSONDecodeError(
+                0, f"Unable to decode json from string", response=response
+            )
+            
+        if self._include_response:
+            return content, response
+        else:
+            return content
 
 
 class ResultsCache:
