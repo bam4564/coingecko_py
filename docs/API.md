@@ -4,47 +4,47 @@ All URIs are relative to *https://api.coingecko.com/api/v3*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**asset_platforms_get**](CoingeckoApi.md#asset_platforms_get) | **GET** /asset_platforms | List all asset platforms (Blockchain networks)
-[**coins_categories_get**](CoingeckoApi.md#coins_categories_get) | **GET** /coins/categories | List all categories with market data
-[**coins_categories_list_get**](CoingeckoApi.md#coins_categories_list_get) | **GET** /coins/categories/list | List all categories
-[**coins_id_contract_contract_address_get**](CoingeckoApi.md#coins_id_contract_contract_address_get) | **GET** /coins/{id}/contract/{contract_address} | Get coin info from contract address
-[**coins_id_contract_contract_address_market_chart_get**](CoingeckoApi.md#coins_id_contract_contract_address_market_chart_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/ | Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address 
-[**coins_id_contract_contract_address_market_chart_range_get**](CoingeckoApi.md#coins_id_contract_contract_address_market_chart_range_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address
-[**coins_id_get**](CoingeckoApi.md#coins_id_get) | **GET** /coins/{id} | Get current data (name, price, market, ... including exchange tickers) for a coin
-[**coins_id_history_get**](CoingeckoApi.md#coins_id_history_get) | **GET** /coins/{id}/history | Get historical data (name, price, market, stats) at a given date for a coin
-[**coins_id_market_chart_get**](CoingeckoApi.md#coins_id_market_chart_get) | **GET** /coins/{id}/market_chart | Get historical market data include price, market cap, and 24h volume (granularity auto)
-[**coins_id_market_chart_range_get**](CoingeckoApi.md#coins_id_market_chart_range_get) | **GET** /coins/{id}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)
-[**coins_id_ohlc_get**](CoingeckoApi.md#coins_id_ohlc_get) | **GET** /coins/{id}/ohlc | Get coin&#x27;s OHLC
-[**coins_id_status_updates_get**](CoingeckoApi.md#coins_id_status_updates_get) | **GET** /coins/{id}/status_updates | Get status updates for a given coin
-[**coins_id_tickers_get**](CoingeckoApi.md#coins_id_tickers_get) | **GET** /coins/{id}/tickers | Get coin tickers (paginated to 100 items)
-[**coins_list_get**](CoingeckoApi.md#coins_list_get) | **GET** /coins/list | List all supported coins id, name and symbol (no pagination required)
-[**coins_markets_get**](CoingeckoApi.md#coins_markets_get) | **GET** /coins/markets | List all supported coins price, market cap, volume, and market related data
-[**companies_public_treasury_coin_id_get**](CoingeckoApi.md#companies_public_treasury_coin_id_get) | **GET** /companies/public_treasury/{coin_id} | Get public companies data
-[**derivatives_exchanges_get**](CoingeckoApi.md#derivatives_exchanges_get) | **GET** /derivatives/exchanges | List all derivative exchanges
-[**derivatives_exchanges_id_get**](CoingeckoApi.md#derivatives_exchanges_id_get) | **GET** /derivatives/exchanges/{id} | show derivative exchange data
-[**derivatives_exchanges_list_get**](CoingeckoApi.md#derivatives_exchanges_list_get) | **GET** /derivatives/exchanges/list | List all derivative exchanges name and identifier
-[**derivatives_get**](CoingeckoApi.md#derivatives_get) | **GET** /derivatives | List all derivative tickers
-[**exchange_rates_get**](CoingeckoApi.md#exchange_rates_get) | **GET** /exchange_rates | Get BTC-to-Currency exchange rates
-[**exchanges_get**](CoingeckoApi.md#exchanges_get) | **GET** /exchanges | List all exchanges
-[**exchanges_id_get**](CoingeckoApi.md#exchanges_id_get) | **GET** /exchanges/{id} | Get exchange volume in BTC and top 100 tickers only
-[**exchanges_id_status_updates_get**](CoingeckoApi.md#exchanges_id_status_updates_get) | **GET** /exchanges/{id}/status_updates | Get status updates for a given exchange
-[**exchanges_id_tickers_get**](CoingeckoApi.md#exchanges_id_tickers_get) | **GET** /exchanges/{id}/tickers | Get exchange tickers (paginated, 100 tickers per page)
-[**exchanges_id_volume_chart_get**](CoingeckoApi.md#exchanges_id_volume_chart_get) | **GET** /exchanges/{id}/volume_chart | Get volume_chart data for a given exchange
-[**exchanges_list_get**](CoingeckoApi.md#exchanges_list_get) | **GET** /exchanges/list | List all supported markets id and name (no pagination required)
-[**finance_platforms_get**](CoingeckoApi.md#finance_platforms_get) | **GET** /finance_platforms | List all finance platforms
-[**finance_products_get**](CoingeckoApi.md#finance_products_get) | **GET** /finance_products | List all finance products
-[**global_decentralized_finance_defi_get**](CoingeckoApi.md#global_decentralized_finance_defi_get) | **GET** /global/decentralized_finance_defi | Get cryptocurrency global decentralized finance(defi) data
-[**global_get**](CoingeckoApi.md#global_get) | **GET** /global | Get cryptocurrency global data
-[**indexes_get**](CoingeckoApi.md#indexes_get) | **GET** /indexes | List all market indexes
-[**indexes_list_get**](CoingeckoApi.md#indexes_list_get) | **GET** /indexes/list | list market indexes id and name
-[**indexes_market_id_id_get**](CoingeckoApi.md#indexes_market_id_id_get) | **GET** /indexes/{market_id}/{id} | get market index by market id and index id
-[**ping_get**](CoingeckoApi.md#ping_get) | **GET** /ping | Check API server status
-[**search_get**](CoingeckoApi.md#search_get) | **GET** /search | Search for coins, categories and markets on CoinGecko
-[**search_trending_get**](CoingeckoApi.md#search_trending_get) | **GET** /search/trending | Get trending search coins (Top-7) on CoinGecko in the last 24 hours
-[**simple_price_get**](CoingeckoApi.md#simple_price_get) | **GET** /simple/price | Get the current price of any cryptocurrencies in any other supported currencies that you need.
-[**simple_supported_vs_currencies_get**](CoingeckoApi.md#simple_supported_vs_currencies_get) | **GET** /simple/supported_vs_currencies | Get list of supported_vs_currencies.
-[**simple_token_price_id_get**](CoingeckoApi.md#simple_token_price_id_get) | **GET** /simple/token_price/{id} | Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.
-[**status_updates_get**](CoingeckoApi.md#status_updates_get) | **GET** /status_updates | List all status_updates with data (description, category, created_at, user, user_title and pin)
+[**asset_platforms_get**](API.md#asset_platforms_get) | **GET** /asset_platforms | List all asset platforms (Blockchain networks)
+[**coins_categories_get**](API.md#coins_categories_get) | **GET** /coins/categories | List all categories with market data
+[**coins_categories_list_get**](API.md#coins_categories_list_get) | **GET** /coins/categories/list | List all categories
+[**coins_id_contract_contract_address_get**](API.md#coins_id_contract_contract_address_get) | **GET** /coins/{id}/contract/{contract_address} | Get coin info from contract address
+[**coins_id_contract_contract_address_market_chart_get**](API.md#coins_id_contract_contract_address_market_chart_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/ | Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address 
+[**coins_id_contract_contract_address_market_chart_range_get**](API.md#coins_id_contract_contract_address_market_chart_range_get) | **GET** /coins/{id}/contract/{contract_address}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address
+[**coins_id_get**](API.md#coins_id_get) | **GET** /coins/{id} | Get current data (name, price, market, ... including exchange tickers) for a coin
+[**coins_id_history_get**](API.md#coins_id_history_get) | **GET** /coins/{id}/history | Get historical data (name, price, market, stats) at a given date for a coin
+[**coins_id_market_chart_get**](API.md#coins_id_market_chart_get) | **GET** /coins/{id}/market_chart | Get historical market data include price, market cap, and 24h volume (granularity auto)
+[**coins_id_market_chart_range_get**](API.md#coins_id_market_chart_range_get) | **GET** /coins/{id}/market_chart/range | Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)
+[**coins_id_ohlc_get**](API.md#coins_id_ohlc_get) | **GET** /coins/{id}/ohlc | Get coin&#x27;s OHLC
+[**coins_id_status_updates_get**](API.md#coins_id_status_updates_get) | **GET** /coins/{id}/status_updates | Get status updates for a given coin
+[**coins_id_tickers_get**](API.md#coins_id_tickers_get) | **GET** /coins/{id}/tickers | Get coin tickers (paginated to 100 items)
+[**coins_list_get**](API.md#coins_list_get) | **GET** /coins/list | List all supported coins id, name and symbol (no pagination required)
+[**coins_markets_get**](API.md#coins_markets_get) | **GET** /coins/markets | List all supported coins price, market cap, volume, and market related data
+[**companies_public_treasury_coin_id_get**](API.md#companies_public_treasury_coin_id_get) | **GET** /companies/public_treasury/{coin_id} | Get public companies data
+[**derivatives_exchanges_get**](API.md#derivatives_exchanges_get) | **GET** /derivatives/exchanges | List all derivative exchanges
+[**derivatives_exchanges_id_get**](API.md#derivatives_exchanges_id_get) | **GET** /derivatives/exchanges/{id} | show derivative exchange data
+[**derivatives_exchanges_list_get**](API.md#derivatives_exchanges_list_get) | **GET** /derivatives/exchanges/list | List all derivative exchanges name and identifier
+[**derivatives_get**](API.md#derivatives_get) | **GET** /derivatives | List all derivative tickers
+[**exchange_rates_get**](API.md#exchange_rates_get) | **GET** /exchange_rates | Get BTC-to-Currency exchange rates
+[**exchanges_get**](API.md#exchanges_get) | **GET** /exchanges | List all exchanges
+[**exchanges_id_get**](API.md#exchanges_id_get) | **GET** /exchanges/{id} | Get exchange volume in BTC and top 100 tickers only
+[**exchanges_id_status_updates_get**](API.md#exchanges_id_status_updates_get) | **GET** /exchanges/{id}/status_updates | Get status updates for a given exchange
+[**exchanges_id_tickers_get**](API.md#exchanges_id_tickers_get) | **GET** /exchanges/{id}/tickers | Get exchange tickers (paginated, 100 tickers per page)
+[**exchanges_id_volume_chart_get**](API.md#exchanges_id_volume_chart_get) | **GET** /exchanges/{id}/volume_chart | Get volume_chart data for a given exchange
+[**exchanges_list_get**](API.md#exchanges_list_get) | **GET** /exchanges/list | List all supported markets id and name (no pagination required)
+[**finance_platforms_get**](API.md#finance_platforms_get) | **GET** /finance_platforms | List all finance platforms
+[**finance_products_get**](API.md#finance_products_get) | **GET** /finance_products | List all finance products
+[**global_decentralized_finance_defi_get**](API.md#global_decentralized_finance_defi_get) | **GET** /global/decentralized_finance_defi | Get cryptocurrency global decentralized finance(defi) data
+[**global_get**](API.md#global_get) | **GET** /global | Get cryptocurrency global data
+[**indexes_get**](API.md#indexes_get) | **GET** /indexes | List all market indexes
+[**indexes_list_get**](API.md#indexes_list_get) | **GET** /indexes/list | list market indexes id and name
+[**indexes_market_id_id_get**](API.md#indexes_market_id_id_get) | **GET** /indexes/{market_id}/{id} | get market index by market id and index id
+[**ping_get**](API.md#ping_get) | **GET** /ping | Check API server status
+[**search_get**](API.md#search_get) | **GET** /search | Search for coins, categories and markets on CoinGecko
+[**search_trending_get**](API.md#search_trending_get) | **GET** /search/trending | Get trending search coins (Top-7) on CoinGecko in the last 24 hours
+[**simple_price_get**](API.md#simple_price_get) | **GET** /simple/price | Get the current price of any cryptocurrencies in any other supported currencies that you need.
+[**simple_supported_vs_currencies_get**](API.md#simple_supported_vs_currencies_get) | **GET** /simple/supported_vs_currencies | Get list of supported_vs_currencies.
+[**simple_token_price_id_get**](API.md#simple_token_price_id_get) | **GET** /simple/token_price/{id} | Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.
+[**status_updates_get**](API.md#status_updates_get) | **GET** /status_updates | List all status_updates with data (description, category, created_at, user, user_title and pin)
 
 # **asset_platforms_get**
 > asset_platforms_get()

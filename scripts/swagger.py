@@ -118,6 +118,7 @@ def generate_client():
     print(f"Generating: {PROJECT_API_DOCS_PATH}")
     with open(SWAGGER_API_DOCS_PATH, "r") as f:
         text = f.read()
+    # process example code blocks to remove unnecessary stuff, update stuff that's different
     import_old = "\n".join(
         [
             "from __future__ import print_function",
@@ -138,6 +139,9 @@ def generate_client():
         text = text.replace(m[0], f"res = {m[1]}")
     text = text.replace("swagger_client.", "")
     text = text.replace("api_instance", "cg")
+    # update hyperlinks within the document
+    print(os.path.basename(SWAGGER_API_DOCS_PATH))
+    text = text.replace("CoingeckoApi.md", os.path.basename(PROJECT_API_DOCS_PATH))
     with open(PROJECT_API_DOCS_PATH, "w") as f:
         f.write(text)
 
