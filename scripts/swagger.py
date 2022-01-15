@@ -4,13 +4,11 @@ import ast
 import re
 import shutil
 import subprocess
-import pkg_resources
 import urllib.parse as urlparse
 from urllib.parse import urlencode
-from collections import OrderedDict
 
 import urllib3
-import toml
+from deepdiff import DeepDiff
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,15 +16,148 @@ load_dotenv()
 
 RAW_SPEC_PATH = os.environ["RAW_SPEC_PATH"]
 FORMATTED_SPEC_PATH = os.environ["FORMATTED_SPEC_PATH"]
+DIFF_SPEC_PATH = os.environ["DIFF_SPEC_PATH"]
 SWAGGER_CLIENT_PATH = os.environ["SWAGGER_CLIENT_PATH"]
 SWAGGER_CLIENT_NAME = os.environ["SWAGGER_CLIENT_NAME"]
 SWAGGER_API_CLIENT_PATH = os.environ["SWAGGER_API_CLIENT_PATH"]
 SWAGGER_DATA_PATH = os.environ["SWAGGER_DATA_PATH"]
 URL_TO_METHOD_PATH = os.environ["URL_TO_METHOD_PATH"]
-TEST_API_DATA_PATH = os.environ["TEST_API_DATA_PATH"]
+TEST_API_CALLS_PATH = os.environ["TEST_API_CALLS_PATH"]
 TEST_API_RESPONSES_PATH = os.environ["TEST_API_RESPONSES_PATH"]
 SWAGGER_API_DOCS_PATH = os.environ["SWAGGER_API_DOCS_PATH"]
-PROJECT_API_DOCS_PATH = os.environ["PROJECT_API_DOCS_PATH"]
+PROCESSED_DOCS_PATH = os.environ["PROCESSED_DOCS_PATH"]
+SPEC_CHECK = True
+
+
+class ApiData:
+
+    """GENERIC I/O"""
+
+    def read(self, path, is_json=True):
+        with open(path, "r") as f:
+            data = f.read()
+            if is_json:
+                data = json.loads(data)
+        return data
+
+    def write(self, path, data, is_json=True):
+        with open(path, "w") as f:
+            if is_json:
+                data = json.dumps(data, indent=4)
+            f.write(data)
+
+    """ READS """
+
+    def get_spec_raw(self):
+        return self.read(RAW_SPEC_PATH)
+
+    def get_spec_processed(self):
+        return self.read(FORMATTED_SPEC_PATH)
+
+    def get_docs_generated(self):
+        return self.read(SWAGGER_API_DOCS_PATH, is_json=False)
+
+    def get_api_client_source_code(self):
+        return self.read(SWAGGER_API_CLIENT_PATH, is_json=False)
+
+    def get_test_api_calls(self):
+        return self.read(TEST_API_CALLS_PATH)
+
+    def get_url_to_method(self):
+        return self.read(URL_TO_METHOD_PATH)
+
+    def get_test_api_responses(self):
+        return self.read(TEST_API_RESPONSES_PATH)
+
+    def get_parameters(self, url_template):
+        spec = self.get_spec_processed()
+        return spec["paths"][url_template]["get"].get("parameters", [])
+
+    def get_url_base(self):
+        spec = self.get_spec_processed()
+        host = spec["host"]
+        basePath = spec["basePath"]
+        schemes = spec["schemes"]
+        assert len(schemes) == 1
+        scheme = schemes[0]
+        url_parts = [scheme, host, basePath, "", "", ""]
+        url = urlparse.urlunparse(url_parts)
+        return url
+
+    def get_api_method_names(self):
+        return list(self.get_url_to_method().values())
+
+    def get_paginated_method_names(self):
+        url_to_methods = self.get_url_to_method()
+        paged_method_names = list()
+        for url_template, method_name in url_to_methods.items():
+            params = filter(
+                lambda p: p["name"] in ["page", "per_page"],
+                self.get_parameters(url_template),
+            )
+            if len(list(params)) == 2:
+                paged_method_names.append(method_name)
+        return paged_method_names
+
+    """ WRITES """
+
+    def write_spec_processed(self, spec):
+        self.write(FORMATTED_SPEC_PATH, spec)
+
+    def write_spec_diff(self, diff):
+        self.write(DIFF_SPEC_PATH, diff, is_json=False)
+
+    def write_docs_processed(self, text):
+        self.write(PROCESSED_DOCS_PATH, text, is_json=False)
+
+    def write_url_to_method(self, url_to_method):
+        self.write(URL_TO_METHOD_PATH, url_to_method)
+
+    def write_test_api_calls(self, test_api_calls):
+        self.write(TEST_API_CALLS_PATH, test_api_calls)
+
+    def write_test_api_responses(self, test_api_responses):
+        self.write(TEST_API_RESPONSES_PATH, test_api_responses)
+
+    """ OTHER """
+
+    def materialize_url_template(self, url_template, args, kwargs):
+        """Converts url template to url to request from api by adding prefix and encoding args, kwargs
+
+        input:
+            url_template = "/coins/{id}/contract/{contract_address}/market_chart/range"
+            args = ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"]
+            kwargs = {
+                "vs_currency": "eur",
+                "from": "1622520000",
+                "to": "1638334800"
+            }
+
+        output:
+            https://api.coingecko.com/api/v3/coins/ethereum/contract/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/market_chart/range?vs_currency=eur&from=1622520000&to=1638334800
+        """
+        url_base = api_data.get_url_base()
+        url_base_parts = list(urlparse.urlparse(url_base))
+        # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
+        path_args = re.findall(r"({[^}]*})", url_template)
+        url = url_template
+        for i, p in enumerate(path_args):
+            url = url.replace(p, "{" + str(i) + "}")
+        # construct full url
+        url_parts = list(urlparse.urlparse(url))
+        url_parts[0] = url_base_parts[0]
+        url_parts[1] = url_base_parts[1]
+        # add args to path
+        url_parts[2] = url_base_parts[2] + url.format(*args)
+        # add kwargs as query string parameters
+        query = dict(urlparse.parse_qsl(url_parts[4]))
+        query.update(kwargs)
+        url_parts[4] = urlencode(query)
+        url = urlparse.urlunparse(url_parts)
+        return url
+
+
+api_data = ApiData()
 
 
 def generate_client():
@@ -38,8 +169,7 @@ def generate_client():
     )
 
     # minimally process raw swagger spec.
-    with open(RAW_SPEC_PATH, "r") as f:
-        spec = json.loads(f.read())
+    spec = api_data.get_spec_raw()
     for path, path_spec in spec["paths"].items():
         assert len(path_spec.keys()) == 1
         assert "get" in path_spec
@@ -50,8 +180,23 @@ def generate_client():
             if param["name"] in ["page", "start_at", "end_at"]:
                 print("Performing spec fix for:", p)
                 spec["paths"][p]["get"]["parameters"][i]["in"] = "query"
-    with open(FORMATTED_SPEC_PATH, "w") as f:
-        f.write(json.dumps(spec, indent=4))
+
+    # for diff testing
+    # spec["new_key"] = 6
+
+    # check to see if the generated spec is different from the downloaded  + processed spec
+    if SPEC_CHECK and os.path.exists(FORMATTED_SPEC_PATH):
+        spec_existing = api_data.get_spec_processed()
+        diff = DeepDiff(spec_existing, spec)
+        if not diff:
+            print(f"Old spec matches new spec. Exiting.")
+            api_data.write_spec_diff("")
+            return
+        if diff:
+            print(f"Downloaded spec different from existing spec.")
+            api_data.write_spec_diff(diff.pretty())
+    else:
+        api_data.write_spec_processed(spec)
 
     # Remove previously generated client
     if os.path.isdir(SWAGGER_CLIENT_PATH):
@@ -71,8 +216,7 @@ def generate_client():
 
     # get a mapping from url templates to auto-generated methods
     methods = []
-    with open(SWAGGER_API_CLIENT_PATH, "r") as f:
-        source = f.read()
+    source = api_data.get_api_client_source_code()
     p = ast.parse(source)
     methods = [node.name for node in ast.walk(p) if isinstance(node, ast.FunctionDef)]
     url_to_method = dict()
@@ -83,13 +227,11 @@ def generate_client():
         method_name = "_".join(parts + ["get"])
         assert method_name in methods
         url_to_method[url_template] = method_name
-    with open(URL_TO_METHOD_PATH, "w") as f:
-        f.write(json.dumps(url_to_method, indent=4))
+    api_data.write_url_to_method(url_to_method)
 
     # process the generated README and create a new one
-    print(f"Generating: {PROJECT_API_DOCS_PATH}")
-    with open(SWAGGER_API_DOCS_PATH, "r") as f:
-        text = f.read()
+    print(f"Generating: {PROCESSED_DOCS_PATH}")
+    text = api_data.get_docs_generated()
     # process example code blocks to remove unnecessary stuff, update stuff that's different
     import_old = "\n".join(
         [
@@ -113,9 +255,8 @@ def generate_client():
     text = text.replace("api_instance", "cg")
     # update hyperlinks within the document
     print(os.path.basename(SWAGGER_API_DOCS_PATH))
-    text = text.replace("CoingeckoApi.md", os.path.basename(PROJECT_API_DOCS_PATH))
-    with open(PROJECT_API_DOCS_PATH, "w") as f:
-        f.write(text)
+    text = text.replace("CoingeckoApi.md", os.path.basename(PROCESSED_DOCS_PATH))
+    api_data.write_docs_processed(text)
 
     # auto-format generated code
     subprocess.call(f"poetry run black .".split(" "))
@@ -123,8 +264,7 @@ def generate_client():
 
 def generate_test_data_template():
     template = dict()
-    with open(FORMATTED_SPEC_PATH, "r") as f:
-        spec = json.loads(f.read())
+    spec = api_data.get_spec(processed=True)
     for path, path_spec in spec["paths"].items():
         template[path] = {"args": list(), "kwargs": dict()}
         assert "get" in path_spec
@@ -133,18 +273,18 @@ def generate_test_data_template():
             assert p["in"] in ["path", "query"]
             if p["in"] == "query":
                 template[path]["kwargs"][p["name"]] = p["type"]
-    with open(TEST_API_DATA_PATH, "w") as f:
-        f.write(json.dumps(template, indent=4))
+    api_data.write_test_api_calls(template)
 
 
 def generate_test_data():
-    with open(TEST_API_DATA_PATH, "r") as f:
-        test_api_calls = json.loads(f.read())
+    test_api_calls = api_data.get_test_api_calls()
     # Generate urls to request from the test api call spec
     urls = [
         (
             url_template,
-            materialize_url_template(url_template, data["args"], data["kwargs"]),
+            api_data.materialize_url_template(
+                url_template, data["args"], data["kwargs"]
+            ),
         )
         for url_template, data in test_api_calls.items()
     ]
@@ -160,95 +300,4 @@ def generate_test_data():
         assert content
         data[url_template] = content
     # write responses to file
-    with open(TEST_API_RESPONSES_PATH, "w") as f:
-        f.write(json.dumps(data, indent=4))
-
-
-def get_parameters(url_template):
-    with open(FORMATTED_SPEC_PATH, "r") as f:
-        spec = json.loads(f.read())
-    return spec["paths"][url_template]["get"].get("parameters", [])
-
-
-def get_url_to_methods():
-    with open(URL_TO_METHOD_PATH, "r") as f:
-        url_to_methods = json.loads(f.read())
-    return url_to_methods
-
-
-def get_expected_response():
-    with open("swagger_data/test_api_responses.json", "r") as f:
-        expected_response = json.loads(f.read())
-    return expected_response
-
-
-def get_test_api_calls():
-    with open("swagger_data/test_api_calls.json", "r") as f:
-        test_api_calls = json.loads(f.read())
-    return test_api_calls
-
-
-def get_api_method_names():
-    url_to_methods = get_url_to_methods()
-    return list(url_to_methods.values())
-
-
-def get_paginated_method_names():
-    url_to_methods = get_url_to_methods()
-    paged_method_names = list()
-    for url_template, method_name in url_to_methods.items():
-        params = filter(
-            lambda p: p["name"] in ["page", "per_page"], get_parameters(url_template)
-        )
-        if len(list(params)) == 2:
-            paged_method_names.append(method_name)
-    return paged_method_names
-
-
-def materialize_url_template(url_template, args, kwargs):
-    """Converts url template to url to request from api by adding prefix and encoding args, kwargs
-
-    input:
-        url_template = "/coins/{id}/contract/{contract_address}/market_chart/range"
-        args = ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"]
-        kwargs = {
-            "vs_currency": "eur",
-            "from": "1622520000",
-            "to": "1638334800"
-        }
-
-    output:
-        https://api.coingecko.com/api/v3/coins/ethereum/contract/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/market_chart/range?vs_currency=eur&from=1622520000&to=1638334800
-    """
-    url_base = get_url_base()
-    url_base_parts = list(urlparse.urlparse(url_base))
-    # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
-    path_args = re.findall(r"({[^}]*})", url_template)
-    url = url_template
-    for i, p in enumerate(path_args):
-        url = url.replace(p, "{" + str(i) + "}")
-    # construct full url
-    url_parts = list(urlparse.urlparse(url))
-    url_parts[0] = url_base_parts[0]
-    url_parts[1] = url_base_parts[1]
-    # add args to path
-    url_parts[2] = url_base_parts[2] + url.format(*args)
-    # add kwargs as query string parameters
-    query = dict(urlparse.parse_qsl(url_parts[4]))
-    query.update(kwargs)
-    url_parts[4] = urlencode(query)
-    url = urlparse.urlunparse(url_parts)
-    return url
-
-
-def get_url_base():
-    with open(FORMATTED_SPEC_PATH, "r") as f:
-        spec = json.loads(f.read())
-    host = spec["host"]
-    basePath = spec["basePath"]
-    schemes = spec["schemes"]
-    assert len(schemes) == 1
-    scheme = schemes[0]
-    url_parts = [scheme, host, basePath, "", "", ""]
-    url = urlparse.urlunparse(url_parts)
-    return url
+    api_data.write_test_api_responses(data)

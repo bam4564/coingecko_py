@@ -10,14 +10,7 @@ from copy import copy
 from requests.exceptions import HTTPError
 
 
-from scripts.swagger import (
-    materialize_url_template,
-    get_parameters,
-    get_paginated_method_names,
-    get_url_to_methods,
-    get_test_api_calls,
-    get_expected_response,
-)
+from scripts.swagger import api_data
 from py_coingecko.utils import (
     extract_from_querystring,
     sort_querystring,
@@ -36,10 +29,11 @@ def cg(request):
 
 
 @pytest.fixture(scope="class")
-def calls(request, cg):
-    url_to_method = get_url_to_methods()
-    expected_response = get_expected_response()
-    test_api_calls = get_test_api_calls()
+def calls(request):
+    cg = request.cls.cg
+    url_to_method = api_data.get_url_to_method()
+    expected_response = api_data.get_test_api_responses()
+    test_api_calls = api_data.get_test_api_calls()
     calls = list()
     for url_template, method_name in url_to_method.items():
         expected = expected_response[url_template]
@@ -47,9 +41,10 @@ def calls(request, cg):
         test_call = test_api_calls[url_template]
         args = test_call["args"]
         kwargs = test_call["kwargs"]
-        url = materialize_url_template(url_template, args, kwargs)
-        args, kwargs = transform_args_kwargs(url_template, args, kwargs)
-        fn = getattr(request.cls.cg, method_name)
+        url = api_data.materialize_url_template(url_template, args, kwargs)
+        params = api_data.get_parameters(url_template)
+        args, kwargs = transform_args_kwargs(url_template, params, args, kwargs)
+        fn = getattr(cg, method_name)
         calls.append((url, expected, fn, args, kwargs))
     request.cls.calls = calls
 
@@ -98,13 +93,12 @@ class FailThenSuccessServer:
             )
 
 
-def transform_args_kwargs(url_template, args, kwargs):
+def transform_args_kwargs(url_template, params, args, kwargs):
     """args and kwargs from input were used to materize url template
     this function transforms them to be supplied to API client endpoint function
     """
     args = copy(args)
     kwargs = copy(kwargs)
-    params = get_parameters(url_template)
     for p in params:
         if p["required"] and p["in"] == "query":
             name = p["name"]
@@ -413,7 +407,7 @@ class TestWrapper(unittest.TestCase):
 
     @responses.activate
     def test_page_range_query_page_start_end(self):
-        paginated_method_names = set(get_paginated_method_names())
+        paginated_method_names = set(api_data.get_paginated_method_names())
         page_start = 1
         page_end = 3
         num_pages = page_end - page_start + 1
@@ -468,7 +462,7 @@ class TestWrapper(unittest.TestCase):
 
     @responses.activate
     def test_page_range_query_page_start_unbounded(self):
-        paginated_method_names = set(get_paginated_method_names())
+        paginated_method_names = set(api_data.get_paginated_method_names())
         page_start = 1
         per_page = 5
         total = 19

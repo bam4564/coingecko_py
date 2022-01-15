@@ -35,6 +35,7 @@ pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 black = {version = "^21.12b0", allow-prereleases = true }
 toml = "^0.10.2"
+deepdiff = "^5.7.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools"]
