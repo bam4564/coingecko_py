@@ -128,9 +128,6 @@ class TestWrapper(unittest.TestCase):
         actual_call_counter = Counter()
         for c in responses.calls:
             actual_call_counter[sort_querystring(c.request.url)] += 1
-        if counter - actual_call_counter:
-            diffa = counter - actual_call_counter
-            diffb = actual_call_counter - counter
         assert counter == actual_call_counter
 
     # ------------ TEST CONNECTION FAILED (Normal + Queued) ----------------------
