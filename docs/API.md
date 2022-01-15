@@ -55,7 +55,7 @@ List all asset platforms
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -90,7 +90,7 @@ List all categories with market data
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -129,7 +129,7 @@ List all categories
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -164,7 +164,7 @@ Get coin info from contract address
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -205,7 +205,7 @@ Get historical market data include price, market cap, and 24h volume (granularit
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -250,7 +250,7 @@ Get historical market data include price, market cap, and 24h volume within a ra
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -297,7 +297,7 @@ Get current data (name, price, market, ... including exchange tickers) for a coi
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -348,7 +348,7 @@ Get historical data (name, price, market, stats) at a given date for a coin
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -391,7 +391,7 @@ Get historical market data include price, market cap, and 24h volume (granularit
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -436,7 +436,7 @@ Get historical market data include price, market cap, and 24h volume within a ra
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -481,7 +481,7 @@ Candle's body:  1 - 2 days: 30 minutes 3 - 30 days: 4 hours 31 and before: 4 day
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -524,7 +524,7 @@ Get status updates for a given coin
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -567,7 +567,7 @@ Get coin tickers (paginated to 100 items)<br><br> **IMPORTANT**:  Ticker `is_sta
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -616,7 +616,7 @@ Use this to obtain all the coins' id in order to make API calls
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -655,7 +655,7 @@ Use this to obtain all the coins market data (price, market cap, volume)
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -708,7 +708,7 @@ Get public companies bitcoin or ethereum holdings (Ordered by total holdings des
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -747,7 +747,7 @@ List all derivative exchanges
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -790,7 +790,7 @@ show derivative exchange data
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -831,7 +831,7 @@ List all derivative exchanges name and identifier
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -866,7 +866,7 @@ List all derivative tickers
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -905,7 +905,7 @@ Get BTC-to-Currency exchange rates
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -940,7 +940,7 @@ List all exchanges
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -981,7 +981,7 @@ Get exchange volume in BTC and tickers<br><br> **IMPORTANT**:  Ticker object is 
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1020,7 +1020,7 @@ Get status updates for a given exchange
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1063,7 +1063,7 @@ Get exchange tickers (paginated)<br><br> **IMPORTANT**:  Ticker `is_stale` is tr
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1112,7 +1112,7 @@ Get volume_chart data for a given exchange
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1153,7 +1153,7 @@ Use this to obtain all the markets' id in order to make API calls
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1188,7 +1188,7 @@ List all finance platforms
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1229,7 +1229,7 @@ List all finance products
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1274,7 +1274,7 @@ Get Top 100 Cryptocurrency Global Eecentralized Finance(defi) data
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1309,7 +1309,7 @@ Get cryptocurrency global data
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1344,7 +1344,7 @@ List all market indexes
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1385,7 +1385,7 @@ list market indexes id and name
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1420,7 +1420,7 @@ get market index by market id and index id
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1461,7 +1461,7 @@ Check API server status
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1496,7 +1496,7 @@ Search for coins, categories and markets listed on CoinGecko ordered by largest 
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1535,7 +1535,7 @@ Top-7 trending coins on CoinGecko as searched by users in the last 24 hours (Ord
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1568,7 +1568,7 @@ Get the current price of any cryptocurrencies in any other supported currencies 
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1615,7 +1615,7 @@ Get list of supported_vs_currencies.
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1648,7 +1648,7 @@ Get current price of tokens (using contract addresses) for a given platform in a
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
@@ -1699,7 +1699,7 @@ List all status_updates with data (description, category, created_at, user, user
 
 ### Example
 ```python
-from py_coingecko import CoinGeckoAPIExtra
+from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()

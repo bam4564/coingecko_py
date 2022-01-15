@@ -127,7 +127,7 @@ def generate_client():
             "from pprint import pprint",
         ]
     )
-    import_new = "from py_coingecko import CoinGeckoAPIExtra"
+    import_new = "from py_coingecko import CoingeckoApi"
     text = text.replace(import_old, import_new)
     matches = re.findall(
         r"(try:\n.*?(api_instance\.[^\)]*?\)).*?)\n```",

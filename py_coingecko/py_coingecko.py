@@ -30,7 +30,7 @@ error_msgs = dict(
 )
 
 
-class CoinGeckoAPIClient(ApiClientSwagger):
+class CoingeckoApiClient(ApiClientSwagger):
     def __init__(self):
         super().__init__()
         # setup HTTP session
@@ -110,14 +110,14 @@ class ResultsCache:
         return self.cache
 
 
-class CoinGeckoAPI(CoinGeckoApiSwagger):
+class CoingeckoApi(CoinGeckoApiSwagger):
 
     defaults = dict(exp_limit=8, progress_interval=10, log_level=logging.INFO)
 
     def __init__(self, *args, **kwargs):
         super().__init__(
             *args,
-            api_client=CoinGeckoAPIClient(),
+            api_client=CoingeckoApiClient(),
             **without_keys(kwargs, *self.defaults.keys()),
         )
         # setup wrapper instance fields, for managing queued calls, rate limit behavior, page range queries

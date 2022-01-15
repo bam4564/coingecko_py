@@ -44,15 +44,15 @@ pip install py_coingecko
 
 To switch from the base api client to this augmented version, all you need to do is change
 ```python
-from pycoingecko import CoinGeckoAPI
-cg = CoinGeckoAPI()
+from pycoingecko import CoingeckoApi
+cg = CoingeckoApi()
 ```
 to 
 ```python
 from py_coingecko import CoinGeckoAPIExtra
 cg = CoinGeckoAPIExtra()
 ```
-If you make this change to an existing script, it will function exactly the same as before as `CoinGeckoAPIExtra` is a subclass of `CoinGeckoAPI`. 
+If you make this change to an existing script, it will function exactly the same as before as `CoinGeckoAPIExtra` is a subclass of `CoingeckoApi`. 
 
 ## Examples  
 
@@ -200,7 +200,7 @@ cg = CoinGeckoAPIExtra(log_level=10, exp_limit=6, progress_interval=5)
 
 To summarize all the above functionality of this package in a single section 
 
-- `CoinGeckoAPIExtra` is an extended version of `CoinGeckoAPI` that can serve as a drop in replacement. 
+- `CoinGeckoAPIExtra` is an extended version of `CoingeckoApi` that can serve as a drop in replacement. 
 - It's extra features are accessible in the following ways 
   - `cg.execute_queued` is the only public method added to the client. It takes no input arguments and returns a dictionary that maps `qid` values to the corresponding queued api call. 
   - You can queue api calls by include the keyword argument `qid` in a client call. When you include the kwarg `qid` the function call does not return anything (as it was queued for later execution). 

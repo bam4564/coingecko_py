@@ -24,7 +24,7 @@ from py_coingecko.utils import (
     update_querystring,
     without_keys,
 )
-from py_coingecko import CoinGeckoAPI, error_msgs
+from py_coingecko import CoingeckoApi, error_msgs
 
 TEST_ID = "TESTING_ID"
 TIME_PATCH_PATH = "py_coingecko.py_coingecko.time.sleep"
@@ -32,7 +32,7 @@ TIME_PATCH_PATH = "py_coingecko.py_coingecko.time.sleep"
 
 @pytest.fixture(scope="class", autouse=True)
 def cg(request):
-    request.cls.cg = CoinGeckoAPI(log_level=10)
+    request.cls.cg = CoingeckoApi(log_level=10)
 
 
 @pytest.fixture(scope="class")

@@ -1,1 +1,1 @@
-from .py_coingecko import CoinGeckoAPI, error_msgs
+from .py_coingecko import CoingeckoApi, error_msgs
