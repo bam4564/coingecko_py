@@ -45,8 +45,8 @@ class CoingeckoApiClient(ApiClientSwagger):
     def request_with_response(self):
         """Context manager that allows for chaning the return value structure of api calls when necessary
 
-        The main use case for this is for page range queries, where we need the raw response object to be returned from the
-        api client. The base api client does not support this so _CoinGeckoAPI__request was overridden.
+        The main use case for this is for page range queries, where we need the raw response object to 
+        be returned from the api client.
         """
         self._include_response = True
         yield
@@ -73,13 +73,14 @@ class CoingeckoApiClient(ApiClientSwagger):
                 return content, response
             else:
                 return content
-        except Exception as e:
+        except BaseException as e:
             try:
                 content = json.loads(response.content.decode("utf-8"))
                 raise ValueError(content)
             except json.decoder.JSONDecodeError:
                 pass
-            raise
+            # Chain a ValueError encapsulating the response to whatever other exception was raised 
+            raise ValueError(response) from e
 
 
 class ResultsCache:

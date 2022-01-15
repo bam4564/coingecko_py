@@ -1,7 +1,8 @@
 - Note that `qid` must be a string in the README
-- Code coverage badge 
-  - https://github.com/marketplace/actions/dynamic-badges
-- Temporal granularity control 
+- Change url for code coverage branch to use master branch when merging new feature
+- Add section to docs about exceptions raised by api client 
+  - If request is unsuccessful, raw response object is always available 
+- Temporal granularity control (maybe?)
 - Add pre-commit hook to 
   - auto-run unit tests 
   - run black code formatting 
