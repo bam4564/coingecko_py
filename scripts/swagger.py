@@ -23,10 +23,8 @@ SWAGGER_CLIENT_NAME = os.environ["SWAGGER_CLIENT_NAME"]
 SWAGGER_API_CLIENT_PATH = os.environ["SWAGGER_API_CLIENT_PATH"]
 SWAGGER_DATA_PATH = os.environ["SWAGGER_DATA_PATH"]
 URL_TO_METHOD_PATH = os.environ["URL_TO_METHOD_PATH"]
-POETRY_PROJECT_FILE_PATH = os.environ["POETRY_PROJECT_FILE_PATH"]
 TEST_API_DATA_PATH = os.environ["TEST_API_DATA_PATH"]
 TEST_API_RESPONSES_PATH = os.environ["TEST_API_RESPONSES_PATH"]
-SWAGGER_REQUIREMENTS_PATH = os.environ["SWAGGER_REQUIREMENTS_PATH"]
 SWAGGER_API_DOCS_PATH = os.environ["SWAGGER_API_DOCS_PATH"]
 PROJECT_API_DOCS_PATH = os.environ["PROJECT_API_DOCS_PATH"]
 
@@ -87,32 +85,6 @@ def generate_client():
         url_to_method[url_template] = method_name
     with open(URL_TO_METHOD_PATH, "w") as f:
         f.write(json.dumps(url_to_method, indent=4))
-
-    # validate that all requirements of generated client are met by the poetry project file
-    with open(POETRY_PROJECT_FILE_PATH, "r") as f:
-        poetry = toml.loads(f.read())
-        deps = poetry["tool"]["poetry"]["dependencies"]
-    with open(SWAGGER_REQUIREMENTS_PATH, "r") as f:
-        reqs = list(pkg_resources.parse_requirements(f))
-    # had to manually update package versions specified in requirements.txt
-    # as they were incompatible with poetry dependencies
-    # req_overrides = dict(
-    #     requests="^2.27.1",
-    #     certifi="^2017.4.17",
-    #     urllib3="^1.26.8",
-    # )
-    # for r in reqs:
-    #     package = r.project_name.replace("-", "_")
-    #     assert len(r.specs) == 1
-    #     op, spec = r.specs[0]
-    #     if package in req_overrides:
-    #         # ensure this other package version already exists in poetry
-    #         assert req_overrides[package] == deps[package]
-    #     else:
-    #         # ensure version in requirements.txt exactly matches poetry dep
-    #         assert op == ">="
-    #         assert package in deps
-    #         assert f"^{spec}" == deps[package]
 
     # process the generated README and create a new one
     print(f"Generating: {PROJECT_API_DOCS_PATH}")

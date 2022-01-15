@@ -4,6 +4,7 @@ import pytest
 import unittest
 import requests
 import responses
+from typing import Callable
 from collections import Counter
 from copy import copy
 from requests.exceptions import HTTPError
@@ -116,8 +117,8 @@ def transform_args_kwargs(url_template, args, kwargs):
 @pytest.mark.usefixtures("calls")
 class TestWrapper(unittest.TestCase):
 
-    # ------------ NON-TEST UTILS ----------------------
-
+    # ------------ TEST UTILS ----------------------
+    @pytest.mark.skip
     def _assert_urls_call_count(self, expected_urls, responses):
         """Asserts that the expected set of requested urls matches the actual set of
         requested urls. Performs normalization on url querystrings so order of
@@ -129,24 +130,126 @@ class TestWrapper(unittest.TestCase):
             actual_call_counter[sort_querystring(c.request.url)] += 1
         assert counter == actual_call_counter
 
-    # ------------ TEST CONNECTION FAILED (Normal + Queued) ----------------------
+    @pytest.mark.skip
+    def test_decode_failure(
+        self, queued: bool, callback: Callable, ErrorClass: BaseException, responses
+    ):
+        expected_urls = list()
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            responses.add_callback(responses.GET, url, callback)
+            expected_urls.append(url)
+            if not queued:
+                with pytest.raises(ErrorClass) as exc_info:
+                    fn(*args, **kwargs)
+            else:
+                fn(*args, **kwargs, qid=str(i))
+                with pytest.raises(ErrorClass) as exc_info:
+                    self.cg.execute_queued()
+            assert isinstance(exc_info.value.response, requests.Response)
+            assert exc_info.value.response.status_code == 200
+            assert len(responses.calls) == i + 1
+        self._assert_urls_call_count(expected_urls, responses)
+
+    # ------------ TEST CONNECTION ERROR (Normal + Queued) ----------------------
+    # No endpoint match for outgoing requests
 
     @responses.activate
-    def test_connection_error_normal(self):
-        with pytest.raises(requests.exceptions.ConnectionError):
-            self.cg.ping_get()
+    def test_connection_error(self):
+        expected_urls = list()
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            expected_urls.append(url)
+            with pytest.raises(requests.exceptions.ConnectionError):
+                fn(*args, **kwargs)
+            assert len(responses.calls) == i + 1
+        self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
     def test_connection_error_queued(self):
-        self.cg.ping_get(qid=TEST_ID)
-        assert len(self.cg._queued_calls) == 1
-        with pytest.raises(requests.exceptions.ConnectionError):
-            self.cg.execute_queued()
+        expected_urls = list()
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            expected_urls.append(url)
+            fn(*args, **kwargs, qid=str(i))
+            assert len(self.cg._queued_calls) == 1
+            with pytest.raises(requests.exceptions.ConnectionError):
+                self.cg.execute_queued()
+            assert len(responses.calls) == i + 1
+        self._assert_urls_call_count(expected_urls, responses)
+
+    # ------------ TEST FAILED RESPONSE CODE (Normal + Queued) ----------------------
+    # Response code is not 200
+
+    @responses.activate
+    def test_failed(self):
+        expected_urls = list()
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            responses.add(
+                responses.GET,
+                url,
+                status=404,
+            )
+            expected_urls.append(url)
+            with pytest.raises(HTTPError) as exc_info:
+                fn(*args, **kwargs)
+            assert isinstance(exc_info.value.response, requests.Response)
+            assert exc_info.value.response.status_code == 404
+            assert len(responses.calls) == i + 1
+        self._assert_urls_call_count(expected_urls, responses)
+
+    @responses.activate
+    def test_failed_queued(self):
+        expected_urls = list()
+        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+            responses.add(
+                responses.GET,
+                url,
+                status=404,
+            )
+            expected_urls.append(url)
+            fn(*args, **kwargs, qid=TEST_ID)
+            assert len(self.cg._queued_calls) == 1
+            with pytest.raises(HTTPError) as exc_info:
+                self.cg.execute_queued()
+            assert isinstance(exc_info.value.response, requests.Response)
+            assert exc_info.value.response.status_code == 404
+            assert len(self.cg._queued_calls) == 0
+            assert len(responses.calls) == i + 1
+        self._assert_urls_call_count(expected_urls, responses)
+
+    # ------------ TEST FAILED DECODING (Normal + Queued) ----------------------
+    # Content returned from in response is either not byte decodable or json decodable
+
+    @responses.activate
+    def test_failed_body_json_decode(self):
+        queued = False
+        response_callback = lambda request: (200, {}, "{'one': 2,}")
+        ErrorClass = requests.exceptions.JSONDecodeError
+        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
+
+    @responses.activate
+    def test_failed_body_json_decode_queued(self):
+        queued = True
+        response_callback = lambda request: (200, {}, "{'one': 2,}")
+        ErrorClass = requests.exceptions.JSONDecodeError
+        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
+
+    @responses.activate
+    def test_failed_body_byte_decode(self):
+        queued = True
+        response_callback = lambda request: (200, {}, b"\x00\xaa\xff")
+        ErrorClass = requests.exceptions.ContentDecodingError
+        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
+
+    @responses.activate
+    def test_failed_body_byte_decode_queued(self):
+        queued = True
+        response_callback = lambda request: (200, {}, b"\x00\xaa\xff")
+        ErrorClass = requests.exceptions.ContentDecodingError
+        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
 
     # ------------ TEST API ENDPOINTS SUCCESS / FAILURE (Normal + Queued) ----------------------
 
     @responses.activate
-    def test_success_normal(self):
+    def test_success(self):
         expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add(
@@ -159,23 +262,6 @@ class TestWrapper(unittest.TestCase):
             response = fn(*args, **kwargs)
             assert len(responses.calls) == i + 1
             assert response == expected
-        self._assert_urls_call_count(expected_urls, responses)
-
-    @responses.activate
-    def test_failed_normal(self):
-        expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
-            responses.add(
-                responses.GET,
-                url,
-                status=404,
-            )
-            expected_urls.append(url)
-            with pytest.raises(HTTPError) as exc_info:
-                fn(*args, **kwargs)
-            assert isinstance(exc_info.value.response, requests.Response)
-            assert exc_info.value.response.status_code == 404 
-            assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
@@ -195,26 +281,6 @@ class TestWrapper(unittest.TestCase):
             assert len(self.cg._queued_calls) == 0
             assert len(responses.calls) == i + 1
             assert response == expected
-        self._assert_urls_call_count(expected_urls, responses)
-
-    @responses.activate
-    def test_failed_queued(self):
-        expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
-            responses.add(
-                responses.GET,
-                url,
-                status=404,
-            )
-            expected_urls.append(url)
-            fn(*args, **kwargs, qid=TEST_ID)
-            assert len(self.cg._queued_calls) == 1
-            with pytest.raises(HTTPError) as exc_info:
-                self.cg.execute_queued()
-            assert isinstance(exc_info.value.response, requests.Response)
-            assert exc_info.value.response.status_code == 404 
-            assert len(self.cg._queued_calls) == 0
-            assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
     # ---------- MULTIPLE QUEUED CALLS + SERVER SIDE RATE LIMITING  ----------

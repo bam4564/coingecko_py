@@ -36,12 +36,12 @@ error_msgs = dict(
 
 class ApiResponseException(BaseException):
     def __init__(
-        self, 
-        response: requests.Response, 
-        message: Optional[str] = None, 
+        self,
+        response: requests.Response,
+        message: Optional[str] = None,
     ):
-        self.response = response 
-        self.message = message 
+        self.response = response
+        self.message = message
 
 
 class CoingeckoApiClient(ApiClientSwagger):
@@ -83,23 +83,25 @@ class CoingeckoApiClient(ApiClientSwagger):
         except requests.exceptions.RequestException:
             raise
 
-        try: 
+        try:
             response.raise_for_status()
-        except requests.HTTPError as e: 
-            logger.info(f"{self.scheme} response had failure status code: {e.response.status_code}")
+        except requests.HTTPError as e:
+            logger.info(
+                f"{self.scheme} response had failure status code: {e.response.status_code}"
+            )
             raise e
-            
-        try: 
+
+        try:
             content = json.loads(response.content.decode("utf-8", "strict"))
-        except UnicodeDecodeError: 
+        except UnicodeDecodeError:
             raise requests.exceptions.ContentDecodingError(
                 0, f"Unable to decode bytes to utf-8 string", response=response
             )
-        except BaseException: 
+        except json.decoder.JSONDecodeError:
             raise requests.exceptions.JSONDecodeError(
                 0, f"Unable to decode json from string", response=response
             )
-            
+
         if self._include_response:
             return content, response
         else:
