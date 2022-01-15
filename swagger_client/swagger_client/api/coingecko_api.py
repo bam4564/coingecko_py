@@ -46,8 +46,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.asset_platforms_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.asset_platforms_get_with_http_info(**kwargs)  # noqa: E501
@@ -69,20 +69,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method asset_platforms_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -100,8 +100,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/asset_platforms",
-            "GET",
+            '/asset_platforms', 'GET',
             path_params,
             query_params,
             header_params,
@@ -110,12 +109,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_categories_get(self, **kwargs):  # noqa: E501
         """List all categories with market data  # noqa: E501
@@ -132,8 +130,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.coins_categories_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.coins_categories_get_with_http_info(**kwargs)  # noqa: E501
@@ -155,29 +153,29 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["order"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['order']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_categories_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "order" in params:
-            query_params.append(("order", params["order"]))  # noqa: E501
+        if 'order' in params:
+            query_params.append(('order', params['order']))  # noqa: E501
 
         header_params = {}
 
@@ -189,8 +187,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/categories",
-            "GET",
+            '/coins/categories', 'GET',
             path_params,
             query_params,
             header_params,
@@ -199,12 +196,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_categories_list_get(self, **kwargs):  # noqa: E501
         """List all categories  # noqa: E501
@@ -220,13 +216,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.coins_categories_list_get_with_http_info(**kwargs)  # noqa: E501
         else:
-            (data) = self.coins_categories_list_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+            (data) = self.coins_categories_list_get_with_http_info(**kwargs)  # noqa: E501
             return data
 
     def coins_categories_list_get_with_http_info(self, **kwargs):  # noqa: E501
@@ -245,20 +239,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_categories_list_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -276,8 +270,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/categories/list",
-            "GET",
+            '/coins/categories/list', 'GET',
             path_params,
             query_params,
             header_params,
@@ -286,16 +279,13 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
-    def coins_id_contract_contract_address_get(
-        self, id, contract_address, **kwargs
-    ):  # noqa: E501
+    def coins_id_contract_contract_address_get(self, id, contract_address, **kwargs):  # noqa: E501
         """Get coin info from contract address  # noqa: E501
 
         Get coin info from contract address  # noqa: E501
@@ -311,20 +301,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_id_contract_contract_address_get_with_http_info(
-                id, contract_address, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_contract_contract_address_get_with_http_info(id, contract_address, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_id_contract_contract_address_get_with_http_info(
-                id, contract_address, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_contract_contract_address_get_with_http_info(id, contract_address, **kwargs)  # noqa: E501
             return data
 
-    def coins_id_contract_contract_address_get_with_http_info(
-        self, id, contract_address, **kwargs
-    ):  # noqa: E501
+    def coins_id_contract_contract_address_get_with_http_info(self, id, contract_address, **kwargs):  # noqa: E501
         """Get coin info from contract address  # noqa: E501
 
         Get coin info from contract address  # noqa: E501
@@ -341,39 +325,37 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "contract_address"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'contract_address']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_contract_contract_address_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_contract_contract_address_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_contract_contract_address_get`")  # noqa: E501
         # verify the required parameter 'contract_address' is set
-        if "contract_address" not in params or params["contract_address"] is None:
-            raise ValueError(
-                "Missing the required parameter `contract_address` when calling `coins_id_contract_contract_address_get`"
-            )  # noqa: E501
+        if ('contract_address' not in params or
+                params['contract_address'] is None):
+            raise ValueError("Missing the required parameter `contract_address` when calling `coins_id_contract_contract_address_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
-        if "contract_address" in params:
-            path_params["contract_address"] = params["contract_address"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
+        if 'contract_address' in params:
+            path_params['contract_address'] = params['contract_address']  # noqa: E501
 
         query_params = []
 
@@ -387,8 +369,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/contract/{contract_address}",
-            "GET",
+            '/coins/{id}/contract/{contract_address}', 'GET',
             path_params,
             query_params,
             header_params,
@@ -397,16 +378,13 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
-    def coins_id_contract_contract_address_market_chart_get(
-        self, id, contract_address, vs_currency, days, **kwargs
-    ):  # noqa: E501
+    def coins_id_contract_contract_address_market_chart_get(self, id, contract_address, vs_currency, days, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address   # noqa: E501
 
         Get historical market data include price, market cap, and 24h volume (granularity auto)   # noqa: E501
@@ -424,24 +402,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return (
-                self.coins_id_contract_contract_address_market_chart_get_with_http_info(
-                    id, contract_address, vs_currency, days, **kwargs
-                )
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_contract_contract_address_market_chart_get_with_http_info(id, contract_address, vs_currency, days, **kwargs)  # noqa: E501
         else:
-            (
-                data
-            ) = self.coins_id_contract_contract_address_market_chart_get_with_http_info(
-                id, contract_address, vs_currency, days, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_contract_contract_address_market_chart_get_with_http_info(id, contract_address, vs_currency, days, **kwargs)  # noqa: E501
             return data
 
-    def coins_id_contract_contract_address_market_chart_get_with_http_info(
-        self, id, contract_address, vs_currency, days, **kwargs
-    ):  # noqa: E501
+    def coins_id_contract_contract_address_market_chart_get_with_http_info(self, id, contract_address, vs_currency, days, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume (granularity auto) from a contract address   # noqa: E501
 
         Get historical market data include price, market cap, and 24h volume (granularity auto)   # noqa: E501
@@ -460,56 +428,51 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "contract_address", "vs_currency", "days"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'contract_address', 'vs_currency', 'days']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method coins_id_contract_contract_address_market_chart_get"
-                    % key
+                    " to method coins_id_contract_contract_address_market_chart_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_contract_contract_address_market_chart_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_contract_contract_address_market_chart_get`")  # noqa: E501
         # verify the required parameter 'contract_address' is set
-        if "contract_address" not in params or params["contract_address"] is None:
-            raise ValueError(
-                "Missing the required parameter `contract_address` when calling `coins_id_contract_contract_address_market_chart_get`"
-            )  # noqa: E501
+        if ('contract_address' not in params or
+                params['contract_address'] is None):
+            raise ValueError("Missing the required parameter `contract_address` when calling `coins_id_contract_contract_address_market_chart_get`")  # noqa: E501
         # verify the required parameter 'vs_currency' is set
-        if "vs_currency" not in params or params["vs_currency"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currency` when calling `coins_id_contract_contract_address_market_chart_get`"
-            )  # noqa: E501
+        if ('vs_currency' not in params or
+                params['vs_currency'] is None):
+            raise ValueError("Missing the required parameter `vs_currency` when calling `coins_id_contract_contract_address_market_chart_get`")  # noqa: E501
         # verify the required parameter 'days' is set
-        if "days" not in params or params["days"] is None:
-            raise ValueError(
-                "Missing the required parameter `days` when calling `coins_id_contract_contract_address_market_chart_get`"
-            )  # noqa: E501
+        if ('days' not in params or
+                params['days'] is None):
+            raise ValueError("Missing the required parameter `days` when calling `coins_id_contract_contract_address_market_chart_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
-        if "contract_address" in params:
-            path_params["contract_address"] = params["contract_address"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
+        if 'contract_address' in params:
+            path_params['contract_address'] = params['contract_address']  # noqa: E501
 
         query_params = []
-        if "vs_currency" in params:
-            query_params.append(("vs_currency", params["vs_currency"]))  # noqa: E501
-        if "days" in params:
-            query_params.append(("days", params["days"]))  # noqa: E501
+        if 'vs_currency' in params:
+            query_params.append(('vs_currency', params['vs_currency']))  # noqa: E501
+        if 'days' in params:
+            query_params.append(('days', params['days']))  # noqa: E501
 
         header_params = {}
 
@@ -521,8 +484,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/contract/{contract_address}/market_chart/",
-            "GET",
+            '/coins/{id}/contract/{contract_address}/market_chart/', 'GET',
             path_params,
             query_params,
             header_params,
@@ -531,16 +493,13 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
-    def coins_id_contract_contract_address_market_chart_range_get(
-        self, id, contract_address, vs_currency, _from, to, **kwargs
-    ):  # noqa: E501
+    def coins_id_contract_contract_address_market_chart_range_get(self, id, contract_address, vs_currency, _from, to, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address  # noqa: E501
 
         Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)   # noqa: E501
@@ -559,22 +518,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_id_contract_contract_address_market_chart_range_get_with_http_info(
-                id, contract_address, vs_currency, _from, to, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_contract_contract_address_market_chart_range_get_with_http_info(id, contract_address, vs_currency, _from, to, **kwargs)  # noqa: E501
         else:
-            (
-                data
-            ) = self.coins_id_contract_contract_address_market_chart_range_get_with_http_info(
-                id, contract_address, vs_currency, _from, to, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_contract_contract_address_market_chart_range_get_with_http_info(id, contract_address, vs_currency, _from, to, **kwargs)  # noqa: E501
             return data
 
-    def coins_id_contract_contract_address_market_chart_range_get_with_http_info(
-        self, id, contract_address, vs_currency, _from, to, **kwargs
-    ):  # noqa: E501
+    def coins_id_contract_contract_address_market_chart_range_get_with_http_info(self, id, contract_address, vs_currency, _from, to, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto) from a contract address  # noqa: E501
 
         Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)   # noqa: E501
@@ -594,69 +545,57 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = [
-            "id",
-            "contract_address",
-            "vs_currency",
-            "_from",
-            "to",
-        ]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'contract_address', 'vs_currency', '_from', 'to']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method coins_id_contract_contract_address_market_chart_range_get"
-                    % key
+                    " to method coins_id_contract_contract_address_market_chart_range_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_contract_contract_address_market_chart_range_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_contract_contract_address_market_chart_range_get`")  # noqa: E501
         # verify the required parameter 'contract_address' is set
-        if "contract_address" not in params or params["contract_address"] is None:
-            raise ValueError(
-                "Missing the required parameter `contract_address` when calling `coins_id_contract_contract_address_market_chart_range_get`"
-            )  # noqa: E501
+        if ('contract_address' not in params or
+                params['contract_address'] is None):
+            raise ValueError("Missing the required parameter `contract_address` when calling `coins_id_contract_contract_address_market_chart_range_get`")  # noqa: E501
         # verify the required parameter 'vs_currency' is set
-        if "vs_currency" not in params or params["vs_currency"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currency` when calling `coins_id_contract_contract_address_market_chart_range_get`"
-            )  # noqa: E501
+        if ('vs_currency' not in params or
+                params['vs_currency'] is None):
+            raise ValueError("Missing the required parameter `vs_currency` when calling `coins_id_contract_contract_address_market_chart_range_get`")  # noqa: E501
         # verify the required parameter '_from' is set
-        if "_from" not in params or params["_from"] is None:
-            raise ValueError(
-                "Missing the required parameter `_from` when calling `coins_id_contract_contract_address_market_chart_range_get`"
-            )  # noqa: E501
+        if ('_from' not in params or
+                params['_from'] is None):
+            raise ValueError("Missing the required parameter `_from` when calling `coins_id_contract_contract_address_market_chart_range_get`")  # noqa: E501
         # verify the required parameter 'to' is set
-        if "to" not in params or params["to"] is None:
-            raise ValueError(
-                "Missing the required parameter `to` when calling `coins_id_contract_contract_address_market_chart_range_get`"
-            )  # noqa: E501
+        if ('to' not in params or
+                params['to'] is None):
+            raise ValueError("Missing the required parameter `to` when calling `coins_id_contract_contract_address_market_chart_range_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
-        if "contract_address" in params:
-            path_params["contract_address"] = params["contract_address"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
+        if 'contract_address' in params:
+            path_params['contract_address'] = params['contract_address']  # noqa: E501
 
         query_params = []
-        if "vs_currency" in params:
-            query_params.append(("vs_currency", params["vs_currency"]))  # noqa: E501
-        if "_from" in params:
-            query_params.append(("from", params["_from"]))  # noqa: E501
-        if "to" in params:
-            query_params.append(("to", params["to"]))  # noqa: E501
+        if 'vs_currency' in params:
+            query_params.append(('vs_currency', params['vs_currency']))  # noqa: E501
+        if '_from' in params:
+            query_params.append(('from', params['_from']))  # noqa: E501
+        if 'to' in params:
+            query_params.append(('to', params['to']))  # noqa: E501
 
         header_params = {}
 
@@ -668,8 +607,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/contract/{contract_address}/market_chart/range",
-            "GET",
+            '/coins/{id}/contract/{contract_address}/market_chart/range', 'GET',
             path_params,
             query_params,
             header_params,
@@ -678,12 +616,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_id_get(self, id, **kwargs):  # noqa: E501
         """Get current data (name, price, market, ... including exchange tickers) for a coin  # noqa: E501
@@ -706,8 +643,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.coins_id_get_with_http_info(id, **kwargs)  # noqa: E501
         else:
             (data) = self.coins_id_get_with_http_info(id, **kwargs)  # noqa: E501
@@ -735,58 +672,45 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = [
-            "id",
-            "localization",
-            "tickers",
-            "market_data",
-            "community_data",
-            "developer_data",
-            "sparkline",
-        ]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'localization', 'tickers', 'market_data', 'community_data', 'developer_data', 'sparkline']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "localization" in params:
-            query_params.append(("localization", params["localization"]))  # noqa: E501
-        if "tickers" in params:
-            query_params.append(("tickers", params["tickers"]))  # noqa: E501
-        if "market_data" in params:
-            query_params.append(("market_data", params["market_data"]))  # noqa: E501
-        if "community_data" in params:
-            query_params.append(
-                ("community_data", params["community_data"])
-            )  # noqa: E501
-        if "developer_data" in params:
-            query_params.append(
-                ("developer_data", params["developer_data"])
-            )  # noqa: E501
-        if "sparkline" in params:
-            query_params.append(("sparkline", params["sparkline"]))  # noqa: E501
+        if 'localization' in params:
+            query_params.append(('localization', params['localization']))  # noqa: E501
+        if 'tickers' in params:
+            query_params.append(('tickers', params['tickers']))  # noqa: E501
+        if 'market_data' in params:
+            query_params.append(('market_data', params['market_data']))  # noqa: E501
+        if 'community_data' in params:
+            query_params.append(('community_data', params['community_data']))  # noqa: E501
+        if 'developer_data' in params:
+            query_params.append(('developer_data', params['developer_data']))  # noqa: E501
+        if 'sparkline' in params:
+            query_params.append(('sparkline', params['sparkline']))  # noqa: E501
 
         header_params = {}
 
@@ -798,8 +722,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}",
-            "GET",
+            '/coins/{id}', 'GET',
             path_params,
             query_params,
             header_params,
@@ -808,12 +731,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_id_history_get(self, id, _date, **kwargs):  # noqa: E501
         """Get historical data (name, price, market, stats) at a given date for a coin  # noqa: E501
@@ -832,15 +754,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_id_history_get_with_http_info(
-                id, _date, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_history_get_with_http_info(id, _date, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_id_history_get_with_http_info(
-                id, _date, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_history_get_with_http_info(id, _date, **kwargs)  # noqa: E501
             return data
 
     def coins_id_history_get_with_http_info(self, id, _date, **kwargs):  # noqa: E501
@@ -861,43 +779,41 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "_date", "localization"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', '_date', 'localization']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_history_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_history_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_history_get`")  # noqa: E501
         # verify the required parameter '_date' is set
-        if "_date" not in params or params["_date"] is None:
-            raise ValueError(
-                "Missing the required parameter `_date` when calling `coins_id_history_get`"
-            )  # noqa: E501
+        if ('_date' not in params or
+                params['_date'] is None):
+            raise ValueError("Missing the required parameter `_date` when calling `coins_id_history_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "_date" in params:
-            query_params.append(("date", params["_date"]))  # noqa: E501
-        if "localization" in params:
-            query_params.append(("localization", params["localization"]))  # noqa: E501
+        if '_date' in params:
+            query_params.append(('date', params['_date']))  # noqa: E501
+        if 'localization' in params:
+            query_params.append(('localization', params['localization']))  # noqa: E501
 
         header_params = {}
 
@@ -909,8 +825,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/history",
-            "GET",
+            '/coins/{id}/history', 'GET',
             path_params,
             query_params,
             header_params,
@@ -919,12 +834,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_id_market_chart_get(self, id, vs_currency, days, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume (granularity auto)  # noqa: E501
@@ -944,20 +858,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_id_market_chart_get_with_http_info(
-                id, vs_currency, days, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_market_chart_get_with_http_info(id, vs_currency, days, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_id_market_chart_get_with_http_info(
-                id, vs_currency, days, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_market_chart_get_with_http_info(id, vs_currency, days, **kwargs)  # noqa: E501
             return data
 
-    def coins_id_market_chart_get_with_http_info(
-        self, id, vs_currency, days, **kwargs
-    ):  # noqa: E501
+    def coins_id_market_chart_get_with_http_info(self, id, vs_currency, days, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume (granularity auto)  # noqa: E501
 
         Get historical market data include price, market cap, and 24h volume (granularity auto)  <b>Minutely data will be used for duration within 1 day, Hourly data will be used for duration between 1 day and 90 days, Daily data will be used for duration above 90 days.</b>  # noqa: E501
@@ -976,50 +884,47 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "vs_currency", "days", "interval"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'vs_currency', 'days', 'interval']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_market_chart_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_market_chart_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_market_chart_get`")  # noqa: E501
         # verify the required parameter 'vs_currency' is set
-        if "vs_currency" not in params or params["vs_currency"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currency` when calling `coins_id_market_chart_get`"
-            )  # noqa: E501
+        if ('vs_currency' not in params or
+                params['vs_currency'] is None):
+            raise ValueError("Missing the required parameter `vs_currency` when calling `coins_id_market_chart_get`")  # noqa: E501
         # verify the required parameter 'days' is set
-        if "days" not in params or params["days"] is None:
-            raise ValueError(
-                "Missing the required parameter `days` when calling `coins_id_market_chart_get`"
-            )  # noqa: E501
+        if ('days' not in params or
+                params['days'] is None):
+            raise ValueError("Missing the required parameter `days` when calling `coins_id_market_chart_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "vs_currency" in params:
-            query_params.append(("vs_currency", params["vs_currency"]))  # noqa: E501
-        if "days" in params:
-            query_params.append(("days", params["days"]))  # noqa: E501
-        if "interval" in params:
-            query_params.append(("interval", params["interval"]))  # noqa: E501
+        if 'vs_currency' in params:
+            query_params.append(('vs_currency', params['vs_currency']))  # noqa: E501
+        if 'days' in params:
+            query_params.append(('days', params['days']))  # noqa: E501
+        if 'interval' in params:
+            query_params.append(('interval', params['interval']))  # noqa: E501
 
         header_params = {}
 
@@ -1031,8 +936,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/market_chart",
-            "GET",
+            '/coins/{id}/market_chart', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1041,16 +945,13 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
-    def coins_id_market_chart_range_get(
-        self, id, vs_currency, _from, to, **kwargs
-    ):  # noqa: E501
+    def coins_id_market_chart_range_get(self, id, vs_currency, _from, to, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)  # noqa: E501
 
         Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)  <b><ul><li>Data granularity is automatic (cannot be adjusted)</li><li>1 day from query time = 5 minute interval data</li><li>1 - 90 days from query time = hourly data</li><li>above 90 days from query time = daily data (00:00 UTC)</li></ul> </b>  # noqa: E501
@@ -1068,20 +969,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_id_market_chart_range_get_with_http_info(
-                id, vs_currency, _from, to, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_market_chart_range_get_with_http_info(id, vs_currency, _from, to, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_id_market_chart_range_get_with_http_info(
-                id, vs_currency, _from, to, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_market_chart_range_get_with_http_info(id, vs_currency, _from, to, **kwargs)  # noqa: E501
             return data
 
-    def coins_id_market_chart_range_get_with_http_info(
-        self, id, vs_currency, _from, to, **kwargs
-    ):  # noqa: E501
+    def coins_id_market_chart_range_get_with_http_info(self, id, vs_currency, _from, to, **kwargs):  # noqa: E501
         """Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)  # noqa: E501
 
         Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)  <b><ul><li>Data granularity is automatic (cannot be adjusted)</li><li>1 day from query time = 5 minute interval data</li><li>1 - 90 days from query time = hourly data</li><li>above 90 days from query time = daily data (00:00 UTC)</li></ul> </b>  # noqa: E501
@@ -1100,55 +995,51 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "vs_currency", "_from", "to"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'vs_currency', '_from', 'to']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_market_chart_range_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_market_chart_range_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_market_chart_range_get`")  # noqa: E501
         # verify the required parameter 'vs_currency' is set
-        if "vs_currency" not in params or params["vs_currency"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currency` when calling `coins_id_market_chart_range_get`"
-            )  # noqa: E501
+        if ('vs_currency' not in params or
+                params['vs_currency'] is None):
+            raise ValueError("Missing the required parameter `vs_currency` when calling `coins_id_market_chart_range_get`")  # noqa: E501
         # verify the required parameter '_from' is set
-        if "_from" not in params or params["_from"] is None:
-            raise ValueError(
-                "Missing the required parameter `_from` when calling `coins_id_market_chart_range_get`"
-            )  # noqa: E501
+        if ('_from' not in params or
+                params['_from'] is None):
+            raise ValueError("Missing the required parameter `_from` when calling `coins_id_market_chart_range_get`")  # noqa: E501
         # verify the required parameter 'to' is set
-        if "to" not in params or params["to"] is None:
-            raise ValueError(
-                "Missing the required parameter `to` when calling `coins_id_market_chart_range_get`"
-            )  # noqa: E501
+        if ('to' not in params or
+                params['to'] is None):
+            raise ValueError("Missing the required parameter `to` when calling `coins_id_market_chart_range_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "vs_currency" in params:
-            query_params.append(("vs_currency", params["vs_currency"]))  # noqa: E501
-        if "_from" in params:
-            query_params.append(("from", params["_from"]))  # noqa: E501
-        if "to" in params:
-            query_params.append(("to", params["to"]))  # noqa: E501
+        if 'vs_currency' in params:
+            query_params.append(('vs_currency', params['vs_currency']))  # noqa: E501
+        if '_from' in params:
+            query_params.append(('from', params['_from']))  # noqa: E501
+        if 'to' in params:
+            query_params.append(('to', params['to']))  # noqa: E501
 
         header_params = {}
 
@@ -1160,8 +1051,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/market_chart/range",
-            "GET",
+            '/coins/{id}/market_chart/range', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1170,12 +1060,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_id_ohlc_get(self, id, vs_currency, days, **kwargs):  # noqa: E501
         """Get coin's OHLC  # noqa: E501
@@ -1194,20 +1083,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_id_ohlc_get_with_http_info(
-                id, vs_currency, days, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_ohlc_get_with_http_info(id, vs_currency, days, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_id_ohlc_get_with_http_info(
-                id, vs_currency, days, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_ohlc_get_with_http_info(id, vs_currency, days, **kwargs)  # noqa: E501
             return data
 
-    def coins_id_ohlc_get_with_http_info(
-        self, id, vs_currency, days, **kwargs
-    ):  # noqa: E501
+    def coins_id_ohlc_get_with_http_info(self, id, vs_currency, days, **kwargs):  # noqa: E501
         """Get coin's OHLC  # noqa: E501
 
         Candle's body:  1 - 2 days: 30 minutes 3 - 30 days: 4 hours 31 and before: 4 days  # noqa: E501
@@ -1225,48 +1108,45 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "vs_currency", "days"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'vs_currency', 'days']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_ohlc_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_ohlc_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_ohlc_get`")  # noqa: E501
         # verify the required parameter 'vs_currency' is set
-        if "vs_currency" not in params or params["vs_currency"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currency` when calling `coins_id_ohlc_get`"
-            )  # noqa: E501
+        if ('vs_currency' not in params or
+                params['vs_currency'] is None):
+            raise ValueError("Missing the required parameter `vs_currency` when calling `coins_id_ohlc_get`")  # noqa: E501
         # verify the required parameter 'days' is set
-        if "days" not in params or params["days"] is None:
-            raise ValueError(
-                "Missing the required parameter `days` when calling `coins_id_ohlc_get`"
-            )  # noqa: E501
+        if ('days' not in params or
+                params['days'] is None):
+            raise ValueError("Missing the required parameter `days` when calling `coins_id_ohlc_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "vs_currency" in params:
-            query_params.append(("vs_currency", params["vs_currency"]))  # noqa: E501
-        if "days" in params:
-            query_params.append(("days", params["days"]))  # noqa: E501
+        if 'vs_currency' in params:
+            query_params.append(('vs_currency', params['vs_currency']))  # noqa: E501
+        if 'days' in params:
+            query_params.append(('days', params['days']))  # noqa: E501
 
         header_params = {}
 
@@ -1275,30 +1155,27 @@ class CoingeckoApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params["Accept"] = self.api_client.select_header_accept(
-            ["application/json"]
-        )  # noqa: E501
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
 
         # Authentication setting
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/ohlc",
-            "GET",
+            '/coins/{id}/ohlc', 'GET',
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type="list[float]",  # noqa: E501
+            response_type='list[float]',  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_id_status_updates_get(self, id, **kwargs):  # noqa: E501
         """Get status updates for a given coin  # noqa: E501
@@ -1317,15 +1194,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_id_status_updates_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_id_status_updates_get_with_http_info(id, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_id_status_updates_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_status_updates_get_with_http_info(id, **kwargs)  # noqa: E501
             return data
 
     def coins_id_status_updates_get_with_http_info(self, id, **kwargs):  # noqa: E501
@@ -1346,38 +1219,37 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "per_page", "page"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'per_page', 'page']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_status_updates_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_status_updates_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_status_updates_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -1389,8 +1261,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/status_updates",
-            "GET",
+            '/coins/{id}/status_updates', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1399,12 +1270,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_id_tickers_get(self, id, **kwargs):  # noqa: E501
         """Get coin tickers (paginated to 100 items)  # noqa: E501
@@ -1426,13 +1296,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.coins_id_tickers_get_with_http_info(id, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_id_tickers_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_id_tickers_get_with_http_info(id, **kwargs)  # noqa: E501
             return data
 
     def coins_id_tickers_get_with_http_info(self, id, **kwargs):  # noqa: E501
@@ -1456,53 +1324,43 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = [
-            "id",
-            "exchange_ids",
-            "include_exchange_logo",
-            "page",
-            "order",
-            "depth",
-        ]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'exchange_ids', 'include_exchange_logo', 'page', 'order', 'depth']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_id_tickers_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `coins_id_tickers_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `coins_id_tickers_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "exchange_ids" in params:
-            query_params.append(("exchange_ids", params["exchange_ids"]))  # noqa: E501
-        if "include_exchange_logo" in params:
-            query_params.append(
-                ("include_exchange_logo", params["include_exchange_logo"])
-            )  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
-        if "order" in params:
-            query_params.append(("order", params["order"]))  # noqa: E501
-        if "depth" in params:
-            query_params.append(("depth", params["depth"]))  # noqa: E501
+        if 'exchange_ids' in params:
+            query_params.append(('exchange_ids', params['exchange_ids']))  # noqa: E501
+        if 'include_exchange_logo' in params:
+            query_params.append(('include_exchange_logo', params['include_exchange_logo']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
+        if 'order' in params:
+            query_params.append(('order', params['order']))  # noqa: E501
+        if 'depth' in params:
+            query_params.append(('depth', params['depth']))  # noqa: E501
 
         header_params = {}
 
@@ -1514,8 +1372,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/{id}/tickers",
-            "GET",
+            '/coins/{id}/tickers', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1524,12 +1381,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_list_get(self, **kwargs):  # noqa: E501
         """List all supported coins id, name and symbol (no pagination required)  # noqa: E501
@@ -1546,8 +1402,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.coins_list_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.coins_list_get_with_http_info(**kwargs)  # noqa: E501
@@ -1569,31 +1425,29 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["include_platform"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['include_platform']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_list_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "include_platform" in params:
-            query_params.append(
-                ("include_platform", params["include_platform"])
-            )  # noqa: E501
+        if 'include_platform' in params:
+            query_params.append(('include_platform', params['include_platform']))  # noqa: E501
 
         header_params = {}
 
@@ -1605,8 +1459,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/list",
-            "GET",
+            '/coins/list', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1615,12 +1468,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def coins_markets_get(self, vs_currency, **kwargs):  # noqa: E501
         """List all supported coins price, market cap, volume, and market related data  # noqa: E501
@@ -1644,15 +1496,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.coins_markets_get_with_http_info(
-                vs_currency, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.coins_markets_get_with_http_info(vs_currency, **kwargs)  # noqa: E501
         else:
-            (data) = self.coins_markets_get_with_http_info(
-                vs_currency, **kwargs
-            )  # noqa: E501
+            (data) = self.coins_markets_get_with_http_info(vs_currency, **kwargs)  # noqa: E501
             return data
 
     def coins_markets_get_with_http_info(self, vs_currency, **kwargs):  # noqa: E501
@@ -1678,59 +1526,47 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = [
-            "vs_currency",
-            "ids",
-            "category",
-            "order",
-            "per_page",
-            "page",
-            "sparkline",
-            "price_change_percentage",
-        ]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['vs_currency', 'ids', 'category', 'order', 'per_page', 'page', 'sparkline', 'price_change_percentage']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method coins_markets_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'vs_currency' is set
-        if "vs_currency" not in params or params["vs_currency"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currency` when calling `coins_markets_get`"
-            )  # noqa: E501
+        if ('vs_currency' not in params or
+                params['vs_currency'] is None):
+            raise ValueError("Missing the required parameter `vs_currency` when calling `coins_markets_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "vs_currency" in params:
-            query_params.append(("vs_currency", params["vs_currency"]))  # noqa: E501
-        if "ids" in params:
-            query_params.append(("ids", params["ids"]))  # noqa: E501
-        if "category" in params:
-            query_params.append(("category", params["category"]))  # noqa: E501
-        if "order" in params:
-            query_params.append(("order", params["order"]))  # noqa: E501
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
-        if "sparkline" in params:
-            query_params.append(("sparkline", params["sparkline"]))  # noqa: E501
-        if "price_change_percentage" in params:
-            query_params.append(
-                ("price_change_percentage", params["price_change_percentage"])
-            )  # noqa: E501
+        if 'vs_currency' in params:
+            query_params.append(('vs_currency', params['vs_currency']))  # noqa: E501
+        if 'ids' in params:
+            query_params.append(('ids', params['ids']))  # noqa: E501
+        if 'category' in params:
+            query_params.append(('category', params['category']))  # noqa: E501
+        if 'order' in params:
+            query_params.append(('order', params['order']))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
+        if 'sparkline' in params:
+            query_params.append(('sparkline', params['sparkline']))  # noqa: E501
+        if 'price_change_percentage' in params:
+            query_params.append(('price_change_percentage', params['price_change_percentage']))  # noqa: E501
 
         header_params = {}
 
@@ -1742,8 +1578,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/coins/markets",
-            "GET",
+            '/coins/markets', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1752,12 +1587,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def companies_public_treasury_coin_id_get(self, coin_id, **kwargs):  # noqa: E501
         """Get public companies data  # noqa: E501
@@ -1774,20 +1608,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.companies_public_treasury_coin_id_get_with_http_info(
-                coin_id, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.companies_public_treasury_coin_id_get_with_http_info(coin_id, **kwargs)  # noqa: E501
         else:
-            (data) = self.companies_public_treasury_coin_id_get_with_http_info(
-                coin_id, **kwargs
-            )  # noqa: E501
+            (data) = self.companies_public_treasury_coin_id_get_with_http_info(coin_id, **kwargs)  # noqa: E501
             return data
 
-    def companies_public_treasury_coin_id_get_with_http_info(
-        self, coin_id, **kwargs
-    ):  # noqa: E501
+    def companies_public_treasury_coin_id_get_with_http_info(self, coin_id, **kwargs):  # noqa: E501
         """Get public companies data  # noqa: E501
 
         Get public companies bitcoin or ethereum holdings (Ordered by total holdings descending)  # noqa: E501
@@ -1803,32 +1631,31 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["coin_id"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['coin_id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method companies_public_treasury_coin_id_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'coin_id' is set
-        if "coin_id" not in params or params["coin_id"] is None:
-            raise ValueError(
-                "Missing the required parameter `coin_id` when calling `companies_public_treasury_coin_id_get`"
-            )  # noqa: E501
+        if ('coin_id' not in params or
+                params['coin_id'] is None):
+            raise ValueError("Missing the required parameter `coin_id` when calling `companies_public_treasury_coin_id_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "coin_id" in params:
-            path_params["coin_id"] = params["coin_id"]  # noqa: E501
+        if 'coin_id' in params:
+            path_params['coin_id'] = params['coin_id']  # noqa: E501
 
         query_params = []
 
@@ -1842,8 +1669,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/companies/public_treasury/{coin_id}",
-            "GET",
+            '/companies/public_treasury/{coin_id}', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1852,12 +1678,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def derivatives_exchanges_get(self, **kwargs):  # noqa: E501
         """List all derivative exchanges  # noqa: E501
@@ -1876,13 +1701,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.derivatives_exchanges_get_with_http_info(**kwargs)  # noqa: E501
         else:
-            (data) = self.derivatives_exchanges_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+            (data) = self.derivatives_exchanges_get_with_http_info(**kwargs)  # noqa: E501
             return data
 
     def derivatives_exchanges_get_with_http_info(self, **kwargs):  # noqa: E501
@@ -1903,33 +1726,33 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["order", "per_page", "page"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['order', 'per_page', 'page']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method derivatives_exchanges_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "order" in params:
-            query_params.append(("order", params["order"]))  # noqa: E501
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
+        if 'order' in params:
+            query_params.append(('order', params['order']))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -1941,8 +1764,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/derivatives/exchanges",
-            "GET",
+            '/derivatives/exchanges', 'GET',
             path_params,
             query_params,
             header_params,
@@ -1951,12 +1773,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def derivatives_exchanges_id_get(self, id, **kwargs):  # noqa: E501
         """show derivative exchange data  # noqa: E501
@@ -1974,15 +1795,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.derivatives_exchanges_id_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.derivatives_exchanges_id_get_with_http_info(id, **kwargs)  # noqa: E501
         else:
-            (data) = self.derivatives_exchanges_id_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+            (data) = self.derivatives_exchanges_id_get_with_http_info(id, **kwargs)  # noqa: E501
             return data
 
     def derivatives_exchanges_id_get_with_http_info(self, id, **kwargs):  # noqa: E501
@@ -2002,38 +1819,35 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "include_tickers"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'include_tickers']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method derivatives_exchanges_id_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `derivatives_exchanges_id_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `derivatives_exchanges_id_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "include_tickers" in params:
-            query_params.append(
-                ("include_tickers", params["include_tickers"])
-            )  # noqa: E501
+        if 'include_tickers' in params:
+            query_params.append(('include_tickers', params['include_tickers']))  # noqa: E501
 
         header_params = {}
 
@@ -2045,8 +1859,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/derivatives/exchanges/{id}",
-            "GET",
+            '/derivatives/exchanges/{id}', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2055,12 +1868,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def derivatives_exchanges_list_get(self, **kwargs):  # noqa: E501
         """List all derivative exchanges name and identifier  # noqa: E501
@@ -2076,15 +1888,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.derivatives_exchanges_list_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.derivatives_exchanges_list_get_with_http_info(**kwargs)  # noqa: E501
         else:
-            (data) = self.derivatives_exchanges_list_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+            (data) = self.derivatives_exchanges_list_get_with_http_info(**kwargs)  # noqa: E501
             return data
 
     def derivatives_exchanges_list_get_with_http_info(self, **kwargs):  # noqa: E501
@@ -2103,20 +1911,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method derivatives_exchanges_list_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -2134,8 +1942,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/derivatives/exchanges/list",
-            "GET",
+            '/derivatives/exchanges/list', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2144,12 +1951,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def derivatives_get(self, **kwargs):  # noqa: E501
         """List all derivative tickers  # noqa: E501
@@ -2166,8 +1972,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.derivatives_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.derivatives_get_with_http_info(**kwargs)  # noqa: E501
@@ -2189,31 +1995,29 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["include_tickers"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['include_tickers']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method derivatives_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "include_tickers" in params:
-            query_params.append(
-                ("include_tickers", params["include_tickers"])
-            )  # noqa: E501
+        if 'include_tickers' in params:
+            query_params.append(('include_tickers', params['include_tickers']))  # noqa: E501
 
         header_params = {}
 
@@ -2225,8 +2029,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/derivatives",
-            "GET",
+            '/derivatives', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2235,12 +2038,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def exchange_rates_get(self, **kwargs):  # noqa: E501
         """Get BTC-to-Currency exchange rates  # noqa: E501
@@ -2256,8 +2058,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.exchange_rates_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.exchange_rates_get_with_http_info(**kwargs)  # noqa: E501
@@ -2279,20 +2081,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method exchange_rates_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -2310,8 +2112,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/exchange_rates",
-            "GET",
+            '/exchange_rates', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2320,12 +2121,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def exchanges_get(self, **kwargs):  # noqa: E501
         """List all exchanges  # noqa: E501
@@ -2343,8 +2143,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.exchanges_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.exchanges_get_with_http_info(**kwargs)  # noqa: E501
@@ -2367,31 +2167,31 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["per_page", "page"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['per_page', 'page']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method exchanges_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -2403,8 +2203,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/exchanges",
-            "GET",
+            '/exchanges', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2413,12 +2212,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def exchanges_id_get(self, id, **kwargs):  # noqa: E501
         """Get exchange volume in BTC and top 100 tickers only  # noqa: E501
@@ -2435,8 +2233,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.exchanges_id_get_with_http_info(id, **kwargs)  # noqa: E501
         else:
             (data) = self.exchanges_id_get_with_http_info(id, **kwargs)  # noqa: E501
@@ -2458,32 +2256,31 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method exchanges_id_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `exchanges_id_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `exchanges_id_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
 
@@ -2497,8 +2294,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/exchanges/{id}",
-            "GET",
+            '/exchanges/{id}', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2507,12 +2303,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def exchanges_id_status_updates_get(self, id, **kwargs):  # noqa: E501
         """Get status updates for a given exchange  # noqa: E501
@@ -2531,20 +2326,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.exchanges_id_status_updates_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.exchanges_id_status_updates_get_with_http_info(id, **kwargs)  # noqa: E501
         else:
-            (data) = self.exchanges_id_status_updates_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+            (data) = self.exchanges_id_status_updates_get_with_http_info(id, **kwargs)  # noqa: E501
             return data
 
-    def exchanges_id_status_updates_get_with_http_info(
-        self, id, **kwargs
-    ):  # noqa: E501
+    def exchanges_id_status_updates_get_with_http_info(self, id, **kwargs):  # noqa: E501
         """Get status updates for a given exchange  # noqa: E501
 
         Get status updates for a given exchange  # noqa: E501
@@ -2562,38 +2351,37 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "per_page", "page"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'per_page', 'page']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method exchanges_id_status_updates_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `exchanges_id_status_updates_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `exchanges_id_status_updates_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -2605,8 +2393,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/exchanges/{id}/status_updates",
-            "GET",
+            '/exchanges/{id}/status_updates', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2615,12 +2402,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def exchanges_id_tickers_get(self, id, **kwargs):  # noqa: E501
         """Get exchange tickers (paginated, 100 tickers per page)  # noqa: E501
@@ -2642,15 +2428,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.exchanges_id_tickers_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.exchanges_id_tickers_get_with_http_info(id, **kwargs)  # noqa: E501
         else:
-            (data) = self.exchanges_id_tickers_get_with_http_info(
-                id, **kwargs
-            )  # noqa: E501
+            (data) = self.exchanges_id_tickers_get_with_http_info(id, **kwargs)  # noqa: E501
             return data
 
     def exchanges_id_tickers_get_with_http_info(self, id, **kwargs):  # noqa: E501
@@ -2674,53 +2456,43 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = [
-            "id",
-            "coin_ids",
-            "include_exchange_logo",
-            "page",
-            "depth",
-            "order",
-        ]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'coin_ids', 'include_exchange_logo', 'page', 'depth', 'order']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method exchanges_id_tickers_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `exchanges_id_tickers_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `exchanges_id_tickers_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "coin_ids" in params:
-            query_params.append(("coin_ids", params["coin_ids"]))  # noqa: E501
-        if "include_exchange_logo" in params:
-            query_params.append(
-                ("include_exchange_logo", params["include_exchange_logo"])
-            )  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
-        if "depth" in params:
-            query_params.append(("depth", params["depth"]))  # noqa: E501
-        if "order" in params:
-            query_params.append(("order", params["order"]))  # noqa: E501
+        if 'coin_ids' in params:
+            query_params.append(('coin_ids', params['coin_ids']))  # noqa: E501
+        if 'include_exchange_logo' in params:
+            query_params.append(('include_exchange_logo', params['include_exchange_logo']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
+        if 'depth' in params:
+            query_params.append(('depth', params['depth']))  # noqa: E501
+        if 'order' in params:
+            query_params.append(('order', params['order']))  # noqa: E501
 
         header_params = {}
 
@@ -2732,8 +2504,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/exchanges/{id}/tickers",
-            "GET",
+            '/exchanges/{id}/tickers', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2742,12 +2513,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def exchanges_id_volume_chart_get(self, id, days, **kwargs):  # noqa: E501
         """Get volume_chart data for a given exchange  # noqa: E501
@@ -2765,20 +2535,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.exchanges_id_volume_chart_get_with_http_info(
-                id, days, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.exchanges_id_volume_chart_get_with_http_info(id, days, **kwargs)  # noqa: E501
         else:
-            (data) = self.exchanges_id_volume_chart_get_with_http_info(
-                id, days, **kwargs
-            )  # noqa: E501
+            (data) = self.exchanges_id_volume_chart_get_with_http_info(id, days, **kwargs)  # noqa: E501
             return data
 
-    def exchanges_id_volume_chart_get_with_http_info(
-        self, id, days, **kwargs
-    ):  # noqa: E501
+    def exchanges_id_volume_chart_get_with_http_info(self, id, days, **kwargs):  # noqa: E501
         """Get volume_chart data for a given exchange  # noqa: E501
 
         Get volume_chart data for a given exchange  # noqa: E501
@@ -2795,41 +2559,39 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["id", "days"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'days']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method exchanges_id_volume_chart_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `exchanges_id_volume_chart_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `exchanges_id_volume_chart_get`")  # noqa: E501
         # verify the required parameter 'days' is set
-        if "days" not in params or params["days"] is None:
-            raise ValueError(
-                "Missing the required parameter `days` when calling `exchanges_id_volume_chart_get`"
-            )  # noqa: E501
+        if ('days' not in params or
+                params['days'] is None):
+            raise ValueError("Missing the required parameter `days` when calling `exchanges_id_volume_chart_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "days" in params:
-            query_params.append(("days", params["days"]))  # noqa: E501
+        if 'days' in params:
+            query_params.append(('days', params['days']))  # noqa: E501
 
         header_params = {}
 
@@ -2841,8 +2603,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/exchanges/{id}/volume_chart",
-            "GET",
+            '/exchanges/{id}/volume_chart', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2851,12 +2612,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def exchanges_list_get(self, **kwargs):  # noqa: E501
         """List all supported markets id and name (no pagination required)  # noqa: E501
@@ -2872,8 +2632,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.exchanges_list_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.exchanges_list_get_with_http_info(**kwargs)  # noqa: E501
@@ -2895,20 +2655,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method exchanges_list_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -2926,8 +2686,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/exchanges/list",
-            "GET",
+            '/exchanges/list', 'GET',
             path_params,
             query_params,
             header_params,
@@ -2936,12 +2695,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def finance_platforms_get(self, **kwargs):  # noqa: E501
         """List all finance platforms  # noqa: E501
@@ -2959,8 +2717,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.finance_platforms_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.finance_platforms_get_with_http_info(**kwargs)  # noqa: E501
@@ -2983,31 +2741,31 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["per_page", "page"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['per_page', 'page']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method finance_platforms_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -3019,8 +2777,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/finance_platforms",
-            "GET",
+            '/finance_platforms', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3029,12 +2786,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def finance_products_get(self, **kwargs):  # noqa: E501
         """List all finance products  # noqa: E501
@@ -3054,8 +2810,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.finance_products_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.finance_products_get_with_http_info(**kwargs)  # noqa: E501
@@ -3080,35 +2836,35 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["per_page", "page", "start_at", "end_at"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['per_page', 'page', 'start_at', 'end_at']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method finance_products_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
-        if "start_at" in params:
-            query_params.append(("start_at", params["start_at"]))  # noqa: E501
-        if "end_at" in params:
-            query_params.append(("end_at", params["end_at"]))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
+        if 'start_at' in params:
+            query_params.append(('start_at', params['start_at']))  # noqa: E501
+        if 'end_at' in params:
+            query_params.append(('end_at', params['end_at']))  # noqa: E501
 
         header_params = {}
 
@@ -3120,8 +2876,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/finance_products",
-            "GET",
+            '/finance_products', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3130,12 +2885,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def global_decentralized_finance_defi_get(self, **kwargs):  # noqa: E501
         """Get cryptocurrency global decentralized finance(defi) data  # noqa: E501
@@ -3151,20 +2905,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.global_decentralized_finance_defi_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.global_decentralized_finance_defi_get_with_http_info(**kwargs)  # noqa: E501
         else:
-            (data) = self.global_decentralized_finance_defi_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+            (data) = self.global_decentralized_finance_defi_get_with_http_info(**kwargs)  # noqa: E501
             return data
 
-    def global_decentralized_finance_defi_get_with_http_info(
-        self, **kwargs
-    ):  # noqa: E501
+    def global_decentralized_finance_defi_get_with_http_info(self, **kwargs):  # noqa: E501
         """Get cryptocurrency global decentralized finance(defi) data  # noqa: E501
 
         Get Top 100 Cryptocurrency Global Eecentralized Finance(defi) data   # noqa: E501
@@ -3180,20 +2928,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method global_decentralized_finance_defi_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -3211,8 +2959,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/global/decentralized_finance_defi",
-            "GET",
+            '/global/decentralized_finance_defi', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3221,12 +2968,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def global_get(self, **kwargs):  # noqa: E501
         """Get cryptocurrency global data  # noqa: E501
@@ -3242,8 +2988,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.global_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.global_get_with_http_info(**kwargs)  # noqa: E501
@@ -3265,20 +3011,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method global_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -3296,8 +3042,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/global",
-            "GET",
+            '/global', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3306,12 +3051,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def indexes_get(self, **kwargs):  # noqa: E501
         """List all market indexes  # noqa: E501
@@ -3329,8 +3073,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.indexes_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.indexes_get_with_http_info(**kwargs)  # noqa: E501
@@ -3353,31 +3097,31 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["per_page", "page"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['per_page', 'page']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method indexes_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -3389,8 +3133,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/indexes",
-            "GET",
+            '/indexes', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3399,12 +3142,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def indexes_list_get(self, **kwargs):  # noqa: E501
         """list market indexes id and name  # noqa: E501
@@ -3420,8 +3162,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.indexes_list_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.indexes_list_get_with_http_info(**kwargs)  # noqa: E501
@@ -3443,20 +3185,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method indexes_list_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -3474,8 +3216,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/indexes/list",
-            "GET",
+            '/indexes/list', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3484,12 +3225,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def indexes_market_id_id_get(self, market_id, id, **kwargs):  # noqa: E501
         """get market index by market id and index id  # noqa: E501
@@ -3507,20 +3247,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.indexes_market_id_id_get_with_http_info(
-                market_id, id, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.indexes_market_id_id_get_with_http_info(market_id, id, **kwargs)  # noqa: E501
         else:
-            (data) = self.indexes_market_id_id_get_with_http_info(
-                market_id, id, **kwargs
-            )  # noqa: E501
+            (data) = self.indexes_market_id_id_get_with_http_info(market_id, id, **kwargs)  # noqa: E501
             return data
 
-    def indexes_market_id_id_get_with_http_info(
-        self, market_id, id, **kwargs
-    ):  # noqa: E501
+    def indexes_market_id_id_get_with_http_info(self, market_id, id, **kwargs):  # noqa: E501
         """get market index by market id and index id  # noqa: E501
 
         get market index by market id and index id  # noqa: E501
@@ -3537,39 +3271,37 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["market_id", "id"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['market_id', 'id']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method indexes_market_id_id_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'market_id' is set
-        if "market_id" not in params or params["market_id"] is None:
-            raise ValueError(
-                "Missing the required parameter `market_id` when calling `indexes_market_id_id_get`"
-            )  # noqa: E501
+        if ('market_id' not in params or
+                params['market_id'] is None):
+            raise ValueError("Missing the required parameter `market_id` when calling `indexes_market_id_id_get`")  # noqa: E501
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `indexes_market_id_id_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `indexes_market_id_id_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "market_id" in params:
-            path_params["market_id"] = params["market_id"]  # noqa: E501
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'market_id' in params:
+            path_params['market_id'] = params['market_id']  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
 
@@ -3583,8 +3315,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/indexes/{market_id}/{id}",
-            "GET",
+            '/indexes/{market_id}/{id}', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3593,12 +3324,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def ping_get(self, **kwargs):  # noqa: E501
         """Check API server status  # noqa: E501
@@ -3614,8 +3344,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.ping_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.ping_get_with_http_info(**kwargs)  # noqa: E501
@@ -3637,20 +3367,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method ping_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -3668,8 +3398,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/ping",
-            "GET",
+            '/ping', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3678,12 +3407,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def search_get(self, query, **kwargs):  # noqa: E501
         """Search for coins, categories and markets on CoinGecko  # noqa: E501
@@ -3700,8 +3428,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.search_get_with_http_info(query, **kwargs)  # noqa: E501
         else:
             (data) = self.search_get_with_http_info(query, **kwargs)  # noqa: E501
@@ -3723,34 +3451,33 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["query"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['query']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method search_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'query' is set
-        if "query" not in params or params["query"] is None:
-            raise ValueError(
-                "Missing the required parameter `query` when calling `search_get`"
-            )  # noqa: E501
+        if ('query' not in params or
+                params['query'] is None):
+            raise ValueError("Missing the required parameter `query` when calling `search_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "query" in params:
-            query_params.append(("query", params["query"]))  # noqa: E501
+        if 'query' in params:
+            query_params.append(('query', params['query']))  # noqa: E501
 
         header_params = {}
 
@@ -3762,8 +3489,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/search",
-            "GET",
+            '/search', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3772,12 +3498,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def search_trending_get(self, **kwargs):  # noqa: E501
         """Get trending search coins (Top-7) on CoinGecko in the last 24 hours  # noqa: E501
@@ -3793,8 +3518,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.search_trending_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.search_trending_get_with_http_info(**kwargs)  # noqa: E501
@@ -3816,20 +3541,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method search_trending_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -3847,8 +3572,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/search/trending",
-            "GET",
+            '/search/trending', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3857,12 +3581,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def simple_price_get(self, ids, vs_currencies, **kwargs):  # noqa: E501
         """Get the current price of any cryptocurrencies in any other supported currencies that you need.  # noqa: E501
@@ -3883,20 +3606,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.simple_price_get_with_http_info(
-                ids, vs_currencies, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.simple_price_get_with_http_info(ids, vs_currencies, **kwargs)  # noqa: E501
         else:
-            (data) = self.simple_price_get_with_http_info(
-                ids, vs_currencies, **kwargs
-            )  # noqa: E501
+            (data) = self.simple_price_get_with_http_info(ids, vs_currencies, **kwargs)  # noqa: E501
             return data
 
-    def simple_price_get_with_http_info(
-        self, ids, vs_currencies, **kwargs
-    ):  # noqa: E501
+    def simple_price_get_with_http_info(self, ids, vs_currencies, **kwargs):  # noqa: E501
         """Get the current price of any cryptocurrencies in any other supported currencies that you need.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -3916,66 +3633,47 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = [
-            "ids",
-            "vs_currencies",
-            "include_market_cap",
-            "include_24hr_vol",
-            "include_24hr_change",
-            "include_last_updated_at",
-        ]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['ids', 'vs_currencies', 'include_market_cap', 'include_24hr_vol', 'include_24hr_change', 'include_last_updated_at']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method simple_price_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'ids' is set
-        if "ids" not in params or params["ids"] is None:
-            raise ValueError(
-                "Missing the required parameter `ids` when calling `simple_price_get`"
-            )  # noqa: E501
+        if ('ids' not in params or
+                params['ids'] is None):
+            raise ValueError("Missing the required parameter `ids` when calling `simple_price_get`")  # noqa: E501
         # verify the required parameter 'vs_currencies' is set
-        if "vs_currencies" not in params or params["vs_currencies"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currencies` when calling `simple_price_get`"
-            )  # noqa: E501
+        if ('vs_currencies' not in params or
+                params['vs_currencies'] is None):
+            raise ValueError("Missing the required parameter `vs_currencies` when calling `simple_price_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "ids" in params:
-            query_params.append(("ids", params["ids"]))  # noqa: E501
-        if "vs_currencies" in params:
-            query_params.append(
-                ("vs_currencies", params["vs_currencies"])
-            )  # noqa: E501
-        if "include_market_cap" in params:
-            query_params.append(
-                ("include_market_cap", params["include_market_cap"])
-            )  # noqa: E501
-        if "include_24hr_vol" in params:
-            query_params.append(
-                ("include_24hr_vol", params["include_24hr_vol"])
-            )  # noqa: E501
-        if "include_24hr_change" in params:
-            query_params.append(
-                ("include_24hr_change", params["include_24hr_change"])
-            )  # noqa: E501
-        if "include_last_updated_at" in params:
-            query_params.append(
-                ("include_last_updated_at", params["include_last_updated_at"])
-            )  # noqa: E501
+        if 'ids' in params:
+            query_params.append(('ids', params['ids']))  # noqa: E501
+        if 'vs_currencies' in params:
+            query_params.append(('vs_currencies', params['vs_currencies']))  # noqa: E501
+        if 'include_market_cap' in params:
+            query_params.append(('include_market_cap', params['include_market_cap']))  # noqa: E501
+        if 'include_24hr_vol' in params:
+            query_params.append(('include_24hr_vol', params['include_24hr_vol']))  # noqa: E501
+        if 'include_24hr_change' in params:
+            query_params.append(('include_24hr_change', params['include_24hr_change']))  # noqa: E501
+        if 'include_last_updated_at' in params:
+            query_params.append(('include_last_updated_at', params['include_last_updated_at']))  # noqa: E501
 
         header_params = {}
 
@@ -3987,8 +3685,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/simple/price",
-            "GET",
+            '/simple/price', 'GET',
             path_params,
             query_params,
             header_params,
@@ -3997,12 +3694,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def simple_supported_vs_currencies_get(self, **kwargs):  # noqa: E501
         """Get list of supported_vs_currencies.  # noqa: E501
@@ -4017,15 +3713,11 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.simple_supported_vs_currencies_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.simple_supported_vs_currencies_get_with_http_info(**kwargs)  # noqa: E501
         else:
-            (data) = self.simple_supported_vs_currencies_get_with_http_info(
-                **kwargs
-            )  # noqa: E501
+            (data) = self.simple_supported_vs_currencies_get_with_http_info(**kwargs)  # noqa: E501
             return data
 
     def simple_supported_vs_currencies_get_with_http_info(self, **kwargs):  # noqa: E501
@@ -4043,20 +3735,20 @@ class CoingeckoApi(object):
         """
 
         all_params = []  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method simple_supported_vs_currencies_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
@@ -4074,8 +3766,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/simple/supported_vs_currencies",
-            "GET",
+            '/simple/supported_vs_currencies', 'GET',
             path_params,
             query_params,
             header_params,
@@ -4084,16 +3775,13 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
-    def simple_token_price_id_get(
-        self, id, contract_addresses, vs_currencies, **kwargs
-    ):  # noqa: E501
+    def simple_token_price_id_get(self, id, contract_addresses, vs_currencies, **kwargs):  # noqa: E501
         """Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -4113,20 +3801,14 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
-            return self.simple_token_price_id_get_with_http_info(
-                id, contract_addresses, vs_currencies, **kwargs
-            )  # noqa: E501
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.simple_token_price_id_get_with_http_info(id, contract_addresses, vs_currencies, **kwargs)  # noqa: E501
         else:
-            (data) = self.simple_token_price_id_get_with_http_info(
-                id, contract_addresses, vs_currencies, **kwargs
-            )  # noqa: E501
+            (data) = self.simple_token_price_id_get_with_http_info(id, contract_addresses, vs_currencies, **kwargs)  # noqa: E501
             return data
 
-    def simple_token_price_id_get_with_http_info(
-        self, id, contract_addresses, vs_currencies, **kwargs
-    ):  # noqa: E501
+    def simple_token_price_id_get_with_http_info(self, id, contract_addresses, vs_currencies, **kwargs):  # noqa: E501
         """Get current price of tokens (using contract addresses) for a given platform in any other currency that you need.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -4147,76 +3829,53 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = [
-            "id",
-            "contract_addresses",
-            "vs_currencies",
-            "include_market_cap",
-            "include_24hr_vol",
-            "include_24hr_change",
-            "include_last_updated_at",
-        ]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['id', 'contract_addresses', 'vs_currencies', 'include_market_cap', 'include_24hr_vol', 'include_24hr_change', 'include_last_updated_at']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method simple_token_price_id_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
         # verify the required parameter 'id' is set
-        if "id" not in params or params["id"] is None:
-            raise ValueError(
-                "Missing the required parameter `id` when calling `simple_token_price_id_get`"
-            )  # noqa: E501
+        if ('id' not in params or
+                params['id'] is None):
+            raise ValueError("Missing the required parameter `id` when calling `simple_token_price_id_get`")  # noqa: E501
         # verify the required parameter 'contract_addresses' is set
-        if "contract_addresses" not in params or params["contract_addresses"] is None:
-            raise ValueError(
-                "Missing the required parameter `contract_addresses` when calling `simple_token_price_id_get`"
-            )  # noqa: E501
+        if ('contract_addresses' not in params or
+                params['contract_addresses'] is None):
+            raise ValueError("Missing the required parameter `contract_addresses` when calling `simple_token_price_id_get`")  # noqa: E501
         # verify the required parameter 'vs_currencies' is set
-        if "vs_currencies" not in params or params["vs_currencies"] is None:
-            raise ValueError(
-                "Missing the required parameter `vs_currencies` when calling `simple_token_price_id_get`"
-            )  # noqa: E501
+        if ('vs_currencies' not in params or
+                params['vs_currencies'] is None):
+            raise ValueError("Missing the required parameter `vs_currencies` when calling `simple_token_price_id_get`")  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if "id" in params:
-            path_params["id"] = params["id"]  # noqa: E501
+        if 'id' in params:
+            path_params['id'] = params['id']  # noqa: E501
 
         query_params = []
-        if "contract_addresses" in params:
-            query_params.append(
-                ("contract_addresses", params["contract_addresses"])
-            )  # noqa: E501
-        if "vs_currencies" in params:
-            query_params.append(
-                ("vs_currencies", params["vs_currencies"])
-            )  # noqa: E501
-        if "include_market_cap" in params:
-            query_params.append(
-                ("include_market_cap", params["include_market_cap"])
-            )  # noqa: E501
-        if "include_24hr_vol" in params:
-            query_params.append(
-                ("include_24hr_vol", params["include_24hr_vol"])
-            )  # noqa: E501
-        if "include_24hr_change" in params:
-            query_params.append(
-                ("include_24hr_change", params["include_24hr_change"])
-            )  # noqa: E501
-        if "include_last_updated_at" in params:
-            query_params.append(
-                ("include_last_updated_at", params["include_last_updated_at"])
-            )  # noqa: E501
+        if 'contract_addresses' in params:
+            query_params.append(('contract_addresses', params['contract_addresses']))  # noqa: E501
+        if 'vs_currencies' in params:
+            query_params.append(('vs_currencies', params['vs_currencies']))  # noqa: E501
+        if 'include_market_cap' in params:
+            query_params.append(('include_market_cap', params['include_market_cap']))  # noqa: E501
+        if 'include_24hr_vol' in params:
+            query_params.append(('include_24hr_vol', params['include_24hr_vol']))  # noqa: E501
+        if 'include_24hr_change' in params:
+            query_params.append(('include_24hr_change', params['include_24hr_change']))  # noqa: E501
+        if 'include_last_updated_at' in params:
+            query_params.append(('include_last_updated_at', params['include_last_updated_at']))  # noqa: E501
 
         header_params = {}
 
@@ -4228,8 +3887,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/simple/token_price/{id}",
-            "GET",
+            '/simple/token_price/{id}', 'GET',
             path_params,
             query_params,
             header_params,
@@ -4238,12 +3896,11 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)
 
     def status_updates_get(self, **kwargs):  # noqa: E501
         """List all status_updates with data (description, category, created_at, user, user_title and pin)  # noqa: E501
@@ -4263,8 +3920,8 @@ class CoingeckoApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs["_return_http_data_only"] = True
-        if kwargs.get("async_req"):
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
             return self.status_updates_get_with_http_info(**kwargs)  # noqa: E501
         else:
             (data) = self.status_updates_get_with_http_info(**kwargs)  # noqa: E501
@@ -4289,35 +3946,35 @@ class CoingeckoApi(object):
                  returns the request thread.
         """
 
-        all_params = ["category", "project_type", "per_page", "page"]  # noqa: E501
-        all_params.append("async_req")
-        all_params.append("_return_http_data_only")
-        all_params.append("_preload_content")
-        all_params.append("_request_timeout")
+        all_params = ['category', 'project_type', 'per_page', 'page']  # noqa: E501
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
 
         params = locals()
-        for key, val in six.iteritems(params["kwargs"]):
+        for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
                 raise TypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method status_updates_get" % key
                 )
             params[key] = val
-        del params["kwargs"]
+        del params['kwargs']
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if "category" in params:
-            query_params.append(("category", params["category"]))  # noqa: E501
-        if "project_type" in params:
-            query_params.append(("project_type", params["project_type"]))  # noqa: E501
-        if "per_page" in params:
-            query_params.append(("per_page", params["per_page"]))  # noqa: E501
-        if "page" in params:
-            query_params.append(("page", params["page"]))  # noqa: E501
+        if 'category' in params:
+            query_params.append(('category', params['category']))  # noqa: E501
+        if 'project_type' in params:
+            query_params.append(('project_type', params['project_type']))  # noqa: E501
+        if 'per_page' in params:
+            query_params.append(('per_page', params['per_page']))  # noqa: E501
+        if 'page' in params:
+            query_params.append(('page', params['page']))  # noqa: E501
 
         header_params = {}
 
@@ -4329,8 +3986,7 @@ class CoingeckoApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            "/status_updates",
-            "GET",
+            '/status_updates', 'GET',
             path_params,
             query_params,
             header_params,
@@ -4339,9 +3995,8 @@ class CoingeckoApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=params.get("async_req"),
-            _return_http_data_only=params.get("_return_http_data_only"),
-            _preload_content=params.get("_preload_content", True),
-            _request_timeout=params.get("_request_timeout"),
-            collection_formats=collection_formats,
-        )
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)

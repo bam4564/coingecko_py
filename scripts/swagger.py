@@ -27,7 +27,8 @@ POETRY_PROJECT_FILE_PATH = os.environ["POETRY_PROJECT_FILE_PATH"]
 TEST_API_DATA_PATH = os.environ["TEST_API_DATA_PATH"]
 TEST_API_RESPONSES_PATH = os.environ["TEST_API_RESPONSES_PATH"]
 SWAGGER_REQUIREMENTS_PATH = os.environ["SWAGGER_REQUIREMENTS_PATH"]
-
+SWAGGER_API_DOCS_PATH = os.environ["SWAGGER_API_DOCS_PATH"]
+PROJECT_API_DOCS_PATH = os.environ["PROJECT_API_DOCS_PATH"]
 
 def generate_client():
     # pull the swagger spec from the coingecko website, write to local file
@@ -112,6 +113,8 @@ def generate_client():
             assert package in deps
             assert f"^{spec}" == deps[package]
 
+    # process the generated README and create a new one 
+    process_readme()
 
 def generate_test_data_template():
     template = dict()
@@ -247,13 +250,19 @@ def get_url_base():
 
 
 def process_readme():
-    # process the client readme, which contains the section describing the auto-generation spec 
-    # and a table of all api endpoints, their paths, and their descriptions 
-    import re 
-    with open("./swagger_client/README.md", "r") as f:
+    with open(SWAGGER_API_DOCS_PATH, "r") as f:
         text = f.read() 
-    pattern = "(# swagger-client\n.*)## Requirements.*(## Documentation for API Endpoints\n.*)## Documentation For Models"
-    matches = re.findall(pattern, text, re.DOTALL | re.MULTILINE | re.IGNORECASE) 
-    new_text = "".join(matches[0])
-    with open("test.md", 'w') as f: 
-        f.write(new_text)
+    import_old = """from __future__ import print_function
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint"""
+    import_new = "from pycoingecko_extra import CoinGeckoAPIExtra"
+    text = text.replace(import_old, import_new)
+    matches = re.findall("(try:\n.*?(api_instance\.[^\)]*?\)).*?```)", text, re.DOTALL | re.MULTILINE | re.IGNORECASE)
+    for m in matches: 
+        text = text.replace(m[0], f"res = {m[1]}")
+    text = text.replace("swagger_client.", "")
+    text = text.replace('api_instance', 'cg')
+    with open(PROJECT_API_DOCS_PATH, 'w') as f: 
+        f.write(text)
