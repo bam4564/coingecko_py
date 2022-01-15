@@ -11,7 +11,7 @@ packages = [
     { include = "pycoingecko_extra" }, 
     { include = "tests" }, 
     { include = "scripts" }, 
-    { include = "swagger_client", from = "swagger_client" }
+    { include = "swagger_client", from = "swagger_generated" }
 ]
 exclude = ["tests", "scripts"]
 
@@ -32,6 +32,7 @@ six = "^1.10"
 urllib3 = "^1.26.8"
 setuptools = "^21.0.0"
 python-dotenv = "^0.19.2"
+swagger_client = { path = "./swagger_generated", develop = true } 
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"
@@ -41,5 +42,5 @@ black = {version = "^21.12b0", allow-prereleases = true}
 toml = "^0.10.2"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", "setuptools"]
 build-backend = "poetry.core.masonry.api"
