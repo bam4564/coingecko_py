@@ -53,13 +53,14 @@ jobs:
         run: poetry run pytest ./tests -vvv
       #----------------------------------------------
       # create code cov badge
+      # https://github.com/marketplace/actions/dynamic-badges
       #----------------------------------------------
       - name: Create Code Coverage Badge
-      uses: schneegans/dynamic-badges-action@v1.1.0
-      with:
-        auth: ${{ secrets.GIST_SECRET }}
-        gistID: e454b900fe6518d21bdd25c9508d8a64
-        filename: test.json
-        label: Hello
-        message: World
-        color: orange
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: e454b900fe6518d21bdd25c9508d8a64
+          filename: test.json
+          label: Hello
+          message: World
+          color: orange
