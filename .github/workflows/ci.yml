@@ -50,7 +50,24 @@ jobs:
       # run tests 
       #----------------------------------------------
       - name: Test with pytest
-        run: poetry run pytest ./tests -vvv
+        run: poetry run pytest ./tests --cov --cov-report xml:cov.xml
+
+      #----------------------------------------------
+      # Extract test code coverage and branch info 
+      # https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa
+      #----------------------------------------------
+      - name: Extract Code Coverage 
+        run: |
+          # get coverage percent 
+          COVERAGE=$(poetry run get_cov)
+          # get current git branch 
+          REF=${{ github.ref }}
+          echo "github.ref: $REF"
+          IFS='/' read -ra PATHS <<< "$REF"
+          BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
+          echo $BRANCH_NAME
+          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+
       #----------------------------------------------
       # create code cov badge
       # https://github.com/marketplace/actions/dynamic-badges
@@ -60,7 +77,8 @@ jobs:
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: e454b900fe6518d21bdd25c9508d8a64
-          filename: test.json
-          label: Hello
-          message: World
-          color: orange
+          filename: pycoingecko-extra__${{ env.BRANCH }}.json
+          label: Test Coverage
+          message: ${{ env.COVERAGE }}
+          color: green
+          namedLogo: pytest 
