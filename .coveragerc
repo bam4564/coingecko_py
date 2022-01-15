@@ -1,0 +1,6 @@
+[run]
+omit =
+    # auto-generated code is assumed to be correct 
+    ./swagger_generated/*
+    # this script is really just used for code generation and reads / writes of metadata 
+    ./scripts/swagger.py

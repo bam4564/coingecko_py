@@ -39,18 +39,18 @@ class CoingeckoApiClient(ApiClientSwagger):
         self.session = requests.Session()
         retries = Retry(total=5, backoff_factor=0.5, status_forcelist=[502, 503, 504])
         self.session.mount("https://", HTTPAdapter(max_retries=retries))
-        self._include_resp = False
+        self._include_response = False
 
     @contextmanager
-    def _include_response(self):
+    def request_with_response(self):
         """Context manager that allows for chaning the return value structure of api calls when necessary
 
         The main use case for this is for page range queries, where we need the raw response object to be returned from the
         api client. The base api client does not support this so _CoinGeckoAPI__request was overridden.
         """
-        self._include_resp = True
+        self._include_response = True
         yield
-        self._include_resp = False
+        self._include_response = False
 
     def call_api(
         self, resource_path, method, path_params, query_params, header_params, **kwargs
@@ -69,7 +69,7 @@ class CoingeckoApiClient(ApiClientSwagger):
         try:
             response.raise_for_status()
             content = json.loads(response.content.decode("utf-8"))
-            if self._include_resp:
+            if self._include_response:
                 return content, response
             else:
                 return content
@@ -156,7 +156,6 @@ class CoingeckoApi(CoinGeckoApiSwagger):
         - page range queries
         - structure of retrurn value from api requests
         """
-        self._include_resp = False
         self._queued_calls = defaultdict(list)
         self._page_range_qids = list()
         self._inferpage_end_qids = list()
@@ -214,7 +213,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
         while res is None and exp < self.exp_limit + 1:
             try:
                 if include_response:
-                    with self.api_client._include_response():
+                    with self.api_client.request_with_response():
                         res, response = fn(*args, **kwargs)
                     return res, response
                 else:
