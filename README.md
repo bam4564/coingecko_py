@@ -3,6 +3,7 @@
 [![PyPi Version](https://img.shields.io/pypi/v/py_coingecko.svg)](https://pypi.org/project/pycoingecko-extra/)
 ![GitHub](https://img.shields.io/github/license/brycemorrow4564/pycoingecko-extra)
 ![Tests](https://github.com/brycemorrow4564/pycoingecko-extra/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/pycoingecko-extra__heads_auto-gen.json)
 
 
 An extension of the [**pycoingecko**](https://github.com/man-c/pycoingecko) api client that adds additional functionality like: 
