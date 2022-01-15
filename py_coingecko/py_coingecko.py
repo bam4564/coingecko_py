@@ -45,7 +45,7 @@ class CoingeckoApiClient(ApiClientSwagger):
     def request_with_response(self):
         """Context manager that allows for chaning the return value structure of api calls when necessary
 
-        The main use case for this is for page range queries, where we need the raw response object to 
+        The main use case for this is for page range queries, where we need the raw response object to
         be returned from the api client.
         """
         self._include_response = True
@@ -79,7 +79,7 @@ class CoingeckoApiClient(ApiClientSwagger):
                 raise ValueError(content)
             except json.decoder.JSONDecodeError:
                 pass
-            # Chain a ValueError encapsulating the response to whatever other exception was raised 
+            # Chain a ValueError encapsulating the response to whatever other exception was raised
             raise ValueError(response) from e
 
 
@@ -152,14 +152,10 @@ class CoingeckoApi(CoinGeckoApiSwagger):
             raise ValueError(f"page_end: {page_end} was less than or equal to 0")
 
     def _reset_state(self) -> None:
-        """Resets internal state. State is used to support the following functionality
-        - queuing
-        - page range queries
-        - structure of retrurn value from api requests
-        """
+        """Resets internal state. State is used to support queueing and page range queries"""
         self._queued_calls = defaultdict(list)
         self._page_range_qids = list()
-        self._inferpage_end_qids = list()
+        self._infer_page_end_qids = list()
         logger.debug("Resetting state")
 
     def _queue_single(self, qid, fn, dup_check, *args, **kwargs) -> None:
@@ -177,7 +173,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
         res_cache and return this value.
         """
         include_response = True
-        for qid in self._inferpage_end_qids:
+        for qid in self._infer_page_end_qids:
             call_list = self._queued_calls[qid]
             if len(call_list) != 1:
                 raise ValueError(
@@ -205,13 +201,11 @@ class CoingeckoApi(CoinGeckoApiSwagger):
     ):
         """Execute a single API call with exponential backoff retries to deal with server side rate limiting.
 
-        - Results in a maximum of exp_limit + 1 request attempts.
-        - Checks res_cache prior to making call to see if we cached result for this call during the imputation
-        of page range query calls.
+        Maximum of exp_limit + 1 request attempts.
         """
         exp = 0
         res = None
-        while res is None and exp < self.exp_limit + 1:
+        while exp < self.exp_limit + 1:
             try:
                 if include_response:
                     with self.api_client.request_with_response():
@@ -289,26 +283,25 @@ class CoingeckoApi(CoinGeckoApiSwagger):
             # 2. paged endpoint and single page specified (supported by base api client)
             self._queue_single(qid, fn, True, *args, **kwargs)
         else:
-            # one or more of page_start and page_end is defined
+            # one or more of page_start and page_end is defined ---> is page range query
             self._validate_page_range(page_start, page_end)
-            # mark this qid as representing a page range query
             self._page_range_qids.append(qid)
-            # queue a single call per page in range
             if page_end:
                 for i, page in enumerate(range(page_start, page_end + 1)):
                     # all queued requests after first are allowed to have same qid, as they are part of a page range query
                     dup_check = i == 0
                     self._queue_single(qid, fn, dup_check, *args, page=page, **kwargs)
             else:
-                # when only page_start is specified, we want to queue a request for all available pages
-                # this can only be determined at execution time so we queue a single request now and the
-                # rest will be queued as a part of execute_many
+                # when only page_start is specified we are dealing with an unbounded page range query.
+                # the total number of queries can only be determined at execution time. we queue first
+                # now and the rest will be queued and executed when `execute_many` is called
                 self._queue_single(qid, fn, True, *args, page=page_start, **kwargs)
-                self._inferpage_end_qids.append(qid)
+                self._infer_page_end_qids.append(qid)
 
     def _wrap_api_endpoint(self, fn, page_range_query, *args, **kwargs):
-        """Decorator that will be applied to all API endpoints on base class. Adds support for method queueing
-        and page range queries.
+        """Decorator that will be applied to all API endpoints on base class.
+
+        Adds support for method queueing and page range queries.
         """
         qid = kwargs.get("qid")
         if qid:
