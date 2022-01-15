@@ -59,7 +59,7 @@ jobs:
       - name: Extract Code Coverage 
         run: |
           # get coverage percent 
-          COVERAGE=$(poetry run get_cov)
+          echo "COVERAGE=$(poetry run get_cov)%" >> $GITHUB_ENV
           # get current git branch 
           REF=${{ github.ref }}
           echo "github.ref: $REF"
