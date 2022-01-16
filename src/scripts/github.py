@@ -8,11 +8,13 @@ def _get_cov_percent():
     percent = round(match * 100, 2)
     return percent
 
+
 """ Since the scripts below are used as part of a github action to set 
     environment variables, they should print their results rather than 
     return them. The shell script will use stdout of these scripts when 
     setting up env vars. 
 """
+
 
 def get_cov_percent():
     print(_get_cov_percent())
