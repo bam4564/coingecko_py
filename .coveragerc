@@ -2,5 +2,7 @@
 omit =
     # auto-generated code is assumed to be correct 
     ./src/swagger_generated/*
-    # this script is really just used for code generation and reads / writes of metadata 
+    # this script is for auto-generating the client  
     ./src/scripts/swagger.py
+    # TODO: add some tests for this one. 
+    ./src/utils/api_meta.py

@@ -10,7 +10,7 @@ from copy import copy
 from requests.exceptions import HTTPError
 
 
-from src.scripts.swagger import api_meta
+from src.utils.api_meta import api_meta
 from src.py_coingecko.utils import (
     extract_from_querystring,
     sort_querystring,

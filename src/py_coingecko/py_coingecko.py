@@ -15,7 +15,7 @@ from src.swagger_generated.swagger_client.api import CoingeckoApi as CoinGeckoAp
 from src.swagger_generated.swagger_client.rest import ApiException
 
 from src.py_coingecko.utils import without_keys, dict_get
-from src.scripts.swagger import api_meta
+from src.utils.api_meta import api_meta
 
 
 logging.basicConfig()
