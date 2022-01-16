@@ -58,8 +58,9 @@ jobs:
       #----------------------------------------------
       - name: Extract Code Coverage 
         run: |
-          # get coverage percent 
+          # get coverage percent and color 
           echo "COVERAGE=$(poetry run get_cov)%" >> $GITHUB_ENV
+          echo "COV_COLOR=$(poetry run get_cov_color)%" >> $GITHUB_ENV
           
           # get current git branch 
           REF=${{ github.ref }}
@@ -81,5 +82,5 @@ jobs:
           filename: pycoingecko-extra__${{ env.BRANCH }}.json
           label: Pytest Coverage
           message: ${{ env.COVERAGE }}
-          color: green
+          color: ${{ env.COV_COLOR }}
           namedLogo: pytest 

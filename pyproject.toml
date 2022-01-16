@@ -22,6 +22,7 @@ generate_client = "scripts.swagger:generate_client"
 generate_test_data = "scripts.swagger:generate_test_data" 
 generate_test_data_template = "scripts.swagger:generate_test_data_template"
 get_cov = "scripts.github:get_cov_percent"
+get_cov_color = "scripts.github:get_cov_color"
 
 [tool.poetry.dependencies]
 python = "^3.7"

@@ -94,7 +94,7 @@ from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
-order = 'order_example' # str | valid values: <b>market_cap_desc (default), market_cap_asc, name_desc, name_asc, market_cap_change_24h_desc and market_cap_change_24h_asc</b> (optional)
+order = 'order_example' # str | valid values: **market_cap_desc (default), market_cap_asc, name_desc, name_asc, market_cap_change_24h_desc and market_cap_change_24h_asc** (optional)
 
 res = cg.coins_categories_get(order=order)
 ```
@@ -302,12 +302,12 @@ from py_coingecko import CoingeckoApi
 # create an instance of the API class
 cg = CoingeckoApi()
 id = 'id_example' # str | pass the coin id (can be obtained from /coins) eg. bitcoin
-localization = 'localization_example' # str | Include all localized languages in response (true/false) <b>[default: true]</b> (optional)
-tickers = true # bool | Include tickers data (true/false) <b>[default: true]</b> (optional)
-market_data = true # bool | Include market_data (true/false) <b>[default: true]</b> (optional)
-community_data = true # bool | Include community_data data (true/false) <b>[default: true]</b> (optional)
-developer_data = true # bool | Include developer_data data (true/false) <b>[default: true]</b> (optional)
-sparkline = true # bool | Include sparkline 7 days data (eg. true, false) <b>[default: false]</b> (optional)
+localization = 'localization_example' # str | Include all localized languages in response (true/false) **[default: true]** (optional)
+tickers = true # bool | Include tickers data (true/false) **[default: true]** (optional)
+market_data = true # bool | Include market_data (true/false) **[default: true]** (optional)
+community_data = true # bool | Include community_data data (true/false) **[default: true]** (optional)
+developer_data = true # bool | Include developer_data data (true/false) **[default: true]** (optional)
+sparkline = true # bool | Include sparkline 7 days data (eg. true, false) **[default: false]** (optional)
 
 res = cg.coins_id_get(id, localization=localization, tickers=tickers, market_data=market_data, community_data=community_data, developer_data=developer_data, sparkline=sparkline)
 ```
@@ -387,7 +387,7 @@ No authorization required
 
 Get historical market data include price, market cap, and 24h volume (granularity auto)
 
-Get historical market data include price, market cap, and 24h volume (granularity auto)  <b>Minutely data will be used for duration within 1 day, Hourly data will be used for duration between 1 day and 90 days, Daily data will be used for duration above 90 days.</b>
+Get historical market data include price, market cap, and 24h volume (granularity auto)  **Minutely data will be used for duration within 1 day, Hourly data will be used for duration between 1 day and 90 days, Daily data will be used for duration above 90 days.**
 
 ### Example
 ```python
@@ -432,7 +432,7 @@ No authorization required
 
 Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)
 
-Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)  <b><ul><li>Data granularity is automatic (cannot be adjusted)</li><li>1 day from query time = 5 minute interval data</li><li>1 - 90 days from query time = hourly data</li><li>above 90 days from query time = daily data (00:00 UTC)</li></ul> </b>
+Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)  **<ul><li>Data granularity is automatic (cannot be adjusted)</li><li>1 day from query time = 5 minute interval data</li><li>1 - 90 days from query time = hourly data</li><li>above 90 days from query time = daily data (00:00 UTC)</li></ul> **
 
 ### Example
 ```python
@@ -575,7 +575,7 @@ id = 'id_example' # str | pass the coin id (can be obtained from /coins/list) eg
 exchange_ids = 'exchange_ids_example' # str | filter results by exchange_ids (ref: v3/exchanges/list) (optional)
 include_exchange_logo = 'include_exchange_logo_example' # str | flag to show exchange_logo (optional)
 page = 56 # int | Page through results (optional)
-order = 'order_example' # str | valid values: <b>trust_score_desc (default), trust_score_asc and volume_desc</b> (optional)
+order = 'order_example' # str | valid values: **trust_score_desc (default), trust_score_asc and volume_desc** (optional)
 depth = 'depth_example' # str | flag to show 2% orderbook depth. valid values: true, false (optional)
 
 res = cg.coins_id_tickers_get(id, exchange_ids=exchange_ids, include_exchange_logo=include_exchange_logo, page=page, order=order, depth=depth)
@@ -660,13 +660,13 @@ from py_coingecko import CoingeckoApi
 # create an instance of the API class
 cg = CoingeckoApi()
 vs_currency = 'vs_currency_example' # str | The target currency of market data (usd, eur, jpy, etc.)
-ids = 'ids_example' # str | The ids of the coin, comma separated crytocurrency symbols (base). refers to `/coins/list`. <b>When left empty, returns numbers the coins observing the params `limit` and `start`</b> (optional)
+ids = 'ids_example' # str | The ids of the coin, comma separated crytocurrency symbols (base). refers to `/coins/list`. **When left empty, returns numbers the coins observing the params `limit` and `start`** (optional)
 category = 'category_example' # str | filter by coin category. Refer to /coin/categories/list (optional)
-order = 'market_cap_desc' # str | valid values: <b>market_cap_desc, gecko_desc, gecko_asc, market_cap_asc, market_cap_desc, volume_asc, volume_desc, id_asc, id_desc</b> sort results by field. (optional) (default to market_cap_desc)
+order = 'market_cap_desc' # str | valid values: **market_cap_desc, gecko_desc, gecko_asc, market_cap_asc, market_cap_desc, volume_asc, volume_desc, id_asc, id_desc** sort results by field. (optional) (default to market_cap_desc)
 per_page = 100 # int | valid values: 1..250  Total results per page (optional) (default to 100)
 page = 1 # int | Page through results (optional) (default to 1)
 sparkline = false # bool | Include sparkline 7 days data (eg. true, false) (optional) (default to false)
-price_change_percentage = 'price_change_percentage_example' # str | Include price change percentage in <b>1h, 24h, 7d, 14d, 30d, 200d, 1y</b> (eg. '`1h,24h,7d`' comma-separated, invalid values will be discarded) (optional)
+price_change_percentage = 'price_change_percentage_example' # str | Include price change percentage in **1h, 24h, 7d, 14d, 30d, 200d, 1y** (eg. '`1h,24h,7d`' comma-separated, invalid values will be discarded) (optional)
 
 res = cg.coins_markets_get(vs_currency, ids=ids, category=category, order=order, per_page=per_page, page=page, sparkline=sparkline, price_change_percentage=price_change_percentage)
 ```
@@ -1072,7 +1072,7 @@ coin_ids = 'coin_ids_example' # str | filter tickers by coin_ids (ref: v3/coins/
 include_exchange_logo = 'include_exchange_logo_example' # str | flag to show exchange_logo (optional)
 page = 56 # int | Page through results (optional)
 depth = 'depth_example' # str | flag to show 2% orderbook depth i.e., cost_to_move_up_usd and cost_to_move_down_usd (optional)
-order = 'order_example' # str | valid values: <b>trust_score_desc (default), trust_score_asc and volume_desc</b> (optional)
+order = 'order_example' # str | valid values: **trust_score_desc (default), trust_score_asc and volume_desc** (optional)
 
 res = cg.exchanges_id_tickers_get(id, coin_ids=coin_ids, include_exchange_logo=include_exchange_logo, page=page, depth=depth, order=order)
 ```
@@ -1572,12 +1572,12 @@ from py_coingecko import CoingeckoApi
 
 # create an instance of the API class
 cg = CoingeckoApi()
-ids = 'ids_example' # str | id of coins, comma-separated if querying more than 1 coin *refers to <b>`coins/list`</b>
-vs_currencies = 'vs_currencies_example' # str | vs_currency of coins, comma-separated if querying more than 1 vs_currency *refers to <b>`simple/supported_vs_currencies`</b>
-include_market_cap = 'include_market_cap_example' # str | <b>true/false</b> to include market_cap, <b>default: false</b> (optional)
-include_24hr_vol = 'include_24hr_vol_example' # str | <b>true/false</b> to include 24hr_vol, <b>default: false</b> (optional)
-include_24hr_change = 'include_24hr_change_example' # str | <b>true/false</b> to include 24hr_change, <b>default: false</b> (optional)
-include_last_updated_at = 'include_last_updated_at_example' # str | <b>true/false</b> to include last_updated_at of price, <b>default: false</b> (optional)
+ids = 'ids_example' # str | id of coins, comma-separated if querying more than 1 coin *refers to **`coins/list`**
+vs_currencies = 'vs_currencies_example' # str | vs_currency of coins, comma-separated if querying more than 1 vs_currency *refers to **`simple/supported_vs_currencies`**
+include_market_cap = 'include_market_cap_example' # str | **true/false** to include market_cap, **default: false** (optional)
+include_24hr_vol = 'include_24hr_vol_example' # str | **true/false** to include 24hr_vol, **default: false** (optional)
+include_24hr_change = 'include_24hr_change_example' # str | **true/false** to include 24hr_change, **default: false** (optional)
+include_last_updated_at = 'include_last_updated_at_example' # str | **true/false** to include last_updated_at of price, **default: false** (optional)
 
 res = cg.simple_price_get(ids, vs_currencies, include_market_cap=include_market_cap, include_24hr_vol=include_24hr_vol, include_24hr_change=include_24hr_change, include_last_updated_at=include_last_updated_at)
 ```
@@ -1654,11 +1654,11 @@ from py_coingecko import CoingeckoApi
 cg = CoingeckoApi()
 id = 'id_example' # str | The id of the platform issuing tokens (See asset_platforms endpoint for list of options)
 contract_addresses = 'contract_addresses_example' # str | The contract address of tokens, comma separated
-vs_currencies = 'vs_currencies_example' # str | vs_currency of coins, comma-separated if querying more than 1 vs_currency *refers to <b>`simple/supported_vs_currencies`</b>
-include_market_cap = 'include_market_cap_example' # str | <b>true/false</b> to include market_cap, <b>default: false</b> (optional)
-include_24hr_vol = 'include_24hr_vol_example' # str | <b>true/false</b> to include 24hr_vol, <b>default: false</b> (optional)
-include_24hr_change = 'include_24hr_change_example' # str | <b>true/false</b> to include 24hr_change, <b>default: false</b> (optional)
-include_last_updated_at = 'include_last_updated_at_example' # str | <b>true/false</b> to include last_updated_at of price, <b>default: false</b> (optional)
+vs_currencies = 'vs_currencies_example' # str | vs_currency of coins, comma-separated if querying more than 1 vs_currency *refers to **`simple/supported_vs_currencies`**
+include_market_cap = 'include_market_cap_example' # str | **true/false** to include market_cap, **default: false** (optional)
+include_24hr_vol = 'include_24hr_vol_example' # str | **true/false** to include 24hr_vol, **default: false** (optional)
+include_24hr_change = 'include_24hr_change_example' # str | **true/false** to include 24hr_change, **default: false** (optional)
+include_last_updated_at = 'include_last_updated_at_example' # str | **true/false** to include last_updated_at of price, **default: false** (optional)
 
 res = cg.simple_token_price_id_get(id, contract_addresses, vs_currencies, include_market_cap=include_market_cap, include_24hr_vol=include_24hr_vol, include_24hr_change=include_24hr_change, include_last_updated_at=include_last_updated_at)
 ```

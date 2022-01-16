@@ -253,6 +253,7 @@ def generate_client():
         text = text.replace(m[0], f"res = {m[1]}")
     text = text.replace("swagger_client.", "")
     text = text.replace("api_instance", "cg")
+    text = text.replace("<b>", "**").replace("</b>", "**")
     # update hyperlinks within the document
     print(os.path.basename(SWAGGER_API_DOCS_PATH))
     text = text.replace("CoingeckoApi.md", os.path.basename(PROCESSED_DOCS_PATH))
