@@ -13,8 +13,8 @@ from requests.packages.urllib3.util import Retry
 from swagger_client import ApiClient as ApiClientSwagger
 from swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
 
-from py_coingecko.utils import without_keys, dict_get
-from py_coingecko.api_meta import api_meta
+from .utils import without_keys, dict_get
+from .api_meta import api_meta
 
 
 logging.basicConfig()

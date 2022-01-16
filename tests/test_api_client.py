@@ -9,15 +9,14 @@ from collections import Counter
 from copy import copy
 from requests.exceptions import HTTPError
 
-
-from py_coingecko.api_meta import api_meta
-from py_coingecko.utils import (
+from src.py_coingecko import CoingeckoApi, error_msgs
+from src.py_coingecko.api_meta import api_meta
+from src.py_coingecko.utils import (
     extract_from_querystring,
     sort_querystring,
     update_querystring,
     without_keys,
 )
-from py_coingecko import CoingeckoApi, error_msgs
 
 TEST_ID = "TESTING_ID"
 TIME_PATCH_PATH = "py_coingecko.py_coingecko.time.sleep"
