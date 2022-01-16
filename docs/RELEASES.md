@@ -4,7 +4,7 @@ This document outlines the process to follow when releasing new package versions
 
 New features and fixes should be introduced to the master branch via a pull request 
 from a feature branch. Thus, all commits to the master branch should be accompanied 
-by a release (publishing the PyPi and creating a release tag on github with the built
+by a release (publishing to PyPI and creating a release tag on github with the built
 source code). 
 
 To start this process, ensure you are on a feature branch where you have made changes. 
@@ -12,7 +12,10 @@ To start this process, ensure you are on a feature branch where you have made ch
 ## 1. Ensuring The Swagger Client is Up to Date 
 
 Ensure that the `swagger-codegen` generated api client is up to date with the 
-OpenAPI specifaction available on the coingecko website [here](https://www.coingecko.com/api/documentations/v3/swagger.json).
+OpenAPI specifaction available [here](https://www.coingecko.com/api/documentations/v3/swagger.json) 
+on the coingecko website.
+
+To do this, run: 
 
 ```shell
 poetry run generate_client 
@@ -24,26 +27,27 @@ on a previous run of this same script.
 
 - If the two specs are the same, the script will exit as everything is up to date. 
 - If the two specs are different, the script will. 
-  - Write a diff of the two specs to [`swagger_data/swagger_processed_diff`](../swagger_data/swagger_processed_diff.txt). 
+  - Write a diff of the two specs to [`swagger_data/swagger_processed_diff.json`](../swagger_data/swagger_processed_diff.txt). 
   - Replace the old client implementation with a new client implementation in the 
-  `client` directory`. 
+  [`swagger_generated`](https://github.com/brycemorrow4564/pycoingecko-extra/tree/master/swagger_generated) directory. 
   - Generate a new metadata file containing a mapping of url templates from the swagger 
   specification to the auto-generated method names at [`swagger_data/url_to_method.json`](../swagger_data/url_to_method.json). 
   - Re-generate the API documentation at [`docs/API.md`](./API.md). 
-    - Check the auto-generated docs to ensure they look okay. 
-  - Run code auto formatting via `black`. 
+    - Check the auto-generated docs to ensure they it looks okay, as it is a processed version of the original. 
+  - Format source code with `black`. 
 
 If the two specs were different, there are a few more manual steps to perform. 
 
 - Check [`swagger_data/swagger_processed_diff`](../swagger_data/swagger_processed_diff.txt). 
-  This will explain what changed from the previous spec version to the current spec version. 
-  Use this information to update [swagger_data/test_api_calls.json](../swagger_data/test_api_calls.json), which is used for generating test data and within the unit tests 
-  testing and contains a single API call per endpoint. 
-  - Add / remove any endpoints that changed. 
-  - Add / remove any path or query arguments that changed. 
+  - This will explain what changed from the previous spec to the current spec. 
+  - Use this information to update [swagger_data/test_api_calls.json](../swagger_data/test_api_calls.json). 
+  This file contains a mapping from url templates to the set of path and query arguments for a test api call. 
+  Test API calls are used to generate test data (real data from coingecko) and also within the test suite. 
+    - Add / remove any endpoints that changed. 
+    - Add / remove any path or query arguments that changed. 
 - After updating the test api calls, run `poetry run generate_test_data` 
-  - This will use the test API calls construct urls and query the coingecko API. The responses
-  are used as mock data within the unit tests. These data objects are written to [swagger_data/test_api_responses.json](../swagger_data/test_api_responses.json). 
+  - This will use the test API calls to construct urls and query the coingecko API. The responses
+  are used as mock data within the test suite. These data objects are written to [swagger_data/test_api_responses.json](../swagger_data/test_api_responses.json). 
     - This should only succeed if you properly made edits to the new spec in the prior step. 
     - Manually inspect the data for validity after this command completes successfully. 
 
@@ -69,8 +73,8 @@ All tests should pass and you should ensure code coverage is at least 80%.
 
 ## Update Project Files 
 
-1. Update the version of the project in `pyproject.toml`.  
-2. Update the changelog for the new version.  
+1. Update the version of the project in `pyproject.toml`. This project uses [semver](https://semver.org/)
+2. Update [docs/CHANGELOG.md](./CHANGELOG.md) for the new version.  
 
 ## Commit Changes 
 
@@ -79,7 +83,9 @@ branch.
 
 ## Validate CICD Pipeline Passes Checks 
 
-After pushing your changes to github, check to see that the CICD pipeline succeeds
+After pushing your changes to github, check to see that the CICD pipeline succeeds.
+
+The status of the testing and code coverage stages are visible via badges in the README. 
 
 ## Merge to Master 
 
