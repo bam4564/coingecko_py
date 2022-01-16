@@ -26,7 +26,7 @@ TEST_API_CALLS_PATH = os.environ["TEST_API_CALLS_PATH"]
 TEST_API_RESPONSES_PATH = os.environ["TEST_API_RESPONSES_PATH"]
 SWAGGER_API_DOCS_PATH = os.environ["SWAGGER_API_DOCS_PATH"]
 PROCESSED_DOCS_PATH = os.environ["PROCESSED_DOCS_PATH"]
-SPEC_CHECK = False
+SPEC_CHECK = True
 
 
 class ApiData:
@@ -255,10 +255,9 @@ def generate_client():
     text = text.replace("api_instance", "cg")
     text = text.replace("<b>", "").replace("</b>", "")
     text = text.replace("&lt;b&gt;", "**").replace("&lt;/b&gt;", "**")
-
     # update hyperlinks within the document
-    print(os.path.basename(SWAGGER_API_DOCS_PATH))
     text = text.replace("CoingeckoApi.md", os.path.basename(PROCESSED_DOCS_PATH))
+    print(os.path.basename(SWAGGER_API_DOCS_PATH))
     api_data.write_docs_processed(text)
 
     # auto-format generated code
