@@ -5,11 +5,9 @@ import logging
 import requests
 import json
 import requests
-from typing import Optional
 from collections import defaultdict
 from functools import partial
 from contextlib import contextmanager
-from requests import HTTPError, JSONDecodeError
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util import Retry
 
@@ -27,7 +25,9 @@ logger = logging.getLogger("CoinGeckoAPIExtra")
 RATE_LIMIT_STATUS_CODE = 429
 
 error_msgs = dict(
-    exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing exp_limit. Queued calls are retained."
+    exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing exp_limit. Queued calls are retained.",
+    failed_decode_bytes="Unable to decode bytes to utf-8 string",
+    failed_decode_json="Unable to decode json from string",
 )
 
 
@@ -81,14 +81,12 @@ class CoingeckoApiClient(ApiClientSwagger):
         try:
             content = json.loads(response.content.decode("utf-8", "strict"))
         except UnicodeDecodeError:
-            # TODO: move this message to err_msgs, then check in tests
             raise requests.exceptions.ContentDecodingError(
-                0, "Unable to decode bytes to utf-8 string", response=response
+                0, error_msgs["failed_decode_bytes"], response=response
             )
         except json.decoder.JSONDecodeError:
-            # TODO: move this message to err_msgs, then check in tests
             raise requests.exceptions.JSONDecodeError(
-                0, "Unable to decode json from string", response=response
+                0, error_msgs["failed_decode_json"], response=response
             )
 
         if self._include_response:
@@ -175,6 +173,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
     def _queue_single(self, qid, fn, dup_check, *args, **kwargs) -> None:
         """Queue a single API call. Optionally perform a duplicate check to see if qid is being overwritten"""
         if dup_check and qid in self._queued_calls:
+            # TODO: Test that this log appears when queueing two calls with same qid
             logger.warning(
                 f"Warning: multiple calls queued with identical qid: {qid}. Most recent call will overwrite old call."
             )
@@ -191,7 +190,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
             call_list = self._queued_calls[qid]
             if len(call_list) != 1:
                 raise ValueError(
-                    "Implementation error. inferpage_end was true but more than one call in call_list"
+                    "Implementation error. infer page_end was true but more than one call in call_list"
                 )
             fn, args, kwargs = call_list[0]
             page_start = kwargs["page"]

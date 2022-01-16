@@ -126,18 +126,23 @@ class TestWrapper(unittest.TestCase):
 
     @pytest.mark.skip
     def test_decode_failure(
-        self, queued: bool, callback: Callable, ErrorClass: BaseException, responses
+        self,
+        queued: bool,
+        callback: Callable,
+        ErrorClass: BaseException,
+        msg_match: str,
+        responses,
     ):
         expected_urls = list()
         for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
             responses.add_callback(responses.GET, url, callback)
             expected_urls.append(url)
             if not queued:
-                with pytest.raises(ErrorClass) as exc_info:
+                with pytest.raises(ErrorClass, match=msg_match) as exc_info:
                     fn(*args, **kwargs)
             else:
                 fn(*args, **kwargs, qid=str(i))
-                with pytest.raises(ErrorClass) as exc_info:
+                with pytest.raises(ErrorClass, match=msg_match) as exc_info:
                     self.cg.execute_queued()
             assert isinstance(exc_info.value.response, requests.Response)
             assert exc_info.value.response.status_code == 200
@@ -217,28 +222,40 @@ class TestWrapper(unittest.TestCase):
         queued = False
         response_callback = lambda request: (200, {}, "{'one': 2,}")
         ErrorClass = requests.exceptions.JSONDecodeError
-        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
+        msg_match = error_msgs["failed_decode_json"]
+        self.test_decode_failure(
+            queued, response_callback, ErrorClass, msg_match, responses
+        )
 
     @responses.activate
     def test_failed_body_json_decode_queued(self):
         queued = True
         response_callback = lambda request: (200, {}, "{'one': 2,}")
         ErrorClass = requests.exceptions.JSONDecodeError
-        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
+        msg_match = error_msgs["failed_decode_json"]
+        self.test_decode_failure(
+            queued, response_callback, ErrorClass, msg_match, responses
+        )
 
     @responses.activate
     def test_failed_body_byte_decode(self):
         queued = True
         response_callback = lambda request: (200, {}, b"\x00\xaa\xff")
         ErrorClass = requests.exceptions.ContentDecodingError
-        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
+        msg_match = error_msgs["failed_decode_bytes"]
+        self.test_decode_failure(
+            queued, response_callback, ErrorClass, msg_match, responses
+        )
 
     @responses.activate
     def test_failed_body_byte_decode_queued(self):
         queued = True
         response_callback = lambda request: (200, {}, b"\x00\xaa\xff")
         ErrorClass = requests.exceptions.ContentDecodingError
-        self.test_decode_failure(queued, response_callback, ErrorClass, responses)
+        msg_match = error_msgs["failed_decode_bytes"]
+        self.test_decode_failure(
+            queued, response_callback, ErrorClass, msg_match, responses
+        )
 
     # ------------ TEST API ENDPOINTS SUCCESS / FAILURE (Normal + Queued) ----------------------
 
@@ -528,3 +545,5 @@ class TestWrapper(unittest.TestCase):
                 assert expected_paged[qid] == response[qid]
 
         self._assert_urls_call_count(expected_urls, responses)
+
+    # TODO: Add tests for raised exceptions when validating page range query args
