@@ -22,32 +22,32 @@ poetry run generate_client
 ```
 
 This script will download the spec, perform some minimal processing on it, then compare it 
-with the existing [local spec](../swagger_data/swagger_processed.json) which was produced 
+with the existing [local spec](../src/swagger_data/swagger_processed.json) which was produced 
 on a previous run of this same script. 
 
 - If the two specs are the same, the script will exit as everything is up to date. 
 - If the two specs are different, the script will. 
-  - Write a diff of the two specs to [`swagger_data/swagger_processed_diff.json`](../swagger_data/swagger_processed_diff.txt). 
-  - Replace the old client implementation with a new client implementation in the 
-  [`swagger_generated`](https://github.com/brycemorrow4564/pycoingecko-extra/tree/master/swagger_generated) directory. 
+  - Write a diff of the two specs to [`src/swagger_data/swagger_processed_diff.json`](../src/swagger_data/swagger_processed_diff.txt). 
+  - Replace the old client implementation with a new client implementation in 
+  [`src/swagger_generated`](https://github.com/brycemorrow4564/pycoingecko-extra/tree/master/src/swagger_generated) directory. 
   - Generate a new metadata file containing a mapping of url templates from the swagger 
-  specification to the auto-generated method names at [`swagger_data/url_to_method.json`](../swagger_data/url_to_method.json). 
+  specification to the auto-generated method names at [`src/swagger_data/url_to_method.json`](../src/swagger_data/url_to_method.json). 
   - Re-generate the API documentation at [`docs/API.md`](./API.md). 
     - Check the auto-generated docs to ensure they it looks okay, as it is a processed version of the original. 
   - Format source code with `black`. 
 
 If the two specs were different, there are a few more manual steps to perform. 
 
-- Check [`swagger_data/swagger_processed_diff`](../swagger_data/swagger_processed_diff.txt). 
+- Check [`src/swagger_data/swagger_processed_diff`](../src/swagger_data/swagger_processed_diff.txt). 
   - This will explain what changed from the previous spec to the current spec. 
-  - Use this information to update [swagger_data/test_api_calls.json](../swagger_data/test_api_calls.json). 
+  - Use this information to update [src/swagger_data/test_api_calls.json](../src/swagger_data/test_api_calls.json). 
   This file contains a mapping from url templates to the set of path and query arguments for a test api call. 
   Test API calls are used to generate test data (real data from coingecko) and also within the test suite. 
     - Add / remove any endpoints that changed. 
     - Add / remove any path or query arguments that changed. 
 - After updating the test api calls, run `poetry run generate_test_data` 
   - This will use the test API calls to construct urls and query the coingecko API. The responses
-  are used as mock data within the test suite. These data objects are written to [swagger_data/test_api_responses.json](../swagger_data/test_api_responses.json). 
+  are used as mock data within the test suite. These data objects are written to [src/swagger_data/test_api_responses.json](../src/swagger_data/test_api_responses.json). 
     - This should only succeed if you properly made edits to the new spec in the prior step. 
     - Manually inspect the data for validity after this command completes successfully. 
 

@@ -13,12 +13,13 @@ from requests import HTTPError, JSONDecodeError
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util import Retry
 
-from swagger_generated.swagger_client import ApiClient as ApiClientSwagger
-from swagger_generated.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
-from swagger_generated.swagger_client.rest import ApiException
+from src.swagger_generated.swagger_client import ApiClient as ApiClientSwagger
+from src.swagger_generated.swagger_client.api import CoingeckoApi as CoinGeckoApiSwagger
+from src.swagger_generated.swagger_client.rest import ApiException
 
-from py_coingecko.utils import without_keys, dict_get
-from scripts.swagger import api_data
+from src.py_coingecko.utils import without_keys, dict_get
+from src.scripts.swagger import api_data
+
 
 logging.basicConfig()
 logger = logging.getLogger("CoinGeckoAPIExtra")
@@ -28,16 +29,6 @@ RATE_LIMIT_STATUS_CODE = 429
 error_msgs = dict(
     exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing exp_limit. Queued calls are retained."
 )
-
-
-class ApiResponseException(BaseException):
-    def __init__(
-        self,
-        response: requests.Response,
-        message: Optional[str] = None,
-    ):
-        self.response = response
-        self.message = message
 
 
 class CoingeckoApiClient(ApiClientSwagger):
@@ -90,12 +81,14 @@ class CoingeckoApiClient(ApiClientSwagger):
         try:
             content = json.loads(response.content.decode("utf-8", "strict"))
         except UnicodeDecodeError:
+            # TODO: move this message to err_msgs, then check in tests
             raise requests.exceptions.ContentDecodingError(
-                0, f"Unable to decode bytes to utf-8 string", response=response
+                0, "Unable to decode bytes to utf-8 string", response=response
             )
         except json.decoder.JSONDecodeError:
+            # TODO: move this message to err_msgs, then check in tests
             raise requests.exceptions.JSONDecodeError(
-                0, f"Unable to decode json from string", response=response
+                0, "Unable to decode json from string", response=response
             )
 
         if self._include_response:

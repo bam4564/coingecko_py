@@ -221,7 +221,7 @@ If you have poetry installed, you can perform the following steps to set up the 
 git clone https://github.com/brycemorrow4564/pycoingecko-extra.git
 cd pycoingecko-extra
 poetry shell 
-poetry install 
+poetry update 
 ```
 
 If you want to run the tests (within the dev environment), do the following 

@@ -8,27 +8,27 @@ readme = "README.md"
 homepage = "https://github.com/brycemorrow4564/pycoingecko-extra"
 repository = "https://github.com/brycemorrow4564/pycoingecko-extra"
 packages = [
-    { include = "py_coingecko" }, 
+    { include = "py_coingecko", from = "./src" }, 
     { include = "tests" }, 
-    { include = "scripts" }, 
-    { include = "swagger_client", from = "swagger_generated" }
+    { include = "scripts", from = "./src" }, 
+    { include = "swagger_client", from = "./src/swagger_generated" }
 ]
-exclude = ["tests", "scripts"]
+exclude = ["tests", "scripts"] # TODO: check bundle after building to see if scripts included 
 
 [tool.poetry.scripts]                                                           
-test = "tests.scripts.runner:run_tests"  
-get_data = "tests.scripts.get_test_data:get_data"
-generate_client = "scripts.swagger:generate_client" 
-generate_test_data = "scripts.swagger:generate_test_data" 
-generate_test_data_template = "scripts.swagger:generate_test_data_template"
-get_cov = "scripts.github:get_cov_percent"
-get_cov_color = "scripts.github:get_cov_color"
+test                        = "tests.scripts.runner:run_tests"  
+get_data                    = "tests.scripts.get_test_data:get_data"
+generate_client             = "src.scripts.swagger:generate_client" 
+generate_test_data          = "src.scripts.swagger:generate_test_data" 
+generate_test_data_template = "src.scripts.swagger:generate_test_data_template"
+get_cov                     = "src.scripts.github:get_cov_percent"
+get_cov_color               = "src.scripts.github:get_cov_color"
 
 [tool.poetry.dependencies]
 python = "^3.7"
 requests = "^2.27.1"
 python-dotenv = "^0.19.2"
-swagger_client = { path = "./swagger_generated", develop = true } 
+swagger_client = { path = "./src/swagger_generated", develop = true } 
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"
