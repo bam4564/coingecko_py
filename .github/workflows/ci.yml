@@ -66,15 +66,18 @@ jobs:
           echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
 
           # get coverage percent and color 
-          echo "COVERAGE=$(poetry run get_cov)%" >> $GITHUB_ENV
-          echo "COV_COLOR=$(poetry run get_cov_color)" >> $GITHUB_ENV
-          echo "COV_FILE=py_coingecko__${{ env.BRANCH }}.json" >> $GITHUB_ENV
+          COVERAGE=$(poetry run get_cov)%
+          COV_COLOR=$(poetry run get_cov_color)
+          COV_FILE=py_coingecko__${{ env.BRANCH }}.json
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+          echo "COV_COLOR=$COV_COLOR" >> $GITHUB_ENV
+          echo "COV_FILE=$COV_FILE" >> $GITHUB_ENV
 
           # log environment values 
-          echo "git branch:         $BRANCH_NAME"
+          echo "git branch: $BRANCH_NAME"
           echo "cov badge filename: $COV_FILE"
-          echo "cov badge percent:  $COVERAGE"
-          echo "cov badge color:    $COV_COLOR"
+          echo "cov badge percent: $COVERAGE"
+          echo "cov badge color: $COV_COLOR"
 
       #----------------------------------------------
       # create code cov badge

@@ -15,7 +15,7 @@ from src.swagger_generated.swagger_client.api import CoingeckoApi as CoinGeckoAp
 from src.swagger_generated.swagger_client.rest import ApiException
 
 from src.py_coingecko.utils import without_keys, dict_get
-from src.scripts.swagger import api_data
+from src.scripts.swagger import api_meta
 
 
 logging.basicConfig()
@@ -60,7 +60,7 @@ class CoingeckoApiClient(ApiClientSwagger):
             path_params.values()
         )  # dictionaries are ordered from python 3.6 on so this is fine.
         query_args = {v[0]: v[1] for v in query_params}
-        url = api_data.materialize_url_template(resource_path, path_args, query_args)
+        url = api_meta.materialize_url_template(resource_path, path_args, query_args)
         logger.debug(f"{self.scheme} request: {url}")
         assert method == "GET"
 
@@ -139,8 +139,8 @@ class CoingeckoApi(CoinGeckoApiSwagger):
         logger.setLevel(self.log_level)
         # decorate bound methods on base class that correspond to api calls to enable
         # queueing and page range query support for page range query enabled functions
-        method_names = api_data.get_api_method_names()
-        paginated_method_names = api_data.get_paginated_method_names()
+        method_names = api_meta.get_api_method_names()
+        paginated_method_names = api_meta.get_paginated_method_names()
         for name in method_names:
             v = getattr(self, name)
             page_range_query = name in paginated_method_names

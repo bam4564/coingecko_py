@@ -10,7 +10,7 @@ from copy import copy
 from requests.exceptions import HTTPError
 
 
-from src.scripts.swagger import api_data
+from src.scripts.swagger import api_meta
 from src.py_coingecko.utils import (
     extract_from_querystring,
     sort_querystring,
@@ -31,9 +31,9 @@ def cg(request):
 @pytest.fixture(scope="class")
 def calls(request):
     cg = request.cls.cg
-    url_to_method = api_data.get_url_to_method()
-    expected_response = api_data.get_test_api_responses()
-    test_api_calls = api_data.get_test_api_calls()
+    url_to_method = api_meta.get_url_to_method()
+    expected_response = api_meta.get_test_api_responses()
+    test_api_calls = api_meta.get_test_api_calls()
     calls = list()
     for url_template, method_name in url_to_method.items():
         expected = expected_response[url_template]
@@ -41,10 +41,9 @@ def calls(request):
         test_call = test_api_calls[url_template]
         path_args = test_call["path"]
         query_args = test_call["query"]
-        url = api_data.materialize_url_template(url_template, path_args, query_args)
-        params = api_data.get_parameters(url_template)
-        args, kwargs = transform_path_query_to_args_kwargs(
-            params, path_args, query_args
+        url = api_meta.materialize_url_template(url_template, path_args, query_args)
+        args, kwargs = api_meta.transform_path_query_to_args_kwargs(
+            url_template, path_args, query_args
         )
         fn = getattr(cg, method_name)
         calls.append((url, expected, fn, args, kwargs))
@@ -93,26 +92,6 @@ class FailThenSuccessServer:
             raise requests.exceptions.RequestException(
                 response=MockResponse(status_code=429)
             )
-
-
-def transform_path_query_to_args_kwargs(params, path_args, query_args):
-    """converts set of path_args and query_args to set of args and kwargs
-    passed to client api functions.
-
-    - all path args are args
-    - query args that required are args
-    - query args that are optional are kwargs
-
-    Order matters here
-    """
-    args = copy(path_args)
-    kwargs = copy(query_args)
-    for p in params:
-        if p["required"] and p["in"] == "query":
-            name = p["name"]
-            args.append(kwargs[name])
-            del kwargs[name]
-    return args, kwargs
 
 
 @pytest.mark.usefixtures("cg")
@@ -432,7 +411,7 @@ class TestWrapper(unittest.TestCase):
 
     @responses.activate
     def test_page_range_query_page_start_end(self):
-        paginated_method_names = set(api_data.get_paginated_method_names())
+        paginated_method_names = set(api_meta.get_paginated_method_names())
         page_start = 1
         page_end = 3
         num_pages = page_end - page_start + 1
@@ -487,7 +466,7 @@ class TestWrapper(unittest.TestCase):
 
     @responses.activate
     def test_page_range_query_page_start_unbounded(self):
-        paginated_method_names = set(api_data.get_paginated_method_names())
+        paginated_method_names = set(api_meta.get_paginated_method_names())
         page_start = 1
         per_page = 5
         total = 19

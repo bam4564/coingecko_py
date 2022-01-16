@@ -1,4 +1,5 @@
 import json
+import copy
 import os
 import ast
 import re
@@ -29,7 +30,7 @@ PROCESSED_DOCS_PATH = os.environ["PROCESSED_DOCS_PATH"]
 SPEC_CHECK = True
 
 
-class ApiData:
+class ApiMeta:
 
     """GENERIC I/O"""
 
@@ -137,7 +138,7 @@ class ApiData:
         output:
             https://api.coingecko.com/api/v3/coins/ethereum/contract/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/market_chart/range?vs_currency=eur&from=1622520000&to=1638334800
         """
-        url_base = api_data.get_url_base()
+        url_base = api_meta.get_url_base()
         url_base_parts = list(urlparse.urlparse(url_base))
         # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
         path_tokens = re.findall(r"({[^}]*})", url_template)
@@ -157,8 +158,28 @@ class ApiData:
         url = urlparse.urlunparse(url_parts)
         return url
 
+    def transform_path_query_to_args_kwargs(self, url_template, path_args, query_args):
+        """converts set of path_args and query_args to set of args and kwargs
+        passed to client api functions.
 
-api_data = ApiData()
+        - all path args are args
+        - query args that required are args
+        - query args that are optional are kwargs
+
+        Order matters here
+        """
+        params = self.get_parameters(url_template)
+        args = copy(path_args)
+        kwargs = copy(query_args)
+        for p in params:
+            if p["required"] and p["in"] == "query":
+                name = p["name"]
+                args.append(kwargs[name])
+                del kwargs[name]
+        return args, kwargs
+
+
+api_meta = ApiMeta()
 
 
 def generate_client():
@@ -170,7 +191,7 @@ def generate_client():
     )
 
     # minimally process raw swagger spec.
-    spec = api_data.get_spec_raw()
+    spec = api_meta.get_spec_raw()
     for path, path_spec in spec["paths"].items():
         assert len(path_spec.keys()) == 1
         assert "get" in path_spec
@@ -187,17 +208,17 @@ def generate_client():
 
     # check to see if the generated spec is different from the downloaded  + processed spec
     if SPEC_CHECK and os.path.exists(FORMATTED_SPEC_PATH):
-        spec_existing = api_data.get_spec_processed()
+        spec_existing = api_meta.get_spec_processed()
         diff = DeepDiff(spec_existing, spec)
         if not diff:
             print(f"Old spec matches new spec. Exiting.")
-            api_data.write_spec_diff("")
+            api_meta.write_spec_diff("")
             return
         if diff:
             print(f"Downloaded spec different from existing spec.")
-            api_data.write_spec_diff(diff.pretty())
+            api_meta.write_spec_diff(diff.pretty())
     else:
-        api_data.write_spec_processed(spec)
+        api_meta.write_spec_processed(spec)
 
     # Remove previously generated client
     if os.path.isdir(SWAGGER_CLIENT_PATH):
@@ -217,7 +238,7 @@ def generate_client():
 
     # get a mapping from url templates to auto-generated methods
     methods = []
-    source = api_data.get_api_client_source_code()
+    source = api_meta.get_api_client_source_code()
     p = ast.parse(source)
     methods = [node.name for node in ast.walk(p) if isinstance(node, ast.FunctionDef)]
     url_to_method = dict()
@@ -228,11 +249,11 @@ def generate_client():
         method_name = "_".join(parts + ["get"])
         assert method_name in methods
         url_to_method[url_template] = method_name
-    api_data.write_url_to_method(url_to_method)
+    api_meta.write_url_to_method(url_to_method)
 
     # process the generated README and create a new one
     print(f"Generating: {PROCESSED_DOCS_PATH}")
-    text = api_data.get_docs_generated()
+    text = api_meta.get_docs_generated()
     # process example code blocks to remove unnecessary stuff, update stuff that's different
     import_old = "\n".join(
         [
@@ -259,7 +280,7 @@ def generate_client():
     # update hyperlinks within the document
     text = text.replace("CoingeckoApi.md", os.path.basename(PROCESSED_DOCS_PATH))
     print(os.path.basename(SWAGGER_API_DOCS_PATH))
-    api_data.write_docs_processed(text)
+    api_meta.write_docs_processed(text)
 
     # auto-format generated code
     subprocess.call(f"poetry run black .".split(" "))
@@ -267,7 +288,7 @@ def generate_client():
 
 def generate_test_data_template():
     template = dict()
-    spec = api_data.get_spec(processed=True)
+    spec = api_meta.get_spec(processed=True)
     for path, path_spec in spec["paths"].items():
         template[path] = {"path": list(), "query": dict()}
         assert "get" in path_spec
@@ -279,16 +300,16 @@ def generate_test_data_template():
                 template[path][_in][p["name"]] = p["type"]
             else:
                 template[path][_in].append(p["type"])
-    api_data.write_test_api_calls(template)
+    api_meta.write_test_api_calls(template)
 
 
 def generate_test_data():
-    test_api_calls = api_data.get_test_api_calls()
+    test_api_calls = api_meta.get_test_api_calls()
     # Generate urls to request from the test api call spec
     urls = [
         (
             url_template,
-            api_data.materialize_url_template(
+            api_meta.materialize_url_template(
                 url_template, data["path"], data["query"]
             ),
         )
@@ -306,4 +327,4 @@ def generate_test_data():
         assert content
         data[url_template] = content
     # write responses to file
-    api_data.write_test_api_responses(data)
+    api_meta.write_test_api_responses(data)
