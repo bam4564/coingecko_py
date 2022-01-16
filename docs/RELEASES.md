@@ -29,7 +29,7 @@ on a previous run of this same script.
 - If the two specs are different, the script will. 
   - Write a diff of the two specs to [`src/swagger_data/swagger_processed_diff.json`](../src/swagger_data/swagger_processed_diff.txt). 
   - Replace the old client implementation with a new client implementation in 
-  [`src/swagger_generated`](https://github.com/brycemorrow4564/pycoingecko-extra/tree/master/src/swagger_generated) directory. 
+  [`src/swagger_generated`](https://github.com/brycemorrow4564/py_coingecko/tree/master/src/swagger_generated) directory. 
   - Generate a new metadata file containing a mapping of url templates from the swagger 
   specification to the auto-generated method names at [`src/swagger_data/url_to_method.json`](../src/swagger_data/url_to_method.json). 
   - Re-generate the API documentation at [`docs/API.md`](./API.md). 

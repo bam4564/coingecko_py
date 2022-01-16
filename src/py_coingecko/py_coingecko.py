@@ -2,7 +2,6 @@ from lib2to3.pytree import Base
 import time
 import math
 import logging
-import requests
 import json
 import requests
 from collections import defaultdict
@@ -20,7 +19,7 @@ from src.scripts.swagger import api_data
 
 
 logging.basicConfig()
-logger = logging.getLogger("CoinGeckoAPIExtra")
+logger = logging.getLogger("CoingeckoApi")
 
 RATE_LIMIT_STATUS_CODE = 429
 

@@ -1,9 +1,9 @@
 # py_coingecko 
 
-[![PyPi Version](https://img.shields.io/pypi/v/py_coingecko.svg)](https://pypi.org/project/pycoingecko-extra/)
-![GitHub](https://img.shields.io/github/license/brycemorrow4564/pycoingecko-extra)
-![Tests](https://github.com/brycemorrow4564/pycoingecko-extra/actions/workflows/ci.yml/badge.svg)
-![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/pycoingecko-extra__heads_auto-gen.json)
+[![PyPi Version](https://img.shields.io/pypi/v/py_coingecko.svg)](https://pypi.org/project/py_coingecko/)
+![GitHub](https://img.shields.io/github/license/brycemorrow4564/py_coingecko)
+![Tests](https://github.com/brycemorrow4564/py_coingecko/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/py_coingecko__heads_auto-gen.json)
 
 
 An extension of the [**pycoingecko**](https://github.com/man-c/pycoingecko) api client that adds additional functionality like: 
@@ -218,8 +218,8 @@ This package is packaged with [poetry](https://python-poetry.org/)
 If you have poetry installed, you can perform the following steps to set up the development environment. 
 
 ```shell 
-git clone https://github.com/brycemorrow4564/pycoingecko-extra.git
-cd pycoingecko-extra
+git clone https://github.com/brycemorrow4564/py_coingecko.git
+cd py_coingecko
 poetry shell 
 poetry update 
 ```
