@@ -19,7 +19,7 @@ from src.py_coingecko.utils import (
 )
 
 TEST_ID = "TESTING_ID"
-TIME_PATCH_PATH = "src.py_coingecko.time.sleep"
+TIME_PATCH_PATH = "src.py_coingecko.py_coingecko.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)
