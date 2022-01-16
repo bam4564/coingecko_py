@@ -69,6 +69,28 @@ class ApiData:
     def get_test_api_responses(self):
         return self.read(TEST_API_RESPONSES_PATH)
 
+    """ WRITES """
+
+    def write_spec_processed(self, spec):
+        self.write(FORMATTED_SPEC_PATH, spec)
+
+    def write_spec_diff(self, diff):
+        self.write(DIFF_SPEC_PATH, diff, is_json=False)
+
+    def write_docs_processed(self, text):
+        self.write(PROCESSED_DOCS_PATH, text, is_json=False)
+
+    def write_url_to_method(self, url_to_method):
+        self.write(URL_TO_METHOD_PATH, url_to_method)
+
+    def write_test_api_calls(self, test_api_calls):
+        self.write(TEST_API_CALLS_PATH, test_api_calls)
+
+    def write_test_api_responses(self, test_api_responses):
+        self.write(TEST_API_RESPONSES_PATH, test_api_responses)
+
+    """ OTHER """
+
     def get_parameters(self, url_template):
         spec = self.get_spec_processed()
         return spec["paths"][url_template]["get"].get("parameters", [])
@@ -99,35 +121,14 @@ class ApiData:
                 paged_method_names.append(method_name)
         return paged_method_names
 
-    """ WRITES """
-
-    def write_spec_processed(self, spec):
-        self.write(FORMATTED_SPEC_PATH, spec)
-
-    def write_spec_diff(self, diff):
-        self.write(DIFF_SPEC_PATH, diff, is_json=False)
-
-    def write_docs_processed(self, text):
-        self.write(PROCESSED_DOCS_PATH, text, is_json=False)
-
-    def write_url_to_method(self, url_to_method):
-        self.write(URL_TO_METHOD_PATH, url_to_method)
-
-    def write_test_api_calls(self, test_api_calls):
-        self.write(TEST_API_CALLS_PATH, test_api_calls)
-
-    def write_test_api_responses(self, test_api_responses):
-        self.write(TEST_API_RESPONSES_PATH, test_api_responses)
-
-    """ OTHER """
-
-    def materialize_url_template(self, url_template, args, kwargs):
-        """Converts url template to url to request from api by adding prefix and encoding args, kwargs
+    def materialize_url_template(self, url_template, path_args, query_args):
+        """Converts url template to url to request from api by adding prefix and encoding
+        path and query args.
 
         input:
             url_template = "/coins/{id}/contract/{contract_address}/market_chart/range"
-            args = ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"]
-            kwargs = {
+            path_args = ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"]
+            query_args = {
                 "vs_currency": "eur",
                 "from": "1622520000",
                 "to": "1638334800"
@@ -139,19 +140,19 @@ class ApiData:
         url_base = api_data.get_url_base()
         url_base_parts = list(urlparse.urlparse(url_base))
         # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
-        path_args = re.findall(r"({[^}]*})", url_template)
+        path_tokens = re.findall(r"({[^}]*})", url_template)
         url = url_template
-        for i, p in enumerate(path_args):
+        for i, p in enumerate(path_tokens):
             url = url.replace(p, "{" + str(i) + "}")
         # construct full url
         url_parts = list(urlparse.urlparse(url))
         url_parts[0] = url_base_parts[0]
         url_parts[1] = url_base_parts[1]
-        # add args to path
-        url_parts[2] = url_base_parts[2] + url.format(*args)
-        # add kwargs as query string parameters
+        # add path_args to path
+        url_parts[2] = url_base_parts[2] + url.format(*path_args)
+        # add query_args as query string parameters
         query = dict(urlparse.parse_qsl(url_parts[4]))
-        query.update(kwargs)
+        query.update(query_args)
         url_parts[4] = urlencode(query)
         url = urlparse.urlunparse(url_parts)
         return url
@@ -268,13 +269,16 @@ def generate_test_data_template():
     template = dict()
     spec = api_data.get_spec(processed=True)
     for path, path_spec in spec["paths"].items():
-        template[path] = {"args": list(), "kwargs": dict()}
+        template[path] = {"path": list(), "query": dict()}
         assert "get" in path_spec
         params = path_spec["get"].get("parameters", list())
         for p in params:
-            assert p["in"] in ["path", "query"]
-            if p["in"] == "query":
-                template[path]["kwargs"][p["name"]] = p["type"]
+            _in = p["in"]
+            assert _in in ["path", "query"]
+            if _in == "query":
+                template[path][_in][p["name"]] = p["type"]
+            else:
+                template[path][_in].append(p["type"])
     api_data.write_test_api_calls(template)
 
 
@@ -285,7 +289,7 @@ def generate_test_data():
         (
             url_template,
             api_data.materialize_url_template(
-                url_template, data["args"], data["kwargs"]
+                url_template, data["path"], data["query"]
             ),
         )
         for url_template, data in test_api_calls.items()

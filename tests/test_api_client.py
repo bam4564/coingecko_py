@@ -39,11 +39,13 @@ def calls(request):
         expected = expected_response[url_template]
         assert expected
         test_call = test_api_calls[url_template]
-        args = test_call["args"]
-        kwargs = test_call["kwargs"]
-        url = api_data.materialize_url_template(url_template, args, kwargs)
+        path_args = test_call["path"]
+        query_args = test_call["query"]
+        url = api_data.materialize_url_template(url_template, path_args, query_args)
         params = api_data.get_parameters(url_template)
-        args, kwargs = transform_args_kwargs(url_template, params, args, kwargs)
+        args, kwargs = transform_path_query_to_args_kwargs(
+            params, path_args, query_args
+        )
         fn = getattr(cg, method_name)
         calls.append((url, expected, fn, args, kwargs))
     request.cls.calls = calls
@@ -93,12 +95,18 @@ class FailThenSuccessServer:
             )
 
 
-def transform_args_kwargs(url_template, params, args, kwargs):
-    """args and kwargs from input were used to materize url template
-    this function transforms them to be supplied to API client endpoint function
+def transform_path_query_to_args_kwargs(params, path_args, query_args):
+    """converts set of path_args and query_args to set of args and kwargs
+    passed to client api functions.
+
+    - all path args are args
+    - query args that required are args
+    - query args that are optional are kwargs
+
+    Order matters here
     """
-    args = copy(args)
-    kwargs = copy(kwargs)
+    args = copy(path_args)
+    kwargs = copy(query_args)
     for p in params:
         if p["required"] and p["in"] == "query":
             name = p["name"]

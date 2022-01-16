@@ -57,11 +57,11 @@ class CoingeckoApiClient(ApiClientSwagger):
     def call_api(
         self, resource_path, method, path_params, query_params, header_params, **kwargs
     ):
-        args = list(
+        path_args = list(
             path_params.values()
         )  # dictionaries are ordered from python 3.6 on so this is fine.
-        kwargs = {v[0]: v[1] for v in query_params}
-        url = api_data.materialize_url_template(resource_path, args, kwargs)
+        query_args = {v[0]: v[1] for v in query_params}
+        url = api_data.materialize_url_template(resource_path, path_args, query_args)
         logger.debug(f"{self.scheme} request: {url}")
         assert method == "GET"
 
