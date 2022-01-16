@@ -10,17 +10,17 @@ from copy import copy
 from requests.exceptions import HTTPError
 
 
-from src.utils.api_meta import api_meta
-from src.py_coingecko.utils import (
+from py_coingecko.api_meta import api_meta
+from py_coingecko.utils import (
     extract_from_querystring,
     sort_querystring,
     update_querystring,
     without_keys,
 )
-from src.py_coingecko import CoingeckoApi, error_msgs
+from py_coingecko import CoingeckoApi, error_msgs
 
 TEST_ID = "TESTING_ID"
-TIME_PATCH_PATH = "src.py_coingecko.py_coingecko.time.sleep"
+TIME_PATCH_PATH = "py_coingecko.py_coingecko.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)

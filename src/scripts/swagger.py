@@ -9,7 +9,7 @@ import urllib3
 from deepdiff import DeepDiff
 from dotenv import load_dotenv
 
-from src.utils.api_meta import api_meta
+from py_coingecko.api_meta import api_meta
 
 load_dotenv()
 

@@ -8,19 +8,19 @@ readme = "README.md"
 homepage = "https://github.com/brycemorrow4564/py_coingecko"
 repository = "https://github.com/brycemorrow4564/py_coingecko"
 packages = [
-    { include = "py_coingecko", from = "./src" }, 
-    { include = "tests" }, 
-    { include = "scripts", from = "./src" }, 
-    { include = "swagger_client", from = "./src/swagger_generated" }
+    { include = "py_coingecko", from = "./src" }
 ]
-exclude = ["tests", "scripts"] # TODO: check bundle after building to see if scripts included 
+exclude = [] 
 
-[tool.poetry.scripts]                                                           
+[tool.poetry.scripts]                              
+# running unit + integration tests                              
 test                        = "tests.scripts.runner:run_tests"  
+# used for generating client / metadata 
 get_data                    = "tests.scripts.get_test_data:get_data"
 generate_client             = "src.scripts.swagger:generate_client" 
 generate_test_data          = "src.scripts.swagger:generate_test_data" 
 generate_test_data_template = "src.scripts.swagger:generate_test_data_template"
+# used by github actions 
 get_cov                     = "src.scripts.github:get_cov_percent"
 get_cov_color               = "src.scripts.github:get_cov_color"
 
@@ -28,7 +28,7 @@ get_cov_color               = "src.scripts.github:get_cov_color"
 python = "^3.7"
 requests = "^2.27.1"
 python-dotenv = "^0.19.2"
-swagger_client = { path = "./src/swagger_generated", develop = true } 
+swagger_client = { path = "./src/swagger_generated/", develop = true }
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"
@@ -39,5 +39,8 @@ toml = "^0.10.2"
 deepdiff = "^5.7.0"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "setuptools"]
+requires = [
+    "setuptools", 
+    "poetry-core>=1.0.0"
+]
 build-backend = "poetry.core.masonry.api"
