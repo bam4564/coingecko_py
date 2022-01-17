@@ -1,15 +1,17 @@
 import json
 import os
 import re
+import pkg_resources
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 from copy import copy
 
+import toml
 from dotenv import load_dotenv
 
 load_dotenv()
 
-
+POETRY_PROJECT_FILE_PATH = os.environ["POETRY_PROJECT_FILE_PATH"]
 RAW_SPEC_PATH = os.environ["RAW_SPEC_PATH"]
 FORMATTED_SPEC_PATH = os.environ["FORMATTED_SPEC_PATH"]
 DIFF_SPEC_PATH = os.environ["DIFF_SPEC_PATH"]
@@ -17,6 +19,7 @@ SWAGGER_CLIENT_PATH = os.environ["SWAGGER_CLIENT_PATH"]
 SWAGGER_CLIENT_NAME = os.environ["SWAGGER_CLIENT_NAME"]
 SWAGGER_API_CLIENT_PATH = os.environ["SWAGGER_API_CLIENT_PATH"]
 SWAGGER_DATA_PATH = os.environ["SWAGGER_DATA_PATH"]
+SWAGGER_REQUIREMENTS_PATH = os.environ["SWAGGER_REQUIREMENTS_PATH"]
 URL_TO_METHOD_PATH = os.environ["URL_TO_METHOD_PATH"]
 TEST_API_CALLS_PATH = os.environ["TEST_API_CALLS_PATH"]
 TEST_API_RESPONSES_PATH = os.environ["TEST_API_RESPONSES_PATH"]
@@ -116,6 +119,17 @@ class ApiMeta:
             if len(list(params)) == 2:
                 paged_method_names.append(method_name)
         return paged_method_names
+
+    def get_swagger_requirements(self):
+        with open(SWAGGER_REQUIREMENTS_PATH, "r") as f:
+            reqs = list(pkg_resources.parse_requirements(f))
+            return reqs
+
+    def get_poetry_dependencies(self):
+        with open(POETRY_PROJECT_FILE_PATH, "r") as f:
+            poetry = toml.loads(f.read())
+            deps = poetry["tool"]["poetry"]["dependencies"]
+            return deps
 
     def materialize_url_template(self, url_template, path_args, query_args):
         """Converts url template to url to request from api by adding prefix and encoding

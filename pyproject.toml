@@ -10,7 +10,11 @@ repository = "https://github.com/brycemorrow4564/py_coingecko"
 packages = [
     { include = "py_coingecko", from = "./src" }
 ]
-exclude = [] 
+include = [
+    "./src/scripts", 
+    "./src/swagger_data", 
+    "./src/swagger_generated/dist/*"
+] 
 
 [tool.poetry.scripts]                              
 # running unit + integration tests                              
@@ -28,7 +32,12 @@ get_cov_color               = "src.scripts.github:get_cov_color"
 python = "^3.7"
 requests = "^2.27.1"
 python-dotenv = "^0.19.2"
-swagger_client = { path = "./src/swagger_generated/", develop = true }
+# dependencies for swagger-codegen generated code 
+certifi = "^2017.4.17" # changed 
+six = "^1.10"
+python_dateutil = "^2.5.3"
+urllib3 = "^1.25.10" # changed 
+
 
 [tool.poetry.dev-dependencies]
 responses = "^0.16.0"

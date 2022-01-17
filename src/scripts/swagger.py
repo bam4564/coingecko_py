@@ -4,6 +4,7 @@ import ast
 import re
 import shutil
 import subprocess
+import pkg_resources
 
 import urllib3
 from deepdiff import DeepDiff
@@ -14,19 +15,21 @@ from ..py_coingecko.api_meta import api_meta
 load_dotenv()
 
 
+POETRY_PROJECT_FILE_PATH = os.environ["POETRY_PROJECT_FILE_PATH"]
 RAW_SPEC_PATH = os.environ["RAW_SPEC_PATH"]
 FORMATTED_SPEC_PATH = os.environ["FORMATTED_SPEC_PATH"]
 DIFF_SPEC_PATH = os.environ["DIFF_SPEC_PATH"]
 SWAGGER_CLIENT_PATH = os.environ["SWAGGER_CLIENT_PATH"]
 SWAGGER_CLIENT_NAME = os.environ["SWAGGER_CLIENT_NAME"]
 SWAGGER_API_CLIENT_PATH = os.environ["SWAGGER_API_CLIENT_PATH"]
+SWAGGER_REQUIREMENTS_PATH = os.environ["SWAGGER_REQUIREMENTS_PATH"]
 SWAGGER_DATA_PATH = os.environ["SWAGGER_DATA_PATH"]
 URL_TO_METHOD_PATH = os.environ["URL_TO_METHOD_PATH"]
 TEST_API_CALLS_PATH = os.environ["TEST_API_CALLS_PATH"]
 TEST_API_RESPONSES_PATH = os.environ["TEST_API_RESPONSES_PATH"]
 SWAGGER_API_DOCS_PATH = os.environ["SWAGGER_API_DOCS_PATH"]
 PROCESSED_DOCS_PATH = os.environ["PROCESSED_DOCS_PATH"]
-SPEC_CHECK = True
+SPEC_CHECK = False
 
 
 def generate_client():
@@ -78,6 +81,27 @@ def generate_client():
             " "
         )
     )
+
+    # validate that all requirements of generated client are met by the poetry project file
+    deps = api_meta.get_poetry_dependencies()
+    reqs = api_meta.get_swagger_requirements()
+    # had to manually update package versions specified in requirements.txt
+    # as they were incompatible with poetry dependencies
+    req_overrides = ["requests", "certifi", "urllib3"]
+    req_skips = ["setuptools"]
+    for r in reqs:
+        package = r.project_name.replace("-", "_")
+        assert len(r.specs) == 1
+        op, ver = r.specs[0]
+        if package in req_skips:
+            continue
+        elif package in req_overrides:
+            assert package in deps
+        else:
+            # ensure version in requirements.txt exactly matches poetry dep
+            assert op == ">="
+            assert package in deps
+            assert f"^{ver}" == deps[package]
 
     # generate directory for swagger data if it does not already exist
     if not os.path.isdir(SWAGGER_DATA_PATH):
