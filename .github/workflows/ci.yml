@@ -68,7 +68,7 @@ jobs:
           # get coverage percent and color 
           COVERAGE=$(poetry run get_cov)%
           COV_COLOR=$(poetry run get_cov_color)
-          COV_FILE=py_coingecko__${{ env.BRANCH }}.json
+          COV_FILE=py_coingecko__$BRANCH_NAME.json
           echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
           echo "COV_COLOR=$COV_COLOR" >> $GITHUB_ENV
           echo "COV_FILE=$COV_FILE" >> $GITHUB_ENV

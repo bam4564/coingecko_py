@@ -176,6 +176,24 @@ def generate_client():
         elif os.path.isdir(path):
             shutil.rmtree(path)
 
+    # fix imports within the generated code
+    for dirpath, dirnames, filenames in os.walk(SWAGGER_CLIENT_PATH):
+        for f in filenames:
+            if f.endswith(".py"):
+                path = os.path.join(dirpath, f)
+                with open(path, "r") as file:
+                    source = file.read()
+                source = source.replace(
+                    "from swagger_client",
+                    "from src.py_coingecko.swagger_generated.swagger_client",
+                )
+                source = source.replace(
+                    "import swagger_client",
+                    "import src.py_coingecko.swagger_generated.swagger_client",
+                )
+                with open(path, "w") as file:
+                    file.write(source)
+
     # auto-format generated code
     subprocess.call(f"poetry run black .".split(" "))
 

@@ -22,9 +22,11 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from swagger_client.configuration import Configuration
-import swagger_client.models
-from swagger_client import rest
+from src.py_coingecko.swagger_generated.swagger_client.configuration import (
+    Configuration,
+)
+import src.py_coingecko.swagger_generated.swagger_client.models
+from src.py_coingecko.swagger_generated.swagger_client import rest
 
 
 class ApiClient(object):
