@@ -3,12 +3,11 @@ name: CICD Pipeline
 
 on:
   # Runs on all pushes to repo 
-  push: 
-    branches: 
-      - "*"
+  push:
+  pull_request:  
   # Runs once per hour on 30th minute (TODO: after testing change this to day)
   schedule: 
-      - "30 * * * *"
+      - cron: "30 * * * *"
 
 jobs:
 
