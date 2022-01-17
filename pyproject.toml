@@ -22,6 +22,7 @@ generate_test_data_template = "src.scripts.swagger:generate_test_data_template"
 # used by github actions 
 get_cov                     = "src.scripts.github:get_cov_percent"
 get_cov_color               = "src.scripts.github:get_cov_color"
+get_api_version             = "src.scripts.github:get_api_version"
 
 [tool.poetry.dependencies]
 python = "^3.7"

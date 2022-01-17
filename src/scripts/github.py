@@ -1,5 +1,7 @@
 import re
 
+from src.py_coingecko.api_meta import api_meta
+
 
 def _get_cov_percent():
     with open("cov.xml", "r") as f:
@@ -29,3 +31,7 @@ def get_cov_color():
     else:
         color = "red"
     print(color)
+
+
+def get_api_version(): 
+    print(api_meta.get_api_version())

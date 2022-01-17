@@ -9,9 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v1 # TODO: update to v2 
         with:
           fetch-depth: 1
+
+      #----------------------------------------------
+      #  -----  Set the Poetry Install command  -----
+      # this is done so that it can be used as a part 
+      # the key for cacheing the poetry venv. If the
+      # command changes, we want a cache miss. 
+      #----------------------------------------------
+      - name: Set Poetry Install Command 
+        run: echo "POETRY_INSTALL_CMD=poetry install --no-interaction" >> $GITHUB_ENV
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
@@ -34,13 +43,13 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ env.POETRY_INSTALL_CMD }}
       #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction
+        run: eval ${{ env.POETRY_INSTALL_CMD }}
       #----------------------------------------------
       # code formatting quality check 
       #----------------------------------------------
@@ -56,7 +65,7 @@ jobs:
       # Extract test code coverage and branch info 
       # https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa
       #----------------------------------------------
-      - name: Extract Code Coverage 
+      - name: Extract Metadata 
         run: |
           # get current git branch 
           REF=${{ github.ref }}
@@ -73,11 +82,18 @@ jobs:
           echo "COV_COLOR=$COV_COLOR" >> $GITHUB_ENV
           echo "COV_FILE=$COV_FILE" >> $GITHUB_ENV
 
+          # get api version 
+          API_VERSION=$(poetry run get_api_version)
+          API_VERSION_FILE=py_coingecko_apiversion__$BRANCH_NAME.json
+          echo "API_VERSION=$API_VERSION"
+          echo "API_VERSION_FILE=$API_VERSION_FILE" >> $GITHUB_ENV
+
           # log environment values 
           echo "git branch: $BRANCH_NAME"
           echo "cov badge filename: $COV_FILE"
           echo "cov badge percent: $COVERAGE"
           echo "cov badge color: $COV_COLOR"
+          echo "coingecko api version: $API_VERSION"
 
       #----------------------------------------------
       # create code cov badge
@@ -93,3 +109,17 @@ jobs:
           message: ${{ env.COVERAGE }}
           color: ${{ env.COV_COLOR }}
           namedLogo: pytest 
+
+      #----------------------------------------------
+      # create api version badge
+      # https://github.com/marketplace/actions/dynamic-badges
+      #----------------------------------------------
+      - name: Create Api Version Badge
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: e454b900fe6518d21bdd25c9508d8a64
+          filename: ${{ env.API_VERSION_FILE }}
+          label: Coingecko API Version
+          message: ${{ env.API_VERSION }}
+          color: "#4287f5"
