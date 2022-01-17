@@ -85,7 +85,7 @@ jobs:
           # get api version 
           API_VERSION=$(poetry run get_api_version)
           API_VERSION_FILE=py_coingecko_apiversion__$BRANCH_NAME.json
-          echo "API_VERSION=$API_VERSION"
+          echo "API_VERSION=$API_VERSION" >> $GITHUB_ENV
           echo "API_VERSION_FILE=$API_VERSION_FILE" >> $GITHUB_ENV
 
           # log environment values 
