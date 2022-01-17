@@ -5,4 +5,4 @@ omit =
     # this script is for auto-generating the client  
     ./src/scripts/swagger.py
     # TODO: add some tests for this one. 
-    ./src/utils/api_meta.py
+    ./src/py_coingecko/api_meta.py

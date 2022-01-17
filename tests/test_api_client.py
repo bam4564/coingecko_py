@@ -9,9 +9,9 @@ from collections import Counter
 from copy import copy
 from requests.exceptions import HTTPError
 
-from src.py_coingecko import CoingeckoApi, error_msgs
-from src.py_coingecko.api_meta import api_meta
-from src.py_coingecko.utils import (
+from py_coingecko import CoingeckoApi, error_msgs
+from py_coingecko.api_meta import api_meta
+from py_coingecko.utils import (
     extract_from_querystring,
     sort_querystring,
     update_querystring,
@@ -19,7 +19,7 @@ from src.py_coingecko.utils import (
 )
 
 TEST_ID = "TESTING_ID"
-TIME_PATCH_PATH = "src.py_coingecko.py_coingecko.time.sleep"
+TIME_PATCH_PATH = "py_coingecko.py_coingecko.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)
@@ -124,12 +124,13 @@ class TestWrapper(unittest.TestCase):
             responses.add_callback(responses.GET, url, callback)
             expected_urls.append(url)
             if not queued:
-                with pytest.raises(ErrorClass, match=msg_match) as exc_info:
+                with pytest.raises(ErrorClass) as exc_info:
                     fn(*args, **kwargs)
             else:
                 fn(*args, **kwargs, qid=str(i))
-                with pytest.raises(ErrorClass, match=msg_match) as exc_info:
+                with pytest.raises(ErrorClass) as exc_info:
                     self.cg.execute_queued()
+            assert exc_info.value.strerror == msg_match
             assert isinstance(exc_info.value.response, requests.Response)
             assert exc_info.value.response.status_code == 200
             assert len(responses.calls) == i + 1
