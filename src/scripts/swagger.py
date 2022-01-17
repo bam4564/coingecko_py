@@ -153,6 +153,29 @@ def generate_client():
     print(os.path.basename(SWAGGER_API_DOCS_PATH))
     api_meta.write_docs_processed(text)
 
+    # cleanup the directory containing the generated code
+    generated_delete = [
+        ".swagger-codegen",
+        "docs",
+        "swagger_client.egg-info",
+        "test",
+        ".gitignore",
+        ".swagger-codegen-ignore",
+        ".travis.yml",
+        "git_push.sh",
+        "README.md",
+        "requirements.txt",
+        "test-requirements.txt",
+        "tox.ini",
+        # "setup.py",
+    ]
+    for name in generated_delete:
+        path = os.path.join(SWAGGER_CLIENT_PATH, name)
+        if os.path.isfile(path):
+            os.remove(path)
+        elif os.path.isdir(path):
+            shutil.rmtree(path)
+
     # auto-format generated code
     subprocess.call(f"poetry run black .".split(" "))
 

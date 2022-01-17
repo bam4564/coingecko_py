@@ -27,7 +27,7 @@ get_cov_color               = "src.scripts.github:get_cov_color"
 python = "^3.7"
 requests = "^2.27.1"
 python-dotenv = "^0.19.2"
-swagger_client = { path = "./src/py_coingecko/swagger_generated/", develop = true }
+# swagger_client = { path = "./src/py_coingecko/swagger_generated/swagger_client/", develop = true }
 # dependencies for swagger-codegen generated code 
 certifi = "^2017.4.17" # changed 
 six = "^1.10"
