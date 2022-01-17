@@ -33,5 +33,5 @@ def get_cov_color():
     print(color)
 
 
-def get_api_version(): 
+def get_api_version():
     print(api_meta.get_api_version())

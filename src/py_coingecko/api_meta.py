@@ -131,9 +131,9 @@ class ApiMeta:
             deps = poetry["tool"]["poetry"]["dependencies"]
             return deps
 
-    def get_api_version(self): 
+    def get_api_version(self):
         spec = self.get_spec_processed()
-        return spec['info']['version']
+        return spec["info"]["version"]
 
     def materialize_url_template(self, url_template, path_args, query_args):
         """Converts url template to url to request from api by adding prefix and encoding
