@@ -10,7 +10,7 @@ from contextlib import contextmanager
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util import Retry
 
-from src.py_coingecko.swagger_generated.swagger_client import (
+from swagger_client import (
     ApiClient as ApiClientSwagger,
     CoingeckoApi as CoinGeckoApiSwagger,
 )
