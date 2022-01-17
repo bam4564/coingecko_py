@@ -1,7 +1,8 @@
 [run]
 omit =
+    # TODO: Fix swagger_client not being omitted 
     # auto-generated code is assumed to be correct 
-    ./src/swagger_generated/*
+    ./src/swagger_generated/swagger_client/**/*.py
     # this script is for auto-generating the client  
     ./src/scripts/swagger.py
     # TODO: add some tests for this one. 
