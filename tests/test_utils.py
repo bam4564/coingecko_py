@@ -12,7 +12,7 @@ from py_coingecko.utils.utils import (
     remove_from_querystring,
     dict_get,
     logger_temp_level,
-    decorate_logger_temp_level,
+    logger_temp_level,
 )
 
 
@@ -74,20 +74,6 @@ class TestUtils(unittest.TestCase):
         assert logger.level == level
         with logger_temp_level(logger, temp_level):
             assert logger.level == temp_level
-        assert logger.level == level
-
-    def test_decorate_logger_temp_level(self):
-        logger = logging.getLogger("testing-logger")
-        level = 42
-        logger.setLevel(42)
-        temp_level = 19
-
-        @decorate_logger_temp_level(logger, temp_level)
-        def foo():
-            assert logger.level == temp_level
-
-        assert logger.level == level
-        foo()
         assert logger.level == level
 
     def test_materialize_url_template(self):

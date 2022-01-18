@@ -59,14 +59,3 @@ def logger_temp_level(logger, new_level):
         yield
     finally:
         logger.setLevel(old_level)
-
-
-def decorate_logger_temp_level(logger, temp_log_level):
-    def decorator(function):
-        def wrapper(*args, **kwargs):
-            with logger_temp_level(logger, temp_log_level):
-                return function(*args, **kwargs)
-
-        return wrapper
-
-    return decorator

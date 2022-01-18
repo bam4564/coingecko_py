@@ -10,7 +10,7 @@ import urllib3
 from deepdiff import DeepDiff
 
 from py_coingecko.utils.api_meta import api_meta
-from py_coingecko.utils.utils import decorate_logger_temp_level
+from py_coingecko.utils.utils import logger_temp_level
 from py_coingecko.utils.constants import (
     RAW_SPEC_PATH,
     FORMATTED_SPEC_PATH,
@@ -207,7 +207,7 @@ def generated_code_fix_imports():
                     file.write(source)
 
 
-@decorate_logger_temp_level(logger, logging.INFO)
+@logger_temp_level(logger, logging.INFO)
 def generate_client():
     SPEC_CHECK = False  # For development only
     spec = process_spec(download_spec())
@@ -230,7 +230,7 @@ def generate_client():
     subprocess.run(f"poetry run black .".split(" "), check=True)
 
 
-@decorate_logger_temp_level(logger, logging.INFO)
+@logger_temp_level(logger, logging.INFO)
 def generate_test_data_template():
     template = dict()
     spec = api_meta.get_spec(processed=True)
@@ -248,7 +248,7 @@ def generate_test_data_template():
     api_meta.write_test_api_calls(template)
 
 
-@decorate_logger_temp_level(logger, logging.INFO)
+@logger_temp_level(logger, logging.INFO)
 def generate_test_data():
     test_api_calls = api_meta.get_test_api_calls()
     # Generate urls to request from the test api call spec

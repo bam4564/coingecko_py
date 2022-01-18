@@ -194,9 +194,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
                 )
             fn, args, kwargs = call_list[0]
             page_start = kwargs["page"]
-            res, response = self._execute_single(
-                res_cache, include_response, qid, fn, *args, **kwargs
-            )
+            res, response = self._execute_single(include_response, fn, *args, **kwargs)
             res_cache.put_page_range_unbounded_first_result(qid, page_start, res)
             per_page = int(response.headers["Per-Page"])
             total = int(response.headers["Total"])
@@ -209,9 +207,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
                 logger.debug(f"queueing page: {page}")
                 self._queue_single(qid, fn, False, *args, **{**kwargs, "page": page})
 
-    def _execute_single(
-        self, res_cache: ResultsCache, include_response, qid, fn, *args, **kwargs
-    ):
+    def _execute_single(self, include_response, fn, *args, **kwargs):
         """Execute a single API call with exponential backoff retries to deal with server side rate limiting.
 
         Maximum of exp_limit + 1 request attempts.
@@ -267,9 +263,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
                     continue
                 # if cache miss, make api call (with retries)
                 res = self._execute_single(
-                    cache,
                     include_response,
-                    qid,
                     fn,
                     *args,
                     **kwargs,

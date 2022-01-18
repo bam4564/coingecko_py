@@ -13,7 +13,7 @@ from py_coingecko.scripts.swagger import (
     download_spec,
     are_specs_equal,
 )
-from py_coingecko.utils.utils import decorate_logger_temp_level, logger_temp_level
+from py_coingecko.utils.utils import logger_temp_level
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
