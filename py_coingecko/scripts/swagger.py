@@ -9,9 +9,9 @@ import logging
 import urllib3
 from deepdiff import DeepDiff
 
-from src.py_coingecko.utils.api_meta import api_meta
-from src.py_coingecko.utils.utils import decorate_logger_temp_level
-from src.py_coingecko.utils.constants import (
+from py_coingecko.utils.api_meta import api_meta
+from py_coingecko.utils.utils import decorate_logger_temp_level
+from py_coingecko.utils.constants import (
     RAW_SPEC_PATH,
     FORMATTED_SPEC_PATH,
     SWAGGER_CLIENT_PATH,
@@ -197,11 +197,11 @@ def generated_code_fix_imports():
                     source = file.read()
                 source = source.replace(
                     "from swagger_client",
-                    "from src.py_coingecko.swagger_generated.swagger_client",
+                    "from py_coingecko.swagger_generated.swagger_client",
                 )
                 source = source.replace(
                     "import swagger_client",
-                    "import src.py_coingecko.swagger_generated.swagger_client",
+                    "import py_coingecko.swagger_generated.swagger_client",
                 )
                 with open(path, "w") as file:
                     file.write(source)

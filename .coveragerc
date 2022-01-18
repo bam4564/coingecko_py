@@ -2,8 +2,8 @@
 omit =
     # TODO: Fix swagger_client not being omitted 
     # auto-generated code is assumed to be correct 
-    ./src/swagger_generated/swagger_client/**/*.py
+    ./py_coingecko/swagger_generated/swagger_client/**/*.py
     # this script is for auto-generating the client  
-    ./src/py_coingecko/scripts/swagger.py
+    ./py_coingecko/scripts/swagger.py
     # TODO: add some tests for this one. 
-    ./src/py_coingecko/api_meta.py
+    ./py_coingecko/utils/api_meta.py

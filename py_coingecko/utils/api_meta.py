@@ -8,7 +8,7 @@ from copy import copy
 
 import toml
 
-from src.py_coingecko.utils.constants import (
+from py_coingecko.utils.constants import (
     POETRY_PROJECT_FILE_PATH,
     RAW_SPEC_PATH,
     FORMATTED_SPEC_PATH,

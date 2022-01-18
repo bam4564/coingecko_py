@@ -3,16 +3,16 @@ import os
 import tempfile
 import logging
 
-from src.py_coingecko.utils.api_meta import api_meta
-from src.py_coingecko.utils.constants import (
+from py_coingecko.utils.api_meta import api_meta
+from py_coingecko.utils.constants import (
     FORMATTED_SPEC_PATH,
 )
-from src.py_coingecko.scripts.swagger import (
+from py_coingecko.scripts.swagger import (
     process_spec,
     download_spec,
     are_specs_equal,
 )
-from src.py_coingecko.utils.utils import logger_temp_level
+from py_coingecko.utils.utils import logger_temp_level
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -56,7 +56,7 @@ def get_api_version():
 
 def github_specs_equal():
     """Script leveraged by github actions to check if downloaded spec equals existing spec"""
-    import src.py_coingecko as pycg
+    import py_coingecko as pycg
 
     logger = logging.getLogger(pycg.__name__)
     with logger_temp_level(logger, 0):
