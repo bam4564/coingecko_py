@@ -16,14 +16,14 @@ packages = [
 test                        = "tests.scripts.runner:run_tests"  
 # used for generating client / metadata 
 get_data                    = "tests.scripts.get_test_data:get_data"
-generate_client             = "src.scripts.swagger:generate_client" 
-generate_test_data          = "src.scripts.swagger:generate_test_data" 
-generate_test_data_template = "src.scripts.swagger:generate_test_data_template"
+generate_client             = "src.py_coingecko.scripts.swagger:generate_client" 
+generate_test_data          = "src.py_coingecko.scripts.swagger:generate_test_data" 
+generate_test_data_template = "src.py_coingecko.scripts.swagger:generate_test_data_template"
 # used by github actions 
-get_cov                     = "src.scripts.github:get_cov_percent"
-get_cov_color               = "src.scripts.github:get_cov_color"
-get_api_version             = "src.scripts.github:get_api_version"
-is_client_updated           = "src.scripts.swagger:github_specs_equal"
+get_cov                     = "src.py_coingecko.scripts.github:get_cov_percent"
+get_cov_color               = "src.py_coingecko.scripts.github:get_cov_color"
+get_api_version             = "src.py_coingecko.scripts.github:get_api_version"
+is_client_updated           = "src.py_coingecko.scripts.github:github_specs_equal"
 
 [tool.poetry.dependencies]
 python = "^3.7"

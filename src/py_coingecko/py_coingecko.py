@@ -15,12 +15,12 @@ from src.py_coingecko.swagger_generated.swagger_client import (
     CoingeckoApi as CoinGeckoApiSwagger,
 )
 
-from .utils import without_keys, dict_get
-from .api_meta import api_meta
+from src.py_coingecko.utils.utils import without_keys, dict_get
+from src.py_coingecko.utils.api_meta import api_meta
 
 
 logging.basicConfig()
-logger = logging.getLogger("CoingeckoApi")
+logger = logging.getLogger(__name__)
 
 RATE_LIMIT_STATUS_CODE = 429
 

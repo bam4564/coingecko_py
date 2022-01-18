@@ -10,8 +10,8 @@ from copy import copy
 from requests.exceptions import HTTPError
 
 from py_coingecko import CoingeckoApi, error_msgs
-from py_coingecko.api_meta import api_meta
-from py_coingecko.utils import (
+from py_coingecko.utils.api_meta import api_meta
+from py_coingecko.utils.utils import (
     extract_from_querystring,
     sort_querystring,
     update_querystring,

@@ -4,6 +4,6 @@ omit =
     # auto-generated code is assumed to be correct 
     ./src/swagger_generated/swagger_client/**/*.py
     # this script is for auto-generating the client  
-    ./src/scripts/swagger.py
+    ./src/py_coingecko/scripts/swagger.py
     # TODO: add some tests for this one. 
     ./src/py_coingecko/api_meta.py
