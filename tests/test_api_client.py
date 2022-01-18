@@ -533,4 +533,24 @@ class TestApiClient(unittest.TestCase):
 
         self._assert_urls_call_count(expected_urls, responses)
 
-    # TODO: Add tests for raised exceptions when validating page range query args
+    def test_validate_page_range(self):
+        with pytest.raises(
+            ValueError, match=error_msgs["page_start_undefined"]
+        ) as exc_info:
+            self.cg._validate_page_range(None, None)
+        with pytest.raises(
+            ValueError, match=error_msgs["page_start_not_int"]
+        ) as exc_info:
+            self.cg._validate_page_range("5", 6)
+        with pytest.raises(
+            ValueError, match=error_msgs["page_end_not_int"]
+        ) as exc_info:
+            self.cg._validate_page_range(5, "6")
+        with pytest.raises(
+            ValueError, match=error_msgs["page_end_before_page_start"]
+        ) as exc_info:
+            self.cg._validate_page_range(5, 4)
+        with pytest.raises(
+            ValueError, match=error_msgs["page_start_lte_zero"]
+        ) as exc_info:
+            self.cg._validate_page_range(0, 3)

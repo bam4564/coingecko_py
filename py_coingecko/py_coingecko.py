@@ -28,6 +28,11 @@ error_msgs = dict(
     exp_limit_reached="Waited for maximum specified time but was still rate limited. Try increasing exp_limit. Queued calls are retained.",
     failed_decode_bytes="Unable to decode bytes to utf-8 string",
     failed_decode_json="Unable to decode json from string",
+    page_start_undefined="page_start must be defined",
+    page_start_not_int="page_start must be int",
+    page_end_not_int="page_end was specified but was not an int",
+    page_end_before_page_start=r"page_end: \d+ less than page_start: \d+",
+    page_start_lte_zero=r"page_start: \d+ was less than or equal to 0",
 )
 
 
@@ -106,10 +111,7 @@ class ResultsCache:
         self.put_page_range_query(qid, data)
 
     def check_contains_page_range_unbounded_first_result(self, qid, page):
-        if page is None:
-            return False
-        else:
-            return (page, qid) in self.page_range_query_first_call_keys
+        return (page, qid) in self.page_range_query_first_call_keys
 
     def put(self, qid, data):
         self.cache[qid] = data
@@ -150,18 +152,16 @@ class CoingeckoApi(CoinGeckoApiSwagger):
 
     def _validate_page_range(self, page_start, page_end) -> None:
         """Validates user supplied values for page_start and page_end"""
-        if not page_start:
-            raise ValueError("page_start must be defined")
+        if page_start is None:
+            raise ValueError(error_msgs["page_start_undefined"])
         if not isinstance(page_start, int):
-            raise ValueError("page_start must be int")
+            raise ValueError(error_msgs["page_start_not_int"])
         if page_end is not None and not isinstance(page_end, int):
-            raise ValueError("page_end was specified but was not an int")
+            raise ValueError(error_msgs["page_end_not_int"])
         if page_end is not None and page_end < page_start:
             raise ValueError(f"page_end: {page_end} less than page_start: {page_start}")
         if page_start <= 0:
             raise ValueError(f"page_start: {page_start} was less than or equal to 0")
-        if page_end is not None and page_end <= 0:
-            raise ValueError(f"page_end: {page_end} was less than or equal to 0")
 
     def _reset_state(self) -> None:
         """Resets internal state. State is used to support queueing and page range queries"""
