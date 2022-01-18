@@ -15,14 +15,10 @@
 from __future__ import absolute_import
 
 # import apis into sdk package
-from py_coingecko.swagger_generated.swagger_client.api.coingecko_api import (
-    CoingeckoApi,
-)
+from py_coingecko.swagger_generated.swagger_client.api.coingecko_api import CoingeckoApi
 
 # import ApiClient
 from py_coingecko.swagger_generated.swagger_client.api_client import ApiClient
-from py_coingecko.swagger_generated.swagger_client.configuration import (
-    Configuration,
-)
+from py_coingecko.swagger_generated.swagger_client.configuration import Configuration
 
 # import models into sdk package

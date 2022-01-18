@@ -1,9 +1,10 @@
 [run]
 omit =
-    # TODO: Fix swagger_client not being omitted 
     # auto-generated code is assumed to be correct 
-    ./py_coingecko/swagger_generated/swagger_client/**/*.py
-    # this script is for auto-generating the client  
-    ./py_coingecko/scripts/swagger.py
-    # TODO: add some tests for this one. 
+    ./py_coingecko/swagger_generated/* 
+    # scripts are for github actions / client generation, so not a part of API functionality
+    ./py_coingecko/scripts/*
+    # TODO: Mostly file I/O but a few utility methods here should be tested. 
     ./py_coingecko/utils/api_meta.py
+    # Exclude tests 
+    ./tests/*

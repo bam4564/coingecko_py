@@ -10,7 +10,7 @@ def without_keys(d: dict, *rm_keys):
     return {k: v for k, v in d.items() if k not in rm_keys}
 
 
-def with_keys(d: dict, keep_keys: List[str]):
+def with_keys(d: dict, *keep_keys):
     """Returns copy of dictionary with each key in keep_keys retained"""
     return {k: v for k, v in d.items() if k in keep_keys}
 
@@ -34,7 +34,7 @@ def remove_from_querystring(url: str, params: List[str]):
 def extract_from_querystring(url: str, params: List[str]):
     url_parts = list(urlparse.urlparse(url))
     query = dict(urlparse.parse_qsl(url_parts[4]))
-    return with_keys(query, params)
+    return with_keys(query, *params)
 
 
 def sort_querystring(url: str):

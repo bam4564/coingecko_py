@@ -22,9 +22,7 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from py_coingecko.swagger_generated.swagger_client.configuration import (
-    Configuration,
-)
+from py_coingecko.swagger_generated.swagger_client.configuration import Configuration
 import py_coingecko.swagger_generated.swagger_client.models
 from py_coingecko.swagger_generated.swagger_client import rest
 

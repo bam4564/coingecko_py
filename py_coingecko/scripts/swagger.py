@@ -209,7 +209,7 @@ def generated_code_fix_imports():
 
 @decorate_logger_temp_level(logger, logging.INFO)
 def generate_client():
-    SPEC_CHECK = True  # For development only
+    SPEC_CHECK = False  # For development only
     spec = process_spec(download_spec())
     if (
         SPEC_CHECK

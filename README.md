@@ -10,6 +10,14 @@ TODO: Change paths for badges to use master branch
 [![PyPi Version](https://img.shields.io/pypi/v/py_coingecko.svg)](https://pypi.org/project/py_coingecko/)
 ![GitHub](https://img.shields.io/github/license/brycemorrow4564/py_coingecko)
 
+*An advanced API client for the coingecko API* 
+
+The base api client class is automatically generated with [`swagger-codegen`](https://swagger.io/tools/swagger-codegen/) from the OpenAPI specification available [here](https://www.coingecko.com/api/documentations/v3/swagger.json) on the coingecko website. 
+
+This ensures that all endpoints and their corresponding parameters are 100% correct. 
+
+
+
 An extension of the [**pycoingecko**](https://github.com/man-c/pycoingecko) api client that adds additional functionality like: 
 
 - Abstracting away complexities associated with server side rate limiting when sending many api requests. 
