@@ -1,16 +1,16 @@
 import re
-import os 
-import tempfile 
-import logging 
+import os
+import tempfile
+import logging
 
 from src.py_coingecko.utils.api_meta import api_meta
 from py_coingecko.utils.constants import (
-    FORMATTED_SPEC_PATH,        
+    FORMATTED_SPEC_PATH,
 )
 from src.py_coingecko.scripts.swagger import (
-    process_spec, 
-    download_spec, 
-    are_specs_equal, 
+    process_spec,
+    download_spec,
+    are_specs_equal,
 )
 from src.py_coingecko.utils.utils import logger_temp_level
 
@@ -20,7 +20,7 @@ logger.setLevel(0)
 
 
 def _get_cov_percent():
-    # TODO: add a constant here 
+    # TODO: add a constant here
     with open("cov.xml", "r") as f:
         lines = f.readlines()
     match = float(re.findall(r'line-rate="([^"]*)"', lines[1])[0])
@@ -57,8 +57,9 @@ def get_api_version():
 def github_specs_equal():
     """Script leveraged by github actions to check if downloaded spec equals existing spec"""
     import src.py_coingecko as pycg
+
     logger = logging.getLogger(pycg.__name__)
-    with logger_temp_level(logger, 0): 
+    with logger_temp_level(logger, 0):
         if not os.path.exists(FORMATTED_SPEC_PATH):
             raise ValueError(
                 "When running this function, a downloaded client spec should always exist"

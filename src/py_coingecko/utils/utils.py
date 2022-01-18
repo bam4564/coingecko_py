@@ -52,20 +52,21 @@ def dict_get(obj, *args, default=None):
 
 
 @contextmanager
-def logger_temp_level(logger, new_level): 
-    old_level = logger.level 
-    try: 
+def logger_temp_level(logger, new_level):
+    old_level = logger.level
+    try:
         logger.setLevel(new_level)
-        yield 
-    finally: 
+        yield
+    finally:
         logger.setLevel(old_level)
 
 
 def decorate_logger_temp_level(logger, temp_log_level):
     def decorator(function):
         def wrapper(*args, **kwargs):
-            with logger_temp_level(logger, temp_log_level): 
+            with logger_temp_level(logger, temp_log_level):
                 return function(*args, **kwargs)
+
         return wrapper
+
     return decorator
-    

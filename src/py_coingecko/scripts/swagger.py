@@ -12,13 +12,13 @@ from deepdiff import DeepDiff
 from src.py_coingecko.utils.api_meta import api_meta
 from src.py_coingecko.utils.utils import decorate_logger_temp_level
 from py_coingecko.utils.constants import (
-    RAW_SPEC_PATH,               
-    FORMATTED_SPEC_PATH,         
-    SWAGGER_CLIENT_PATH,         
-    SWAGGER_CLIENT_NAME,         
-    SWAGGER_DATA_PATH,           
-    SWAGGER_API_DOCS_PATH,       
-    PROCESSED_DOCS_PATH,         
+    RAW_SPEC_PATH,
+    FORMATTED_SPEC_PATH,
+    SWAGGER_CLIENT_PATH,
+    SWAGGER_CLIENT_NAME,
+    SWAGGER_DATA_PATH,
+    SWAGGER_API_DOCS_PATH,
+    PROCESSED_DOCS_PATH,
 )
 
 
@@ -209,7 +209,7 @@ def generated_code_fix_imports():
 
 @decorate_logger_temp_level(logger, logging.INFO)
 def generate_client():
-    SPEC_CHECK = True # For development only 
+    SPEC_CHECK = True  # For development only
     spec = process_spec(download_spec())
     if (
         SPEC_CHECK
@@ -274,5 +274,3 @@ def generate_test_data():
         data[url_template] = content
     # write responses to file
     api_meta.write_test_api_responses(data)
-
-
