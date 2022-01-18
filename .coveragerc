@@ -4,7 +4,5 @@ omit =
     ./py_coingecko/swagger_generated/* 
     # scripts are for github actions / client generation, so not a part of API functionality
     ./py_coingecko/scripts/*
-    # TODO: Mostly file I/O but a few utility methods here should be tested. 
-    ./py_coingecko/utils/api_meta.py
     # Exclude tests 
     ./tests/*

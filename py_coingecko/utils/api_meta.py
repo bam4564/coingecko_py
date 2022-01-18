@@ -146,7 +146,7 @@ class ApiMeta:
         output:
             https://api.coingecko.com/api/v3/coins/ethereum/contract/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984/market_chart/range?vs_currency=eur&from=1622520000&to=1638334800
         """
-        url_base = api_meta.get_url_base()
+        url_base = self.get_url_base()
         url_base_parts = list(urlparse.urlparse(url_base))
         # transform /coins/{id}/contract/{contract_address} ---> /coins/{0}/contract/{1}
         path_tokens = re.findall(r"({[^}]*})", url_template)

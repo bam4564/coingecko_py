@@ -3,6 +3,7 @@ import os
 import tempfile
 import logging
 
+import py_coingecko
 from py_coingecko.utils.api_meta import api_meta
 from py_coingecko.utils.constants import (
     FORMATTED_SPEC_PATH,
@@ -12,7 +13,7 @@ from py_coingecko.scripts.swagger import (
     download_spec,
     are_specs_equal,
 )
-from py_coingecko.utils.utils import logger_temp_level
+from py_coingecko.utils.utils import decorate_logger_temp_level, logger_temp_level
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -36,10 +37,14 @@ def _get_cov_percent():
 
 
 def get_cov_percent():
+    """Prints the code coverage percentage
+    """
     print(_get_cov_percent())
 
 
 def get_cov_color():
+    """Prints the color to be used for code coverage badge 
+    """
     percent = _get_cov_percent()
     if percent >= 80:
         color = "green"
@@ -51,21 +56,25 @@ def get_cov_color():
 
 
 def get_api_version():
+    """Prints the Coingecko API version of the generated client code 
+    """
     print(api_meta.get_api_version())
 
 
+@logger_temp_level(logging.getLogger(py_coingecko.__name__), 0)
 def github_specs_equal():
-    """Script leveraged by github actions to check if downloaded spec equals existing spec"""
-    import py_coingecko as pycg
-
-    logger = logging.getLogger(pycg.__name__)
-    with logger_temp_level(logger, 0):
-        if not os.path.exists(FORMATTED_SPEC_PATH):
-            raise ValueError(
-                "When running this function, a downloaded client spec should always exist"
-            )
-        old_spec = api_meta.get_spec_processed()
-        with tempfile.NamedTemporaryFile() as fp:
-            file_path = fp.name
-            new_spec = process_spec(download_spec(output_path=file_path, silent=True))
-        print(are_specs_equal(old_spec, new_spec))
+    """Prints boolean indicating whether or not OpenAPI spec used to generate client
+    matches the OpenAPI spec downloaded from the coingecko website. 
+        
+    It's necessary to disable the package logger here as this function's only output
+    to stdout should be "True" or "False". 
+    """
+    if not os.path.exists(FORMATTED_SPEC_PATH):
+        raise ValueError(
+            "When running this function, a downloaded client spec should always exist"
+        )
+    old_spec = api_meta.get_spec_processed()
+    with tempfile.NamedTemporaryFile() as fp:
+        file_path = fp.name
+        new_spec = process_spec(download_spec(output_path=file_path, silent=True))
+    print(are_specs_equal(old_spec, new_spec))

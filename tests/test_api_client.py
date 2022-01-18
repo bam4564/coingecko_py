@@ -95,7 +95,7 @@ class FailThenSuccessServer:
 
 @pytest.mark.usefixtures("cg")
 @pytest.mark.usefixtures("calls")
-class TestWrapper(unittest.TestCase):
+class TestApiClient(unittest.TestCase):
 
     # ------------ TEST UTILS ----------------------
     @pytest.mark.skip
