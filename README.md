@@ -10,23 +10,21 @@ TODO: Change paths for badges to use master branch
 [![PyPi Version](https://img.shields.io/pypi/v/py_coingecko.svg)](https://pypi.org/project/py_coingecko/)
 ![GitHub](https://img.shields.io/github/license/brycemorrow4564/py_coingecko)
 
-*An advanced API client for the coingecko API* 
+> An advanced API client for the coingecko API
 
-The base api client class is automatically generated with [`swagger-codegen`](https://swagger.io/tools/swagger-codegen/) from the OpenAPI specification available [here](https://www.coingecko.com/api/documentations/v3/swagger.json) on the coingecko website. 
+The base api client class and its documentation are automatically generated with [`swagger-codegen`](https://swagger.io/tools/swagger-codegen/) from the OpenAPI specification available [here](https://www.coingecko.com/api/documentations/v3/swagger.json) on the coingecko website. 
 
-This ensures that all endpoints and their corresponding parameters are 100% correct. 
+The documentation for the api client can be found [here](./docs/API.md). 
 
+This ensures that all endpoints and their corresponding parameters are **100%** correct. Furthermore, 
+the "Client Updated" badge you see at the top of this README is a live check that the spec used to 
+generate the client code matches the latest version of the spec available on the coingecko website. 
+This badge is updated once a day as a part of the CICD pipeline. 
 
-
-An extension of the [**pycoingecko**](https://github.com/man-c/pycoingecko) api client that adds additional functionality like: 
+Additionally, the base api client has been extended to provide additional functionality like: 
 
 - Abstracting away complexities associated with server side rate limiting when sending many api requests. 
-- Page range queries. 
-- Configurable temporal granularity (future work)
-  
-This module is intended to serve as a drop-in replacement for the pycoingecko api client and the additional functionality can be enabled as desired. 
-
-To give users confidence that this is true, the unit tests for this package clone the tests from the base package, replace all instances of the base class with this modules' subclass, and include these tests in the full test suite (which includes robust tests for new features). 
+- Page range queries (bounded and unbounded). 
 
 ## Outline 
 
@@ -34,9 +32,11 @@ To give users confidence that this is true, the unit tests for this package clon
 
 [Usage](#usage)
 
-[Examples - Mitigate Rate Limiting](#examples---mitigate-rate-limiting)
+[API Reference](./docs/API.md)
 
-[Examples - Page Range Queries](#examples---page-range-queries)
+[Advanced Features - Mitigate Rate Limiting](#advanced-features---mitigate-rate-limiting)
+
+[Advanced Features - Page Range Queries](#advanced-features---page-range-queries)
 
 [Client Configuration](#client-configuration)
 
@@ -55,23 +55,21 @@ pip install py_coingecko
 
 ## Usage 
 
-To switch from the base api client to this augmented version, all you need to do is change
+To create an instance of the api client, do this: 
+
 ```python
-from pycoingecko import CoingeckoApi
+from py_coingecko import CoingeckoApi
 cg = CoingeckoApi()
 ```
-to 
-```python
-from py_coingecko import CoinGeckoAPIExtra
-cg = CoinGeckoAPIExtra()
-```
-If you make this change to an existing script, it will function exactly the same as before as `CoinGeckoAPIExtra` is a subclass of `CoingeckoApi`. 
 
-## Examples  
+Check out the [API Reference](./docs/API.md) for further details on usage. 
 
-All references to `cg` that you see in code blocks within this section are an instance of `CoinGeckoAPIExtra`. 
+## Advanced Features  
 
-### Examples - Mitigate Rate Limiting  
+This section includes usage examples for advanced features that have been added to the 
+base api client. 
+
+### Advanced Features - Mitigate Rate Limiting  
 
 *Note: This functionality is available for **all** endpoints available on the base client.*
 
@@ -89,7 +87,7 @@ ndays = 365
 prices = dict()
 for c in coins: 
     cid = c['id']
-    prices[cid] = cg.get_coin_market_chart_by_id(cid, 'usd', ndays)['prices']
+    prices[cid] = cg.coins_id_market_chart_get(cid, 'usd', ndays)['prices']
 ```
 The issue here is that the coingecko api performs server side rate limiting. If you are using the free tier, it's about 50 api calls per second. Paid tiers have higher limits, but there is still a limit. 
 
@@ -103,7 +101,7 @@ This allows you to write code without worrying about rate limiting! Here is a bl
 ndays = 365
 for c in coins: 
     cid = c['id']
-    cg.get_coin_market_chart_by_id(cid, 'usd', ndays, qid=cid)
+    cg.coins_id_market_chart_get(cid, 'usd', ndays, qid=cid)
 prices = cg.execute_queued()
 prices = {k: v['prices'] for k, v in prices.items()}
 ```
@@ -115,13 +113,13 @@ The key differences here are
   - Whenever `qid` is present as a keyword argument in an api call, the client will queue the call instead of executing it. 
   - `qid` can be used as a lookup key for the result of this api call once it is executed. 
   
-- The line containing the api call (`cg.get_coin_market_chart_by_id(...)`) does not return anything. 
+- The line containing the api call (`cg.coins_id_market_chart_get(...)`) does not return anything. 
   - Whenever `qid` is not a kwarg, an api call behaves exactly the same as the base api client. 
-  - Whenever `qid` is a kwarg, an api call returns nothing. 
+  - Whenever `qid` is a kwarg, an api call returns nothing, as it was queued. 
   
 - The function `execute_queued` must be invoked in order to execute all queued calls. 
   - It internally deals with rate limiting. 
-  - It's return value is a dictionary where the keys are the `qid` values from queued calls and the values are the responses from the corresponding api calls. 
+  - It's return value is a dictionary where the keys are the `qid` values from queued calls and the values are the data parsed from responses from the corresponding api calls. 
   - If `execute_queued` is successful, the internal call queue is cleared. 
     - So if you called `execute_queued` on line 1 then again on line 2, the second call would return an empty dictionary. 
 
@@ -151,42 +149,47 @@ prices = {
 
 This approach to API design was loosely inspired by [dask's][https://docs.dask.org/en/stable/] approach to lazy execution of a sequence of operations on dataframes.
 
-### Examples - Page Range Queries 
+### Advanced Features - Page Range Queries 
 
 The coingecko api has a number of endpoints that support pagination. Pagination is a common api feature where you can request a specific page of data from an api. This is often necessary as some data objects are too large to return in a single api response. If you want all the data for a particular api call you are executing, you must request data from all pages. 
 
 Here is an example that uses the client to query for a single page of data 
+
 ```python
-cg.get_coin_ticker_by_id('bitcoin', page=2, per_page=50)
+cg.coins_id_tickers_get('bitcoin', page=2, per_page=50)
 ```
 
-Page range queries allow you to request a range of pages in a **single** client call.
+Page range queries allow you to request a range of pages in a **single** client call. The 
+api client supports **bounded** and **unbounded** page range queries. 
 
-Here is an example of doing pagination using the base api client functionality 
+Here is an example of doing pagination manually using the base api client functionality 
+
 ```python 
 data = []
 for i in range(1, 101):
-    res = cg.get_coin_ticker_by_id('bitcoin', page=i)
+    res = cg.coins_id_tickers_get('bitcoin', page=i)
     data.append(res)
 ```
 
-Here is an example of doing a page range query with the extended client
+Here is an example of doing a **bounded** page range query with the extended client. **bounded**
+indicates that both `page_start` and `page_end` are specified. 
+
 ```python 
-cg.get_coin_ticker_by_id('bitcoin', qid="data", page_start=1, page_end=100)
+cg.coins_id_tickers_get('bitcoin', qid="data", page_start=1, page_end=100)
 data = cg.execute_queued()['data']
 ```
 
 Both code blocks produce equivalent output. The return value of a page range query is a list of response data from each individual api call. So `data[0]` contains the result for page 1, `data[49]` contains the result for page 50.
 
-It's important to note that `qid` must be included as a keyword argument for page range queries. Thus, page range queries will also automatically deal with rate limiting as detailed in the [rate limiting](#examples---rate-limiting) section. 
+It's important to note that `qid` must be included as a keyword argument for page range queries. Thus, page range queries will also automatically deal with rate limiting as detailed in the [rate limiting](#advanced-features---mitigate-rate-limiting) section. 
 
-The coolest thing about page range queries is that you can perform them without specifying a `page_end`. This will result in the retrival of all available data pages from `page_start` onwards. 
+The api also supports **unbounded** page range queries, where you only specify `page_start` and the
+call will retrieve all available data pages from `page_start` onwards.  
+
 ```python 
-cg.get_coin_ticker_by_id('bitcoin', qid="data", page_start=1)
+cg.coins_id_tickers_get('bitcoin', qid="data", page_start=1)
 data = cg.execute_queued()['data']
 ```
-
-This is actually hard to simulate with the base api client itself. For each of it's api endpoints methods, it only returns the data. It discards the HTTP response that includes headers which give users details about how many total pages exist. Using the base client, you would continually need to increment a counter and continue requesting pages until you found an empty data object. But since the api returns different types of data objects for different paginated endpoints (dict, list, etc.), you would need to have a different **empty** condition for different paginated endpoints.  
 
 ## Client Configuration
 
@@ -213,7 +216,8 @@ cg = CoinGeckoAPIExtra(log_level=10, exp_limit=6, progress_interval=5)
 
 To summarize all the above functionality of this package in a single section 
 
-- `CoinGeckoAPIExtra` is an extended version of `CoingeckoApi` that can serve as a drop in replacement. 
+- It's base api client is automatically generated, ensuring correctness. 
+  It's functionality is described in the [API Reference](./docs/API.md). 
 - It's extra features are accessible in the following ways 
   - `cg.execute_queued` is the only public method added to the client. It takes no input arguments and returns a dictionary that maps `qid` values to the corresponding queued api call. 
   - You can queue api calls by include the keyword argument `qid` in a client call. When you include the kwarg `qid` the function call does not return anything (as it was queued for later execution). 
@@ -234,6 +238,7 @@ git clone https://github.com/brycemorrow4564/py_coingecko.git
 cd py_coingecko
 poetry shell 
 poetry update 
+poetry install 
 ```
 
 If you want to run the tests (within the dev environment), do the following 
