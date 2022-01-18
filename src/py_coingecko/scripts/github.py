@@ -4,7 +4,7 @@ import tempfile
 import logging
 
 from src.py_coingecko.utils.api_meta import api_meta
-from py_coingecko.utils.constants import (
+from src.py_coingecko.utils.constants import (
     FORMATTED_SPEC_PATH,
 )
 from src.py_coingecko.scripts.swagger import (

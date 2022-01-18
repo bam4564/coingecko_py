@@ -11,7 +11,7 @@ from deepdiff import DeepDiff
 
 from src.py_coingecko.utils.api_meta import api_meta
 from src.py_coingecko.utils.utils import decorate_logger_temp_level
-from py_coingecko.utils.constants import (
+from src.py_coingecko.utils.constants import (
     RAW_SPEC_PATH,
     FORMATTED_SPEC_PATH,
     SWAGGER_CLIENT_PATH,
