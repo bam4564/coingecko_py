@@ -7,7 +7,7 @@ on:
   pull_request:  
   # Runs once per hour on 30th minute (TODO: after testing change this to day)
   schedule: 
-      - cron: "30 * * * *"
+      - cron: "*/15 * * * *"
 
 jobs:
 
