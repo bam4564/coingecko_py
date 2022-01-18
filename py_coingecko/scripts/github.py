@@ -37,14 +37,12 @@ def _get_cov_percent():
 
 
 def get_cov_percent():
-    """Prints the code coverage percentage
-    """
+    """Prints the code coverage percentage"""
     print(_get_cov_percent())
 
 
 def get_cov_color():
-    """Prints the color to be used for code coverage badge 
-    """
+    """Prints the color to be used for code coverage badge"""
     percent = _get_cov_percent()
     if percent >= 80:
         color = "green"
@@ -56,18 +54,17 @@ def get_cov_color():
 
 
 def get_api_version():
-    """Prints the Coingecko API version of the generated client code 
-    """
+    """Prints the Coingecko API version of the generated client code"""
     print(api_meta.get_api_version())
 
 
 @logger_temp_level(logging.getLogger(py_coingecko.__name__), 0)
 def github_specs_equal():
     """Prints boolean indicating whether or not OpenAPI spec used to generate client
-    matches the OpenAPI spec downloaded from the coingecko website. 
-        
+    matches the OpenAPI spec downloaded from the coingecko website.
+
     It's necessary to disable the package logger here as this function's only output
-    to stdout should be "True" or "False". 
+    to stdout should be "True" or "False".
     """
     if not os.path.exists(FORMATTED_SPEC_PATH):
         raise ValueError(
