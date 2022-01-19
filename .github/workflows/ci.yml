@@ -48,7 +48,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ env.POETRY_INSTALL_CMD }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ env.POETRY_INSTALL_CMD }}-${{ env.GITHUB_REPOSITORY }}
       #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
