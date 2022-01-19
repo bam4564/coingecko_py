@@ -16,7 +16,7 @@ packages = [
 # running unit + integration tests                              
 test                        = "tests.scripts.runner:run_tests"  
 # used for generating client / metadata 
-get_data                    = "tests.scripts.get_test_data:get_data"
+get_data                    = "coingecko_py.scripts.swagger:generate_test_data"
 generate_client             = "coingecko_py.scripts.swagger:generate_client" 
 generate_test_data          = "coingecko_py.scripts.swagger:generate_test_data" 
 generate_test_data_template = "coingecko_py.scripts.swagger:generate_test_data_template"
