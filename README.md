@@ -1,7 +1,5 @@
 # py_coingecko 
 
-TODO: Change paths for badges to use master branch after release 
-
 ![Api Version](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/py_coingecko_apiversion__heads_master.json)
 ![Api Updated](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/py_coingecko_clientupdated__heads_master.json)
 ![Tests](https://github.com/brycemorrow4564/py_coingecko/actions/workflows/ci.yml/badge.svg)
