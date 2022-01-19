@@ -82,20 +82,20 @@ jobs:
           # get coverage percent and color 
           COVERAGE=$(poetry run get_cov)%
           COV_COLOR=$(poetry run get_cov_color)
-          COV_FILE=py_coingecko__$BRANCH_NAME.json
+          COV_FILE=coingecko_py__$BRANCH_NAME.json
           echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
           echo "COV_COLOR=$COV_COLOR" >> $GITHUB_ENV
           echo "COV_FILE=$COV_FILE" >> $GITHUB_ENV
 
           # get api version 
           API_VERSION=$(poetry run get_api_version)
-          API_VERSION_FILE=py_coingecko_apiversion__$BRANCH_NAME.json
+          API_VERSION_FILE=coingecko_py_apiversion__$BRANCH_NAME.json
           echo "API_VERSION=$API_VERSION" >> $GITHUB_ENV
           echo "API_VERSION_FILE=$API_VERSION_FILE" >> $GITHUB_ENV
 
           # determine if generated code is up to date with spec on coingecko website 
           IS_CLIENT_UPDATED=$(poetry run is_client_updated | awk '{print tolower($0)}')
-          IS_CLIENT_UPDATED_FILE=py_coingecko_clientupdated__$BRANCH_NAME.json
+          IS_CLIENT_UPDATED_FILE=coingecko_py_clientupdated__$BRANCH_NAME.json
           case "$IS_CLIENT_UPDATED" in
             true) IS_CLIENT_UPDATED_COLOR="green" ;;
             *)    IS_CLIENT_UPDATED_COLOR="red" ;;

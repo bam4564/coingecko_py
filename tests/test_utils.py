@@ -2,8 +2,8 @@ import logging
 import unittest
 from unittest.mock import patch
 
-from py_coingecko.utils.api_meta import api_meta
-from py_coingecko.utils.utils import (
+from coingecko_py.utils.api_meta import api_meta
+from coingecko_py.utils.utils import (
     without_keys,
     with_keys,
     extract_from_querystring,
@@ -88,7 +88,7 @@ class TestUtils(unittest.TestCase):
             "query": {"vs_currency": "eur", "to": "1638334800"},
         }
         with patch(
-            "py_coingecko.utils.api_meta.api_meta.get_url_base"
+            "coingecko_py.utils.api_meta.api_meta.get_url_base"
         ) as patch_get_url_base:
             patch_get_url_base.return_value = url_base
             result = api_meta.materialize_url_template(
@@ -134,7 +134,7 @@ class TestUtils(unittest.TestCase):
             "include_24hr_vol": "true",
         }
         with patch(
-            "py_coingecko.utils.api_meta.api_meta.get_parameters"
+            "coingecko_py.utils.api_meta.api_meta.get_parameters"
         ) as patch_get_parameters:
             patch_get_parameters.return_value = parameters
             args, kwargs = api_meta.transform_path_query_to_args_kwargs(

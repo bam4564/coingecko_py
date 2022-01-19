@@ -1,12 +1,12 @@
-# py_coingecko 
+# coingecko_py 
 
-![Api Version](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/py_coingecko_apiversion__heads_master.json)
-![Api Updated](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/py_coingecko_clientupdated__heads_master.json)
-![Tests](https://github.com/brycemorrow4564/py_coingecko/actions/workflows/ci.yml/badge.svg)
-![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/py_coingecko__heads_master.json)
+![Api Version](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/coingecko_py_apiversion__heads_master.json)
+![Api Updated](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/coingecko_py_clientupdated__heads_master.json)
+![Tests](https://github.com/brycemorrow4564/coingecko_py/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/brycemorrow4564/e454b900fe6518d21bdd25c9508d8a64/raw/coingecko_py__heads_master.json)
 
-[![PyPi Version](https://img.shields.io/pypi/v/py_coingecko.svg)](https://pypi.org/project/py_coingecko/)
-![GitHub](https://img.shields.io/github/license/brycemorrow4564/py_coingecko)
+[![PyPi Version](https://img.shields.io/pypi/v/coingecko_py.svg)](https://pypi.org/project/coingecko_py/)
+![GitHub](https://img.shields.io/github/license/brycemorrow4564/coingecko_py)
 
 ## An Advanced API Client For The Coingecko API
 
@@ -50,7 +50,7 @@ This package is currently only available through **PyPI**. You can install
 it by running
 
 ```shell
-pip install py_coingecko
+pip install coingecko_py
 ```
 
 ## Usage 
@@ -59,7 +59,7 @@ This package exposes a single class called `CoingeckoApi`. To import and
 initialize this class, do the following
 
 ```python
-from py_coingecko import CoingeckoApi
+from coingecko_py import CoingeckoApi
 cg = CoingeckoApi()
 ```
 
@@ -97,7 +97,7 @@ The issue here is that the coingecko api performs server side rate limiting. If 
 
 Since the above code block would be sending 1000 api requests synchronously, it is likely to fail at some point if you have a decent internet connection. In order to get around this, you would have to add error detection and call management logic. If you are writing a complex app with many api calls, this can be really annoying. 
 
-The **py_coingecko** client introduces a mechanism to queue api calls and execute a series of queued calls while performing **client side exponential backoff retries**. See [here](https://docs.aws.amazon.com/general/latest/gr/api-retries.html) for an explanation of this strategy. 
+The **coingecko_py** client introduces a mechanism to queue api calls and execute a series of queued calls while performing **client side exponential backoff retries**. See [here](https://docs.aws.amazon.com/general/latest/gr/api-retries.html) for an explanation of this strategy. 
 
 This allows you to write code without worrying about rate limiting! Here is a block of code that is equivalent to the above code block that won't error out due to rate limiting. 
 
@@ -249,8 +249,8 @@ This package is packaged with [poetry](https://python-poetry.org/)
 If you have poetry installed, you can perform the following steps to set up the development environment. 
 
 ```shell 
-git clone https://github.com/brycemorrow4564/py_coingecko.git
-cd py_coingecko
+git clone https://github.com/brycemorrow4564/coingecko_py.git
+cd coingecko_py
 poetry shell 
 poetry update 
 poetry install 

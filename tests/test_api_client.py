@@ -8,9 +8,9 @@ from typing import Callable
 from collections import Counter
 from requests.exceptions import HTTPError
 
-from py_coingecko import CoingeckoApi, error_msgs
-from py_coingecko.utils.api_meta import api_meta
-from py_coingecko.utils.utils import (
+from coingecko_py import CoingeckoApi, error_msgs
+from coingecko_py.utils.api_meta import api_meta
+from coingecko_py.utils.utils import (
     extract_from_querystring,
     sort_querystring,
     update_querystring,
@@ -18,7 +18,7 @@ from py_coingecko.utils.utils import (
 )
 
 TEST_ID = "TESTING_ID"
-TIME_PATCH_PATH = "py_coingecko.py_coingecko.time.sleep"
+TIME_PATCH_PATH = "coingecko_py.coingecko_py.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)

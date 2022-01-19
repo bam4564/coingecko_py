@@ -1,15 +1,15 @@
 [tool.poetry]
-name = "py_coingecko"
+name = "coingecko_py"
 version = "1.0.0"
 description = "A python API client for the coingecko API."
 authors = ["Bryce Morrow <brycemorrow4564@gmail.com>"]
 maintainers = ["Bryce Morrow <brycemorrow4564@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/brycemorrow4564/py_coingecko"
-repository = "https://github.com/brycemorrow4564/py_coingecko"
+homepage = "https://github.com/brycemorrow4564/coingecko_py"
+repository = "https://github.com/brycemorrow4564/coingecko_py"
 packages = [
-    { include = "py_coingecko" }
+    { include = "coingecko_py" }
 ]
 
 [tool.poetry.scripts]                              
@@ -17,14 +17,14 @@ packages = [
 test                        = "tests.scripts.runner:run_tests"  
 # used for generating client / metadata 
 get_data                    = "tests.scripts.get_test_data:get_data"
-generate_client             = "py_coingecko.scripts.swagger:generate_client" 
-generate_test_data          = "py_coingecko.scripts.swagger:generate_test_data" 
-generate_test_data_template = "py_coingecko.scripts.swagger:generate_test_data_template"
+generate_client             = "coingecko_py.scripts.swagger:generate_client" 
+generate_test_data          = "coingecko_py.scripts.swagger:generate_test_data" 
+generate_test_data_template = "coingecko_py.scripts.swagger:generate_test_data_template"
 # used by github actions 
-get_cov                     = "py_coingecko.scripts.github:get_cov_percent"
-get_cov_color               = "py_coingecko.scripts.github:get_cov_color"
-get_api_version             = "py_coingecko.scripts.github:get_api_version"
-is_client_updated           = "py_coingecko.scripts.github:github_specs_equal"
+get_cov                     = "coingecko_py.scripts.github:get_cov_percent"
+get_cov_color               = "coingecko_py.scripts.github:get_cov_color"
+get_api_version             = "coingecko_py.scripts.github:get_api_version"
+is_client_updated           = "coingecko_py.scripts.github:github_specs_equal"
 
 [tool.poetry.dependencies]
 python = "^3.7"
