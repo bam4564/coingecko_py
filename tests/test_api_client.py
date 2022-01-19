@@ -6,7 +6,6 @@ import requests
 import responses
 from typing import Callable
 from collections import Counter
-from copy import copy
 from requests.exceptions import HTTPError
 
 from py_coingecko import CoingeckoApi, error_msgs

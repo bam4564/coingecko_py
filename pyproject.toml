@@ -3,6 +3,7 @@ name = "py_coingecko"
 version = "1.0.0"
 description = "A python API client for the coingecko API."
 authors = ["Bryce Morrow <brycemorrow4564@gmail.com>"]
+maintainers = ["Bryce Morrow <brycemorrow4564@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/brycemorrow4564/py_coingecko"

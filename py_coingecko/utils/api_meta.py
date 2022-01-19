@@ -1,5 +1,4 @@
 import json
-import os
 import re
 import pkg_resources
 import urllib.parse as urlparse

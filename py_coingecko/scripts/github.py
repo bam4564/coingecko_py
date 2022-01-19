@@ -7,6 +7,7 @@ import py_coingecko
 from py_coingecko.utils.api_meta import api_meta
 from py_coingecko.utils.constants import (
     FORMATTED_SPEC_PATH,
+    COVERAGE_PATH,
 )
 from py_coingecko.scripts.swagger import (
     process_spec,
@@ -15,14 +16,9 @@ from py_coingecko.scripts.swagger import (
 )
 from py_coingecko.utils.utils import logger_temp_level
 
-logging.basicConfig()
-logger = logging.getLogger(__name__)
-logger.setLevel(0)
-
 
 def _get_cov_percent():
-    # TODO: add a constant here
-    with open("cov.xml", "r") as f:
+    with open(COVERAGE_PATH, "r") as f:
         lines = f.readlines()
     match = float(re.findall(r'line-rate="([^"]*)"', lines[1])[0])
     percent = round(match * 100, 2)

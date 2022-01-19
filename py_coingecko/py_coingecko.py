@@ -1,4 +1,3 @@
-from lib2to3.pytree import Base
 import time
 import math
 import logging
@@ -251,6 +250,8 @@ class CoingeckoApi(CoinGeckoApiSwagger):
         # execute all queued calls
         last_progress = 0
         call_count = 0
+        # TODO: this value is slightly off. should include number of page range calls
+        #       executed when imputing page range calls
         num_calls = sum([len(v) for v in self._queued_calls.values()])
         include_response = False
         logger.info(f"Begin executing {num_calls} queued calls")
