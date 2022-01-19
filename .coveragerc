@@ -1,0 +1,8 @@
+[run]
+omit =
+    # auto-generated code is assumed to be correct 
+    ./py_coingecko/swagger_generated/* 
+    # scripts are for github actions / client generation, so not a part of API functionality
+    ./py_coingecko/scripts/*
+    # Exclude tests 
+    ./tests/*

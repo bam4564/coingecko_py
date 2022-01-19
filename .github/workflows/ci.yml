@@ -1,17 +1,31 @@
 # https://medium.com/@vanflymen/blazing-fast-ci-with-github-actions-poetry-black-and-pytest-9e74299dd4a5
-name: Tests
+name: CICD Pipeline
 
-on: [push]
+on:
+  # Runs on all pushes to repo 
+  push:
+  pull_request:  
+  # Runs once per hour on 30th minute (TODO: after testing change this to day)
+  schedule: 
+      - cron: "*/15 * * * *"
 
 jobs:
 
-  test:
+  cicd:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v1 # TODO: update to v2 
         with:
           fetch-depth: 1
+
+      #----------------------------------------------
+      #  -----  Set the Poetry Install command  -----
+      # this is done so that it can be used as a part 
+      # the key for cacheing the poetry venv. If the
+      # command changes, we want a cache miss. 
+      #----------------------------------------------
+      - name: Set Poetry Install Command 
+        run: echo "POETRY_INSTALL_CMD=poetry install --no-interaction" >> $GITHUB_ENV
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
@@ -34,13 +48,13 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ env.POETRY_INSTALL_CMD }}
       #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
+        run: eval ${{ env.POETRY_INSTALL_CMD }}
       #----------------------------------------------
       # code formatting quality check 
       #----------------------------------------------
@@ -50,4 +64,94 @@ jobs:
       # run tests 
       #----------------------------------------------
       - name: Test with pytest
-        run: poetry run test 
+        run: poetry run pytest ./tests --cov --cov-report xml:cov.xml
+
+      #----------------------------------------------
+      # Extract test code coverage and branch info 
+      # https://dev.to/thejaredwilcurt/coverage-badge-with-github-actions-finally-59fa
+      #----------------------------------------------
+      - name: Extract Metadata 
+        run: |
+          # get current git branch 
+          REF=${{ github.ref }}
+          echo "github.ref: $REF"
+          IFS='/' read -ra PATHS <<< "$REF"
+          BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
+          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+
+          # get coverage percent and color 
+          COVERAGE=$(poetry run get_cov)%
+          COV_COLOR=$(poetry run get_cov_color)
+          COV_FILE=py_coingecko__$BRANCH_NAME.json
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+          echo "COV_COLOR=$COV_COLOR" >> $GITHUB_ENV
+          echo "COV_FILE=$COV_FILE" >> $GITHUB_ENV
+
+          # get api version 
+          API_VERSION=$(poetry run get_api_version)
+          API_VERSION_FILE=py_coingecko_apiversion__$BRANCH_NAME.json
+          echo "API_VERSION=$API_VERSION" >> $GITHUB_ENV
+          echo "API_VERSION_FILE=$API_VERSION_FILE" >> $GITHUB_ENV
+
+          # determine if generated code is up to date with spec on coingecko website 
+          IS_CLIENT_UPDATED=$(poetry run is_client_updated | awk '{print tolower($0)}')
+          IS_CLIENT_UPDATED_FILE=py_coingecko_clientupdated__$BRANCH_NAME.json
+          case "$IS_CLIENT_UPDATED" in
+            true) IS_CLIENT_UPDATED_COLOR="green" ;;
+            *)    IS_CLIENT_UPDATED_COLOR="red" ;;
+          esac
+          echo "IS_CLIENT_UPDATED=$IS_CLIENT_UPDATED" >> $GITHUB_ENV
+          echo "IS_CLIENT_UPDATED_FILE=$IS_CLIENT_UPDATED_FILE" >> $GITHUB_ENV
+          echo "IS_CLIENT_UPDATED_COLOR=$IS_CLIENT_UPDATED_COLOR" >> $GITHUB_ENV
+
+          # log environment values 
+          echo "git branch: $BRANCH_NAME"
+          echo "cov badge filename: $COV_FILE"
+          echo "cov badge percent: $COVERAGE"
+          echo "cov badge color: $COV_COLOR"
+          echo "coingecko api version: $API_VERSION"
+          echo "is client updated: $IS_CLIENT_UPDATED"
+
+      #----------------------------------------------
+      # create code cov badge
+      # https://github.com/marketplace/actions/dynamic-badges
+      #----------------------------------------------
+      - name: Create Code Coverage Badge
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: e454b900fe6518d21bdd25c9508d8a64
+          filename: ${{ env.COV_FILE }}
+          label: Pytest Coverage
+          message: ${{ env.COVERAGE }}
+          color: ${{ env.COV_COLOR }}
+          namedLogo: pytest 
+
+      #----------------------------------------------
+      # create api version badge
+      # https://github.com/marketplace/actions/dynamic-badges
+      #----------------------------------------------
+      - name: Create Api Version Badge
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: e454b900fe6518d21bdd25c9508d8a64
+          filename: ${{ env.API_VERSION_FILE }}
+          label: Coingecko API Version
+          message: ${{ env.API_VERSION }}
+          color: "#4287f5"
+
+      #----------------------------------------------
+      # create client updated indicator badge 
+      # https://github.com/marketplace/actions/dynamic-badges
+      #----------------------------------------------
+      - name: Create Client Updated Indicator Badge 
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: e454b900fe6518d21bdd25c9508d8a64
+          filename: ${{ env.IS_CLIENT_UPDATED_FILE }}
+          label: Client Updated
+          message: ${{ env.IS_CLIENT_UPDATED }}
+          color: ${{ env.IS_CLIENT_UPDATED_COLOR }}
+

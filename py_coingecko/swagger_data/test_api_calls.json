@@ -1,0 +1,267 @@
+{
+    "/ping": {
+        "path": [],
+        "query": {}
+    },
+    "/simple/price": {
+        "path": [],
+        "query": {
+            "ids": "bitcoin,ethereum",
+            "vs_currencies": "eth",
+            "include_market_cap": "true",
+            "include_24hr_vol": "true",
+            "include_24hr_change": "true",
+            "include_last_updated_at": "true"
+        }
+    },
+    "/simple/token_price/{id}": {
+        "path": ["ethereum"],
+        "query": {
+            "contract_addresses": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+            "vs_currencies": "btc",
+            "include_market_cap": "true",
+            "include_24hr_vol": "true",
+            "include_24hr_change": "true",
+            "include_last_updated_at": "true"
+        }
+    },
+    "/simple/supported_vs_currencies": {
+        "path": [],
+        "query": {}
+    },
+    "/coins/list": {
+        "path": [],
+        "query": {
+            "include_platform": "true"
+        }
+    },
+    "/coins/markets": {
+        "path": [],
+        "query": {
+            "vs_currency": "eth",
+            "ids": "bitcoin,ethereum",
+            "order": "volume_desc",
+            "per_page": 5,
+            "page": 1,
+            "sparkline": true,
+            "price_change_percentage": "24h"
+        }
+    },
+    "/coins/{id}": {
+        "path": ["solana"],
+        "query": {
+            "localization": "true",
+            "tickers": true,
+            "market_data": true,
+            "community_data": true,
+            "developer_data": true,
+            "sparkline": true
+        }
+    },
+    "/coins/{id}/tickers": {
+        "path": ["solana"],
+        "query": {
+            "exchange_ids": "binance",
+            "include_exchange_logo": "true",
+            "page": 3,
+            "order": "trust_score_asc",
+            "depth": "true"
+        }
+    },
+    "/coins/{id}/history": {
+        "path": ["bitcoin"],
+        "query": {
+            "date": "30-12-2017",
+            "localization": "true"
+        }
+    },
+    "/coins/{id}/market_chart": {
+        "path": ["ethereum"],
+        "query": {
+            "vs_currency": "bnb",
+            "days": "14",
+            "interval": "daily"
+        }
+    },
+    "/coins/{id}/market_chart/range": {
+        "path": ["ethereum"],
+        "query": {
+            "vs_currency": "eur",
+            "from": "1622520000",
+            "to": "1638334800"
+        }
+    },
+    "/coins/{id}/status_updates": {
+        "path": ["bitcoin"],
+        "query": {
+            "per_page": 5,
+            "page": 3
+        }
+    },
+    "/coins/{id}/contract/{contract_address}": {
+        "path": ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"],
+        "query": {}
+    },
+    "/coins/{id}/contract/{contract_address}/market_chart/": {
+        "path": ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"],
+        "query": {
+            "vs_currency": "bnb",
+            "days": "20"
+        }
+    },
+    "/coins/{id}/contract/{contract_address}/market_chart/range": {
+        "path": ["ethereum", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"],
+        "query": {
+            "vs_currency": "eur",
+            "from": "1622520000",
+            "to": "1638334800"
+        }
+    },
+    "/coins/{id}/ohlc": {
+        "path": ["bitcoin"],
+        "query": {
+            "vs_currency": "eur",
+            "days": 7
+        }
+    },
+    "/asset_platforms": {
+        "path": [],
+        "query": {}
+    },
+    "/coins/categories/list": {
+        "path": [],
+        "query": {}
+    },
+    "/coins/categories": {
+        "path": [],
+        "query": {
+            "order": "name_desc"
+        }
+    },
+    "/exchanges": {
+        "path": [],
+        "query": {
+            "per_page": 4,
+            "page": 3
+        }
+    },
+    "/exchanges/list": {
+        "path": [],
+        "query": {}
+    },
+    "/exchanges/{id}": {
+        "path": ["aave"],
+        "query": {}
+    },
+    "/exchanges/{id}/tickers": {
+        "path": ["binance"],
+        "query": {
+            "coin_ids": "bitcoin,ethereum",
+            "include_exchange_logo": "true",
+            "page": 4,
+            "depth": "true",
+            "order": "trust_score_desc"
+        }
+    },
+    "/finance_platforms": {
+        "path": [],
+        "query": {
+            "page": 2, 
+            "per_page": 5
+        }
+    },
+    "/finance_products": {
+        "path": [],
+        "query": {
+            "page": 2, 
+            "per_page": 5
+        }
+    },
+    "/indexes": {
+        "path": [],
+        "query": {
+            "page": 2, 
+            "per_page": 5
+        }
+    },
+    "/indexes/{market_id}/{id}": {
+        "path": ["jex_futures", "ETH"],
+        "query": {}
+    },
+    "/indexes/list": {
+        "path": [],
+        "query": {}
+    },
+    "/derivatives": {
+        "path": [],
+        "query": {
+            "include_tickers": "unexpired"
+        }
+    },
+    "/derivatives/exchanges": {
+        "path": [],
+        "query": {
+            "order": "name_desc",
+            "per_page": 5,
+            "page": 3
+        }
+    },
+    "/derivatives/exchanges/{id}": {
+        "path": ["binance_futures"],
+        "query": {
+            "include_tickers": "unexpired"
+        }
+    },
+    "/derivatives/exchanges/list": {
+        "path": [],
+        "query": {}
+    },
+    "/exchanges/{id}/status_updates": {
+        "path": ["binance"],
+        "query": {
+            "per_page": 6,
+            "page": 2
+        }
+    },
+    "/exchanges/{id}/volume_chart": {
+        "path": ["binance"],
+        "query": {
+            "days": 10
+        }
+    },
+    "/status_updates": {
+        "path": [],
+        "query": {
+            "category": "exchange_listing",
+            "project_type": "coin",
+            "per_page": 5,
+            "page": 5
+        }
+    },
+    "/exchange_rates": {
+        "path": [],
+        "query": {}
+    },
+    "/search": {
+        "path": [],
+        "query": {
+            "query": "olympus"
+        }
+    },
+    "/search/trending": {
+        "path": [],
+        "query": {}
+    },
+    "/global": {
+        "path": [],
+        "query": {}
+    },
+    "/global/decentralized_finance_defi": {
+        "path": [],
+        "query": {}
+    },
+    "/companies/public_treasury/{coin_id}": {
+        "path": ["bitcoin"],
+        "query": {}
+    }
+}
