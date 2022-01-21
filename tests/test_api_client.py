@@ -141,7 +141,6 @@ class TestApiClient(unittest.TestCase):
             assert exc_info.value.strerror == msg_match
             assert isinstance(exc_info.value.response, requests.Response)
             assert exc_info.value.response.status_code == 200
-            assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
     # ------------ TEST CONNECTION ERROR (Normal + Queued) ----------------------
@@ -154,7 +153,6 @@ class TestApiClient(unittest.TestCase):
             expected_urls.append(url)
             with pytest.raises(requests.exceptions.ConnectionError):
                 fn(*args, **kwargs)
-            assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
@@ -166,7 +164,6 @@ class TestApiClient(unittest.TestCase):
             assert len(self.cg._queued_calls) == 1
             with pytest.raises(requests.exceptions.ConnectionError):
                 self.cg.execute_queued()
-            assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
     # ------------ TEST FAILED RESPONSE CODE (Normal + Queued) ----------------------
@@ -186,7 +183,6 @@ class TestApiClient(unittest.TestCase):
                 fn(*args, **kwargs)
             assert isinstance(exc_info.value.response, requests.Response)
             assert exc_info.value.response.status_code == 404
-            assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
@@ -206,7 +202,6 @@ class TestApiClient(unittest.TestCase):
             assert isinstance(exc_info.value.response, requests.Response)
             assert exc_info.value.response.status_code == 404
             assert len(self.cg._queued_calls) == 0
-            assert len(responses.calls) == i + 1
         self._assert_urls_call_count(expected_urls, responses)
 
     # ------------ TEST FAILED DECODING (Normal + Queued) ----------------------
@@ -266,7 +261,6 @@ class TestApiClient(unittest.TestCase):
             )
             expected_urls.append(url)
             response = fn(*args, **kwargs)
-            assert len(responses.calls) == i + 1
             assert response == expected
         self._assert_urls_call_count(expected_urls, responses)
 
@@ -285,7 +279,6 @@ class TestApiClient(unittest.TestCase):
             assert len(self.cg._queued_calls) == 1
             response = self.cg.execute_queued()[TEST_ID]
             assert len(self.cg._queued_calls) == 0
-            assert len(responses.calls) == i + 1
             assert response == expected
         self._assert_urls_call_count(expected_urls, responses)
 
@@ -583,6 +576,5 @@ class TestApiClient(unittest.TestCase):
             # get method from client initialized with pro api key
             fn = getattr(self.cg_pro, method_name)
             response = fn(*args, **kwargs)
-            assert len(responses.calls) == i + 1
             assert response == expected
         self._assert_urls_call_count(expected_urls, responses)
