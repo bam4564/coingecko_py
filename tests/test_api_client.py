@@ -225,7 +225,7 @@ class TestApiClient(unittest.TestCase):
 
     @responses.activate
     def test_failed_body_byte_decode(self):
-        queued = True
+        queued = False
         response_callback = lambda request: (200, {}, b"\x00\xaa\xff")
         ErrorClass = requests.exceptions.ContentDecodingError
         msg_match = error_msgs["failed_decode_bytes"]
@@ -409,7 +409,7 @@ class TestApiClient(unittest.TestCase):
     # ---------- PAGE RANGE QUERIES ----------
 
     @responses.activate
-    def test_page_range_query_page_start_end(self):
+    def test_page_range_query_bounded(self):
         paginated_method_names = set(api_meta.get_paginated_method_names())
         page_start = 1
         page_end = 3
@@ -464,7 +464,7 @@ class TestApiClient(unittest.TestCase):
         self._assert_urls_call_count(expected_urls, responses)
 
     @responses.activate
-    def test_page_range_query_page_start_unbounded(self):
+    def test_page_range_query_unbounded(self):
         paginated_method_names = set(api_meta.get_paginated_method_names())
         page_start = 1
         per_page = 5

@@ -1,5 +1,5 @@
 # https://medium.com/@vanflymen/blazing-fast-ci-with-github-actions-poetry-black-and-pytest-9e74299dd4a5
-name: CICD Pipeline
+name: Tests
 
 on:
   # Runs on all pushes to repo 

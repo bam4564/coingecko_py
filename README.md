@@ -113,7 +113,7 @@ prices = {k: v['prices'] for k, v in prices.items()}
 The key differences here are 
 
 - The inclusion of the `qid` keyword argument in the api call signature. 
-  - `qid` stands for queue id. 
+  - `qid` stands for queue id. `qid` must be a string. 
   - Whenever `qid` is present as a keyword argument in an api call, the client will queue the call instead of executing it. 
   - `qid` can be used as a lookup key for the result of this api call once it is executed. 
   
@@ -150,8 +150,6 @@ prices = {
     ...
 } 
 ```
-
-This approach to API design was loosely inspired by [dask's][https://docs.dask.org/en/stable/] approach to lazy execution of a sequence of operations on dataframes.
 
 ### Advanced Features - Page Range Queries 
 
