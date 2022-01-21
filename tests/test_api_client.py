@@ -1,9 +1,11 @@
 import math
 import json
+from turtle import update
 import pytest
 import unittest
 import requests
 import responses
+from functools import update_wrapper
 from typing import Callable
 from collections import Counter
 from requests.exceptions import HTTPError
@@ -18,12 +20,18 @@ from coingecko_py.utils.utils import (
 )
 
 TEST_ID = "TESTING_ID"
+TEST_API_KEY = "dummy_key"
 TIME_PATCH_PATH = "coingecko_py.coingecko_py.time.sleep"
 
 
 @pytest.fixture(scope="class", autouse=True)
 def cg(request):
     request.cls.cg = CoingeckoApi(log_level=10)
+
+
+@pytest.fixture(scope="class", autouse=True)
+def cg_pro(request):
+    request.cls.cg_pro = CoingeckoApi(log_level=10, api_key=TEST_API_KEY)
 
 
 @pytest.fixture(scope="class")
@@ -44,7 +52,7 @@ def calls(request):
             url_template, path_args, query_args
         )
         fn = getattr(cg, method_name)
-        calls.append((url, expected, fn, args, kwargs))
+        calls.append((url, expected, fn, method_name, args, kwargs))
     request.cls.calls = calls
 
 
@@ -93,6 +101,7 @@ class FailThenSuccessServer:
 
 
 @pytest.mark.usefixtures("cg")
+@pytest.mark.usefixtures("cg_pro")
 @pytest.mark.usefixtures("calls")
 class TestApiClient(unittest.TestCase):
 
@@ -119,7 +128,7 @@ class TestApiClient(unittest.TestCase):
         responses,
     ):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             responses.add_callback(responses.GET, url, callback)
             expected_urls.append(url)
             if not queued:
@@ -141,7 +150,7 @@ class TestApiClient(unittest.TestCase):
     @responses.activate
     def test_connection_error(self):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             expected_urls.append(url)
             with pytest.raises(requests.exceptions.ConnectionError):
                 fn(*args, **kwargs)
@@ -151,7 +160,7 @@ class TestApiClient(unittest.TestCase):
     @responses.activate
     def test_connection_error_queued(self):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             expected_urls.append(url)
             fn(*args, **kwargs, qid=str(i))
             assert len(self.cg._queued_calls) == 1
@@ -166,7 +175,7 @@ class TestApiClient(unittest.TestCase):
     @responses.activate
     def test_failed(self):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -183,7 +192,7 @@ class TestApiClient(unittest.TestCase):
     @responses.activate
     def test_failed_queued(self):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -248,7 +257,7 @@ class TestApiClient(unittest.TestCase):
     @responses.activate
     def test_success(self):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -264,7 +273,7 @@ class TestApiClient(unittest.TestCase):
     @responses.activate
     def test_success_queued(self):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             responses.add(
                 responses.GET,
                 url,
@@ -285,7 +294,7 @@ class TestApiClient(unittest.TestCase):
     @responses.activate
     def test_multiple_queued(self):
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             responses.add(
                 responses.GET,
@@ -302,7 +311,7 @@ class TestApiClient(unittest.TestCase):
         assert len(self.cg._queued_calls) == 0
         assert len(responses.calls) == len(self.calls)
 
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             assert response[qid] == expected
 
@@ -319,7 +328,7 @@ class TestApiClient(unittest.TestCase):
 
         # queue calls
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             server = FailThenSuccessServer(num_attempts, expected)
             responses.add_callback(
@@ -339,7 +348,7 @@ class TestApiClient(unittest.TestCase):
         assert len(responses.calls) == total_calls
 
         # validate expected
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             assert response[qid] == expected
 
@@ -368,7 +377,7 @@ class TestApiClient(unittest.TestCase):
 
         # queue calls
         expected_urls = list()
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
             responses.add_callback(
                 responses.GET,
@@ -417,9 +426,9 @@ class TestApiClient(unittest.TestCase):
         expected_paged = dict()
         queued = 0
         expected_urls = []
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
-            name = list(fn.args)[0].__name__
+            name = fn.__name__
             if name in paginated_method_names:
                 paginated_method_names.remove(name)
                 qparams = extract_from_querystring(url, ["page"])
@@ -456,9 +465,10 @@ class TestApiClient(unittest.TestCase):
         assert len(self.cg._queued_calls) == 0
         assert len(responses.calls) == queued * num_pages
 
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
-            if list(fn.args)[0].__name__ in paginated_method_names:
+            name = fn.__name__
+            if name in paginated_method_names:
                 assert expected_paged[qid] == response[qid]
 
         self._assert_urls_call_count(expected_urls, responses)
@@ -487,9 +497,9 @@ class TestApiClient(unittest.TestCase):
 
             return callback
 
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
-            name = list(fn.args)[0].__name__
+            name = fn.__name__
             if name in paginated_method_names:
                 paginated_method_names.remove(name)
                 qparams = extract_from_querystring(url, ["page"])
@@ -525,9 +535,10 @@ class TestApiClient(unittest.TestCase):
         assert len(self.cg._queued_calls) == 0
         assert len(responses.calls) == queued * num_pages
 
-        for i, (url, expected, fn, args, kwargs) in enumerate(self.calls):
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
             qid = str(i)
-            if list(fn.args)[0].__name__ in paginated_method_names:
+            name = fn.__name__
+            if name in paginated_method_names:
                 assert expected_paged[qid] == response[qid]
 
         self._assert_urls_call_count(expected_urls, responses)
@@ -553,3 +564,25 @@ class TestApiClient(unittest.TestCase):
             ValueError, match=error_msgs["page_start_lte_zero"]
         ) as exc_info:
             self.cg._validate_page_range(0, 3)
+
+    # ---------- PRO USER API AUTHENTICATION ----------
+
+    @responses.activate
+    def test_success_pro_authentication(self):
+        expected_urls = list()
+        for i, (url, expected, fn, method_name, args, kwargs) in enumerate(self.calls):
+            # update querystring to contain api key
+            url = update_querystring(url, dict(x_cg_pro_api_key=TEST_API_KEY))
+            responses.add(
+                responses.GET,
+                url,
+                json=expected,
+                status=200,
+            )
+            expected_urls.append(url)
+            # get method from client initialized with pro api key
+            fn = getattr(self.cg_pro, method_name)
+            response = fn(*args, **kwargs)
+            assert len(responses.calls) == i + 1
+            assert response == expected
+        self._assert_urls_call_count(expected_urls, responses)

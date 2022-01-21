@@ -4,7 +4,7 @@ import logging
 import json
 import requests
 from collections import defaultdict
-from functools import partial
+from functools import wraps
 from contextlib import contextmanager
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util import Retry
@@ -36,10 +36,10 @@ error_msgs = dict(
 
 
 class CoingeckoApiClient(ApiClientSwagger):
-    def __init__(self):
+    def __init__(self, api_key=None):
         super().__init__()
-        # setup HTTP session
-        # TODO: compare benefits of session vs pool
+        self.api_key = api_key
+        # setup HTTP session TODO: compare benefits of session vs pool
         self.request_timeout = 120
         self.session = requests.Session()
         self.scheme = "https"
@@ -65,6 +65,9 @@ class CoingeckoApiClient(ApiClientSwagger):
             path_params.values()
         )  # dictionaries are ordered from python 3.6 on so this is fine.
         query_args = {v[0]: v[1] for v in query_params}
+        # authentication for pro users
+        if self.api_key:
+            query_args["x_cg_pro_api_key"] = self.api_key
         url = api_meta.materialize_url_template(resource_path, path_args, query_args)
         logger.debug(f"{self.scheme} request: {url}")
         assert method == "GET"
@@ -126,18 +129,24 @@ class ResultsCache:
 
 class CoingeckoApi(CoinGeckoApiSwagger):
 
-    defaults = dict(exp_limit=8, progress_interval=10, log_level=logging.INFO)
+    defaults = dict(
+        exp_limit=8,
+        progress_interval=10,
+        log_level=logging.INFO,
+    )
 
     def __init__(self, *args, **kwargs):
+        api_client_kwargs = {k: v for k, v in kwargs.items() if k == "api_key"}
         super().__init__(
             *args,
-            api_client=CoingeckoApiClient(),
-            **without_keys(kwargs, *self.defaults.keys()),
+            api_client=CoingeckoApiClient(**api_client_kwargs),
+            **without_keys(kwargs, *self.defaults.keys(), "api_key"),
         )
         # setup wrapper instance fields, for managing queued calls, rate limit behavior, page range queries
         self._reset_state()
         for k, v in self.defaults.items():
             setattr(self, k, kwargs.get(k) or v)
+
         logger.setLevel(self.log_level)
         # decorate bound methods on base class that correspond to api calls to enable
         # queueing and page range query support for page range query enabled functions
@@ -147,7 +156,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
             v = getattr(self, name)
             page_range_query = name in paginated_method_names
             logger.debug(f"Decorating: {name:60} page_range_query: {page_range_query}")
-            setattr(self, name, partial(self._wrap_api_endpoint, v, page_range_query))
+            setattr(self, name, self._wrap(v, page_range_query))
 
     def _validate_page_range(self, page_start, page_end) -> None:
         """Validates user supplied values for page_start and page_end"""
@@ -250,7 +259,9 @@ class CoingeckoApi(CoinGeckoApiSwagger):
         # execute all queued calls
         last_progress = 0
         call_count = 0
-        num_calls = sum([len(v) for v in self._queued_calls.values()]) + len(self._infer_page_end_qids)
+        num_calls = sum([len(v) for v in self._queued_calls.values()]) + len(
+            self._infer_page_end_qids
+        )
         include_response = False
         logger.info(f"Begin executing {num_calls} queued calls")
         for (qid, call_list) in self._queued_calls.items():
@@ -304,21 +315,28 @@ class CoingeckoApi(CoinGeckoApiSwagger):
                 self._queue_single(qid, fn, True, *args, page=page_start, **kwargs)
                 self._infer_page_end_qids.append(qid)
 
-    def _wrap_api_endpoint(self, fn, page_range_query, *args, **kwargs):
+    def _wrap(self, fn, page_range_query):
         """Decorator that will be applied to all API endpoints on base class.
 
-        Adds support for method queueing and page range queries.
+        - Adds support for method queueing and page range queries.
+        - Leverages wraps decorator to preserve input method signature which
+            allows for correct autocomplete suggestions in IDE's when using client.
         """
-        qid = kwargs.get("qid")
-        if qid:
-            qid = str(qid)
-            kwargs = without_keys(kwargs, "qid")
-            if page_range_query:
-                self._queue_page_range_query(qid, fn, *args, **kwargs)
+
+        @wraps(fn)
+        def decorated(*args, **kwargs):
+            qid = kwargs.get("qid")
+            if qid:
+                qid = str(qid)
+                kwargs = without_keys(kwargs, "qid")
+                if page_range_query:
+                    self._queue_page_range_query(qid, fn, *args, **kwargs)
+                else:
+                    self._queue_single(qid, fn, True, *args, **kwargs)
             else:
-                self._queue_single(qid, fn, True, *args, **kwargs)
-        else:
-            return fn(*args, **kwargs)
+                return fn(*args, **kwargs)
+
+        return decorated
 
     def execute_queued(self):
         try:
