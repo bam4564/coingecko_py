@@ -19,10 +19,14 @@ the "Client Updated" badge you see at the top of this README is a live check tha
 generate the client code matches the latest version of the spec available on the coingecko website. 
 This badge is updated once a day as a part of the CICD pipeline. 
 
+This client supports authentication via an api key for users with a paid api plan.   
+
 Additionally, the base api client has been extended to provide additional functionality like
 
 - Abstracting away complexities associated with server side rate limiting when sending many api requests. 
 - Page range queries (bounded and unbounded). 
+
+This client supports python versions >= `3.6.2`. 
 
 ## Outline 
 
@@ -37,6 +41,8 @@ Additionally, the base api client has been extended to provide additional functi
 [Advanced Features - Page Range Queries](#advanced-features---page-range-queries)
 
 [Client Configuration](#client-configuration)
+
+[Exception Handling](#exception-handling)
 
 [Summary](#summary)
 
@@ -210,6 +216,7 @@ The extended client supports multiple configuration options which impact its beh
 
 | Kwarg | Default | Description | 
 | --- | --- | --- |
+| api_key | `None` | Coingecko API key if you have a paid plan. |
 | exp_limit | `8` | Max exponent (2<sup>exp_limit</sup>) for exponential backoff retries |
 | progress_interval | `10` | Min percentage interval at which to log progress of queued api calls |
 | log_level | `logging.INFO` | python [logging](https://docs.python.org/3/library/logging.html) log level for client log messages |
@@ -222,8 +229,19 @@ See [here](https://docs.python.org/3/library/logging.html#levels) for more info 
 
 Here's an example of how to configure the client with non-default values. 
 ```python 
-cg = CoingeckoApi(log_level=10, exp_limit=6, progress_interval=5)
+cg = CoingeckoApi(api_key="dummykey", log_level=10, exp_limit=6, progress_interval=5)
 ```
+
+## Exception Handling 
+
+In the case of a request or response decoding failure, the client will raise an exception of
+type `requests.exceptions.RequestException` (or a subclass of this exception). 
+
+If the request is successful (i.e. we received a response) then the decoding fails, the 
+raw response object (an instance of `requests.Response` will always be available as an 
+attribute `response` on any caught exception. Sometimes, a more detailed string message 
+describing what caused the exception is available as an attribute `strerror` on the 
+caught exception. 
 
 ## Summary 
 

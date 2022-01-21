@@ -27,7 +27,7 @@ get_api_version             = "coingecko_py.scripts.github:get_api_version"
 is_client_updated           = "coingecko_py.scripts.github:github_specs_equal"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.6.2,<4"
 requests = "^2.27.1"
 python-dotenv = "^0.19.2"
 # dependencies for swagger-codegen generated code 
