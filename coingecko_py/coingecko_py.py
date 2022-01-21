@@ -187,7 +187,7 @@ class CoingeckoApi(CoinGeckoApiSwagger):
             )
         self._queued_calls[qid].append((fn, args, kwargs))
 
-    def _impute_page_range_calls(self, res_cache: ResultsCache):
+    def _impute_page_range_calls(self):
         """Finds each queued call that is a page range query where page_start is defined and page_end is not included.
         Executes each of these calls to get an HTTP header back containing information on how many pages exist. With
         this information, we queue the remainder of calls. We cache the result of the call we already executed in
@@ -203,7 +203,8 @@ class CoingeckoApi(CoinGeckoApiSwagger):
             fn, args, kwargs = call_list[0]
             page_start = kwargs["page"]
             res, response = self._execute_single(include_response, fn, *args, **kwargs)
-            res_cache.put_page_range_unbounded_first_result(qid, page_start, res)
+            self.cache.put_page_range_unbounded_first_result(qid, page_start, res)
+            self._call_progress_update()
             per_page = int(response.headers["Per-Page"])
             total = int(response.headers["Total"])
             page_end = math.ceil(total / per_page)
@@ -247,50 +248,60 @@ class CoingeckoApi(CoinGeckoApiSwagger):
             raise Exception(error_msgs["exp_limit_reached"])
         return res
 
+    @contextmanager
+    def _call_bookkeeping_context(self):
+        self.cache = ResultsCache()
+        self.last_progress = 0
+        self.call_count = 0
+        num_queued_calls = sum([len(v) for v in self._queued_calls.values()])
+        num_page_range_unbounded_calls = len(self._infer_page_end_qids)
+        self.num_calls = num_queued_calls + num_page_range_unbounded_calls
+        yield
+        self.cache = None
+        self.last_progress = None
+        self.call_count = None
+        self.num_calls = None
+
+    def _call_progress_update(self):
+        self.call_count += 1
+        progress = self.call_count / self.num_calls * 100
+        next_progress = self.last_progress + self.progress_interval
+        if progress >= next_progress:
+            logger.info(f"Progress: {math.floor(progress)}%")
+            self.last_progress = progress
+
     def _execute_queued(self):
         """Execute all queued calls
 
-        - Prior to execution, we impute calls for page range queries
+        - Prior to execution of queued calls, we impute calls for page range queries
         - Logs progress at configurable intervals
         """
         # impute calls related to page range queries where page_end is not specified
-        cache = ResultsCache()
-        self._impute_page_range_calls(cache)
-        # execute all queued calls
-        last_progress = 0
-        call_count = 0
-        num_calls = sum([len(v) for v in self._queued_calls.values()]) + len(
-            self._infer_page_end_qids
-        )
-        include_response = False
-        logger.info(f"Begin executing {num_calls} queued calls")
-        for (qid, call_list) in self._queued_calls.items():
-            for fn, args, kwargs in call_list:
-                # check if this call was already completed (first call in unbounded page range query)
-                if cache.check_contains_page_range_unbounded_first_result(
-                    qid, kwargs.get("page", None)
-                ):
-                    continue
-                # if cache miss, make api call (with retries)
-                res = self._execute_single(
-                    include_response,
-                    fn,
-                    *args,
-                    **kwargs,
-                )
-                # store the result
-                if qid in self._page_range_qids:
-                    cache.put_page_range_query(qid, res)
-                else:
-                    cache.put(qid, res)
-                # log progress
-                call_count += 1
-                progress = call_count / num_calls * 100
-                next_progress = last_progress + self.progress_interval
-                if progress >= next_progress:
-                    logger.info(f"Progress: {math.floor(progress)}%")
-                    last_progress = progress
-        return cache.data()
+        with self._call_bookkeeping_context():
+            logger.info(f"Begin executing {self.num_calls} queued calls")
+            self._impute_page_range_calls()
+            include_response = False
+            for (qid, call_list) in self._queued_calls.items():
+                for fn, args, kwargs in call_list:
+                    # check if this call was already completed (first call in unbounded page range query)
+                    if self.cache.check_contains_page_range_unbounded_first_result(
+                        qid, kwargs.get("page", None)
+                    ):
+                        continue
+                    res = self._execute_single(
+                        include_response,
+                        fn,
+                        *args,
+                        **kwargs,
+                    )
+                    if qid in self._page_range_qids:
+                        self.cache.put_page_range_query(qid, res)
+                    else:
+                        self.cache.put(qid, res)
+                    self._call_progress_update()
+            # important to do this before leaving the context manager
+            data = self.cache.data()
+        return data
 
     def _queue_page_range_query(self, qid, fn, *args, **kwargs) -> None:
         page, page_start, page_end = dict_get(kwargs, "page", "page_start", "page_end")

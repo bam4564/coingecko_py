@@ -1,11 +1,9 @@
 import math
 import json
-from turtle import update
 import pytest
 import unittest
 import requests
 import responses
-from functools import update_wrapper
 from typing import Callable
 from collections import Counter
 from requests.exceptions import HTTPError
