@@ -250,7 +250,9 @@ class CoingeckoApi(CoinGeckoApiSwagger):
         # execute all queued calls
         last_progress = 0
         call_count = 0
-        num_calls = sum([len(v) for v in self._queued_calls.values()]) + len(self._infer_page_end_qids)
+        num_calls = sum([len(v) for v in self._queued_calls.values()]) + len(
+            self._infer_page_end_qids
+        )
         include_response = False
         logger.info(f"Begin executing {num_calls} queued calls")
         for (qid, call_list) in self._queued_calls.items():
